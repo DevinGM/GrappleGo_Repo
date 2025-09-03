@@ -15,16 +15,30 @@ public class PlayerBehaviour : MonoBehaviour
     [Header("Turn On To Start The Run")]
     [SerializeField] private bool _StartRun = false;
 
-    // speed player moves at
-    [SerializeField] private float _moveSpeed = 10f;
+    // speed player begins moving at
+    [SerializeField] private float _startSpeed = 10f;
+    // speed player is moving at
+    [SerializeField] private float _moveSpeed;
+    // amount player accelerates by
+    [SerializeField] private float _accelSpeed = 1f;
+    // amount of time passed before player accelerates
+    [SerializeField] private float _accelTime = 5f;
     // distance travelled
     [SerializeField] private int _score = 0;
     // highest distance ever travelled
     [SerializeField] private int _highScore = 0;
+    // number of player's lives
+    // player dies when _lives hits 0
+    [SerializeField] private int _lives = 1;
+    // is the player currently in a run
+    [SerializeField] private bool _inRun = false;
     // is the player currently moving
     [SerializeField] private bool _moving = false;
+
     // position at the start of a run
     private Vector3 _spawnPos;
+    // is the player currently moving
+    private bool _waitingToAccelerate = false;
 
     void OnEnable()
     {
@@ -43,6 +57,8 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _spawnPos = transform.position;
         _moving = true;
+        _inRun = true;
+        _moveSpeed = _startSpeed;
     }
     
     // called when run ends
@@ -50,38 +66,61 @@ public class PlayerBehaviour : MonoBehaviour
     {
         transform.position = _spawnPos;
         _moving = false;
+        _inRun = false;
+        _lives = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // start a run when _StartRun is set to true
+        // mainly dev tool, most likely remove for build
         if (_StartRun)
         {
             EventBus.Publish(EventType.RunStart);
             _StartRun = false;
         }
-
-        // handle score
-        _score = (int)transform.position.x;
-        if (_highScore < _score)
-            _highScore = _score;
-
-        // move forward constantly
-        if (_moving)
+        
+        // logic only happens when in a run
+        if (_inRun)
         {
-            Vector3 movePos = transform.position;
-            movePos.x = transform.position.x + _moveSpeed * Time.deltaTime;
-            transform.position = movePos;
+            // increase speed by 1 every 5 seconds
+            if (!_waitingToAccelerate)
+            {
+                StartCoroutine(Accelerate());
+            }
+
+            // handle score
+            // player MUST start run at x = 0 for score to be accurate
+            _score = (int)transform.position.x;
+            if (_highScore < _score)
+                _highScore = _score;
+
+            // move forward constantly
+            if (_moving)
+                transform.position = new Vector3(transform.position.x + _moveSpeed * Time.deltaTime, 
+                    transform.position.y, transform.position.z);
+
+            // if the player runs out of lives end the run
+            if (_lives <= 0)
+                EventBus.Publish(EventType.RunEnd);
         }
     }
 
     // handles collision interactions
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Obstacle")
-        {
-            EventBus.Publish(EventType.RunEnd);
-        }
+        if (collision.gameObject.CompareTag("Obstacle"))
+            _lives--;
+    }
+
+    // wait _accelTime amount of seconds before increasing speed by _accelSpeed
+    private IEnumerator Accelerate()
+    {
+        _waitingToAccelerate = true;
+        yield return new WaitForSeconds(_accelTime);
+        _moveSpeed += _accelSpeed;
+        _waitingToAccelerate = false;
     }
 
     // temp prototyping ui
