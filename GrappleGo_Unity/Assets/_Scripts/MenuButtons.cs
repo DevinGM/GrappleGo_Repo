@@ -13,23 +13,27 @@ public class MenuButtons : MonoBehaviour
     //  For PlayButton on MainMenu Scene. //
     public void PlayGame()
     {
+        Debug.Log("Entering Game");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     // For QuitButton on MainMenu Scene. //
     public void QuitGame()
     {
+        Debug.Log("Quitting Game");
         Application.Quit();
     }
 
 
     public void EnterSetting()
     {
+        Debug.Log("Enter Settings");
         SceneManager.LoadScene("SettingMenu");
     }
 
     public void ExitSetting()
     {
+        Debug.Log("Exit Settings");
         SceneManager.LoadScene("MainMenu");
     }
 }
