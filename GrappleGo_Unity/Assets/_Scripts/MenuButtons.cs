@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// Script Creator: Songchalee, James
-/// Recent Date Modified: 09 - 08 - 2025
+/// Recent Date Modified: 
+/// 09 - 08 - 2025
+/// 09 - 09 - 2025
 
-public class MainMenu : MonoBehaviour
+public class MenuButtons : MonoBehaviour
 {
     //  For PlayButton on MainMenu Scene. //
     public void PlayGame()
@@ -23,13 +25,11 @@ public class MainMenu : MonoBehaviour
 
     public void EnterSetting()
     {
-        SceneManager.LoadScene("SceneMenu");
+        SceneManager.LoadScene("SettingMenu");
     }
 
     public void ExitSetting()
     {
         SceneManager.LoadScene("MainMenu");
     }
-
-
 }
