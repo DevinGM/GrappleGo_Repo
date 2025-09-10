@@ -31,9 +31,10 @@ public class MenuButtons : MonoBehaviour
         SceneManager.LoadScene("SettingMenu");
     }
 
-    public void ExitSetting()
+    public void ReturnToMenu()
     {
-        Debug.Log("Exit Settings");
         SceneManager.LoadScene("MainMenu");
     }
+
+
 }

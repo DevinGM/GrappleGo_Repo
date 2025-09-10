@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/James Stuff/SettingMenu.unity
     guid: b5521584c9ff5a441abedda6fec8b61c
+  - enabled: 1
+    path: Assets/Scenes/James Stuff/DeathMenu.unity
+    guid: e909351314a4b7e44a9532021abab014
   m_configObjects: {}
