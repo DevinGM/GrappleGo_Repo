@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "PlayerInputs",
+    "maps": [
+        {
+            "name": "ControlsTemp",
+            "id": "251d8a6a-aa20-4548-8630-efba688a49a3",
+            "actions": [
+                {
+                    "name": "GrappleTemp",
+                    "type": "Button",
+                    "id": "1272ded1-b237-4e1c-976d-80c5e743433f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e0c34aa7-8cdf-4c8c-a244-35dd2bfbd11e",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GrappleTemp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

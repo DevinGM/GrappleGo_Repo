@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/7/2025
+/// 9/16/2025
 /// Holds player behaviours
 /// Handles player state machine
-///     state machnie handles movement
+///     state machine handles movement
 /// </summary>
 
 public class PlayerController : MonoBehaviour
@@ -43,6 +44,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 _spawnPos;
     // is the player currently moving
     private bool _waitingToAccelerate = false;
+    // references to inputs
+    private PlayerInputs _playerInputs;
+    private InputAction _grappleAction;
 
     // reference to player rigidbody
     public Rigidbody RBRef { get; private set; }
@@ -79,6 +83,14 @@ public class PlayerController : MonoBehaviour
         // get references
         RBRef = this.GetComponent<Rigidbody>();
         GrappleRef = this.GetComponentInChildren<GrappleController>();
+
+        // add inputs
+        _playerInputs = new PlayerInputs();
+        _playerInputs.Enable();
+
+        _grappleAction = _playerInputs.ControlsTemp.GrappleTemp;
+        _grappleAction.performed += OnGrapplePerformed;
+        _grappleAction.canceled += OnGrappleCanceled;
     }
 
     void OnDisable()
@@ -134,9 +146,6 @@ public class PlayerController : MonoBehaviour
         // logic only happens when in a run
         if (InRun)
         {
-            // get inputs
-            TempInputs();
-
             // increase speed by 1 every 5 seconds
             if (!_waitingToAccelerate)
             {
@@ -179,14 +188,15 @@ public class PlayerController : MonoBehaviour
         CurrentState.Handle(this);
     }
 
-    // temp prototyping inputs
-    private void TempInputs()
+    // called when player inputs grapple
+    private void OnGrapplePerformed(InputAction.CallbackContext context)
     {
-        // hold W to grapple
-        if (Input.GetKey(KeyCode.W))
-            InputtingGrapple = true;
-        else
-            InputtingGrapple = false;
+        InputtingGrapple = true;
+    }
+    // called when player stops inputting grapple
+    private void OnGrappleCanceled(InputAction.CallbackContext context)
+    {
+        InputtingGrapple = false;
     }
 
     // temp prototyping ui
