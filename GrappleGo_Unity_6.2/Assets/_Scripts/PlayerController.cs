@@ -32,10 +32,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _accelSpeed = 1f;
     // amount of time passed before player accelerates
     [SerializeField] private float _accelTime = 5f;
-    // distance travelled
-    [SerializeField] private int _score = 0;
-    // highest distance ever travelled
-    [SerializeField] private int _highScore = 0;
     // number of player's lives
     // player dies when lives hits 0
     [SerializeField] private int _lives = 1;
@@ -154,9 +150,7 @@ public class PlayerController : MonoBehaviour
 
             // handle score
             // player MUST start run at x = 0 for score to be accurate
-            _score = (int)transform.position.x;
-            if (_highScore < _score)
-                _highScore = _score;
+            GameManager.Instance.score = (int)transform.position.x;
 
             // if the player runs out of lives end the run
             if (_lives <= 0)
@@ -197,17 +191,5 @@ public class PlayerController : MonoBehaviour
     private void OnGrappleCanceled(InputAction.CallbackContext context)
     {
         InputtingGrapple = false;
-    }
-
-    // temp prototyping ui
-    private void OnGUI()
-    {
-        GUIStyle customStyle = new GUIStyle(GUI.skin.label);
-        customStyle.fontSize = 30;
-
-        Rect scoreText = new Rect(10, 10, 200, 40); // x, y, width, height
-        GUI.Label(scoreText, "Score: " + _score, customStyle);
-        Rect highScoreText = new Rect(10, 50, 200, 40); // x, y, width, height
-        GUI.Label(highScoreText, "High Score: " + _highScore, customStyle);
     }
 }
