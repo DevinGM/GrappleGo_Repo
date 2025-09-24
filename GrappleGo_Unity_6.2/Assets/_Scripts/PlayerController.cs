@@ -44,6 +44,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     private bool _waitingToAccelerate = false;
     // references to inputs
     private PlayerInputs _playerInputs;
+    private InputAction _grappleActionKeyboard;
     private InputAction _grappleAction;
 
     // reference to player rigidbody
@@ -86,7 +87,10 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
 
-        _grappleAction = _playerInputs.ControlsTemp.GrappleTemp;
+        _grappleActionKeyboard = _playerInputs.ControlsTemp.GrappleTemp;
+        _grappleActionKeyboard.performed += OnGrapplePerformed;
+        _grappleActionKeyboard.canceled += OnGrappleCanceled;
+        _grappleAction = _playerInputs.ControlsTemp.Grapple;
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
     }
@@ -134,7 +138,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     void Update()
     {
         // start a run when _StartRun is set to true
-        // dev tool, presumedly remove for build
+        // dev tool, remove for build
         if (_StartRun)
         {
             EventBus.Publish(EventType.RunStart);
@@ -211,6 +215,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     {
         InputtingGrapple = true;
     }
+
     // called when player stops inputting grapple
     private void OnGrappleCanceled(InputAction.CallbackContext context)
     {

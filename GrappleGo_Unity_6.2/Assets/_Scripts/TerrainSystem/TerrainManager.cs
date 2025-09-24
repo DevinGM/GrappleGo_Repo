@@ -15,9 +15,9 @@ public class TerrainManager : MonoBehaviour
     [Header("List of Chunk Prefabs \nEach chunk MUST be 10 meters long")]
     public List <GameObject> chunkList;
 
-    // x position chunk spawns at, defaults to 30
+    // x position chunk spawns at, defaults to 40
     [Header("Spawn X Coordinate of Chunk \nSet to coordinate first chunk will spawn at")]
-    [SerializeField] private float _spawnXPos = 30f;
+    [SerializeField] private float _spawnXPos = 40f;
 
     [Header("Max number of reserved chunks")]
     [SerializeField] private int _maxPoolSize = 10;
