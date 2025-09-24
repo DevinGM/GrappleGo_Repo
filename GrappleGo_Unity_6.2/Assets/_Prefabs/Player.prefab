@@ -291,7 +291,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6188158603636003502}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 60
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -345,16 +345,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 927e2b76c5d9cd943932f87ed13b9ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _StartRun: 0
+  _StartRun: 1
   _CurrentState: {fileID: 0}
   _startSpeed: 10
   _startClimbSpeed: 5
   _grappleClimbSpeed: 0
   _accelSpeed: 1
   _accelTime: 5
-  _score: 0
-  _highScore: 0
   _lives: 1
+  _coinValue: 10
 --- !u!114 &9079047272047372646
 MonoBehaviour:
   m_ObjectHideFlags: 0

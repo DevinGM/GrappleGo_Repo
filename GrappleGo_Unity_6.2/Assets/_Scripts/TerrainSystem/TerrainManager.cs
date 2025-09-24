@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Pool;
 
 /// <summary>
 /// Devin G Monaghan
@@ -18,56 +18,105 @@ public class TerrainManager : MonoBehaviour
     // x position chunk spawns at, defaults to 30
     [Header("Spawn X Coordinate of Chunk \nSet to coordinate first chunk will spawn at")]
     [SerializeField] private float _spawnXPos = 30f;
-    
+
+    [Header("Max number of reserved chunks")]
+    [SerializeField] private int _maxPoolSize = 10;
+    [Header("Initial amount of reserved memory reserved for pool")]
+    [SerializeField] private int _stackDefaultCapacity = 10;
+
+    // pool of chunks
+    private IObjectPool<ChunkController> _pool;
+
+    // property referencing private pool
+    public IObjectPool<ChunkController> Pool
+    {
+        get
+        {
+            if (_pool == null)
+            {
+                _pool = new ObjectPool<ChunkController>(CreatedPooledItem, OnTakeFromPool,
+                    OnReturnedFromPool, OnDestroyPoolObject, true, _stackDefaultCapacity, _maxPoolSize);
+            }
+            return _pool;
+        }
+    }
+
     // is the player currently in a run?
-    private bool _inRun = false;
+    //private bool _inRun = false;
 
     void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.RunStart, StartRun);
-        EventBus.Subscribe(EventType.RunEnd, EndRun);
         EventBus.Subscribe(EventType.ChunkSteppedOn, SpawnChunk);
     }
     void OnDisable()
     {
         // unsubscribe to events
-        EventBus.Unsubscribe(EventType.RunStart, StartRun);
-        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
         EventBus.Unsubscribe(EventType.ChunkSteppedOn, SpawnChunk);
     }
 
-    // randomly select a chunk and spawn it in line
-    private void SpawnChunk()
+    // instantiates a new random chunk
+    // returns chunk's controller
+    private ChunkController CreatedPooledItem()
     {
-        // only do logic if in run
-        if (_inRun)
+        // make sure there are chunks in the list
+        if (chunkList.Count > 0)
         {
-            // make sure there are chunks in the list
-            if (chunkList.Count > 0)
-            {
-                int random = Random.Range(0, chunkList.Count);
-                GameObject spawnedChunk = Instantiate(chunkList[random], new Vector3(_spawnXPos, 0f, 0f), transform.rotation);
-                spawnedChunk.GetComponent<ChunkController>().StartRun();
-            }
-            // there are no chunks so return an error
-            else
-            {
-                Debug.LogError("ERROR: No chunks given to terrain manager");
-            }
+            int random = Random.Range(0, chunkList.Count);
+            GameObject chunk = Instantiate(chunkList[random], new Vector3(_spawnXPos, 0f, 0f), transform.rotation);
+            ChunkController chunkController = chunk.GetComponent<ChunkController>();
+            chunkController.StartRun();
+            chunkController.Pool = _pool;
 
-            _spawnXPos += 10f;
+            // return chunk's controller
+            return chunkController;
+        }
+        // there are no chunks in list so return an error
+        else
+        {
+            Debug.LogError("ERROR: No chunks given to terrain manager");
+            return null;
         }
     }
 
-    // called when run begins
-    private void StartRun()
+    // set requested chunk active
+    private void OnTakeFromPool(ChunkController chunk)
     {
-        _inRun = true;
+        chunk.gameObject.SetActive(true);
     }
-    // called when run ends
-    private void EndRun()
+
+    // set requested chunk inactive
+    // 1 in 3 random chance to replace chunk to make sure we keep randomizing the used chunks
+    private void OnReturnedFromPool(ChunkController chunk)
     {
-        _inRun = false;
+        chunk.gameObject.SetActive(false);
+
+        // randomly replace chunk
+        // also replace chunk if it has consumables
+        int random = Random.Range(0, 3);
+        if (random == 0 || chunk.consumable)
+        {
+            // destry this chunk
+            OnDestroyPoolObject(chunk);
+
+            // replace it with a fresh chunk so the pool doesn't kill itself trying to access a dead chunk
+            var newChunk = CreatedPooledItem();
+            _pool.Release(newChunk);
+        }
+    }
+
+    // destroy requested chunk
+    private void OnDestroyPoolObject(ChunkController chunk)
+    {
+        Destroy(chunk.gameObject);
+    }
+
+    // get a random chunk from object pool and spawn it in line
+    public void SpawnChunk()
+    {
+        // grab a chunk from the pool and place it in line
+        var chunk = Pool.Get();
+        chunk.transform.position = new Vector3(_spawnXPos, 0f, 0f);
+        _spawnXPos += 10f;
     }
 }

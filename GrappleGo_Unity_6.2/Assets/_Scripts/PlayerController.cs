@@ -11,9 +11,10 @@ using UnityEngine.InputSystem;
 /// Holds player behaviours
 /// Handles player state machine
 ///     state machine handles movement
+/// Handles coin collection
 /// </summary>
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : SingletonNonPersisit<PlayerController>
 {
     // turn on to start the run
     [Header("Turn On To Start The Run")]
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     // number of player's lives
     // player dies when lives hits 0
     [SerializeField] private int _lives = 1;
+    [SerializeField] private int _coinValue = 10;
 
     // position at the start of a run
     private Vector3 _spawnPos;
@@ -144,9 +146,7 @@ public class PlayerController : MonoBehaviour
         {
             // increase speed by 1 every 5 seconds
             if (!_waitingToAccelerate)
-            {
                 StartCoroutine(Accelerate());
-            }
 
             // handle score
             // player MUST start run at x = 0 for score to be accurate
@@ -161,8 +161,32 @@ public class PlayerController : MonoBehaviour
     // handles collision interactions
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
-            _lives--;
+        print("player collided with something");
+        // only do logic inside run
+        if (InRun)
+        {
+            if (collision.gameObject.CompareTag("Obstacle"))
+            {
+                print("player collided with obstacle");
+                _lives--;
+                Destroy(collision.gameObject);
+            }
+        }
+    }
+
+    // handles triger collisions
+    private void OnTriggerEnter(Collider other)
+    {
+        // only do logic inside run
+        if (InRun)
+        {
+            // if collide with coin destroy it and add to score
+            if (other.gameObject.CompareTag("Coin"))
+            {
+                GameManager.Instance.score += _coinValue;
+                Destroy(other.gameObject);
+            }
+        }
     }
 
     // wait _accelTime amount of seconds before increasing speed by _accelSpeed

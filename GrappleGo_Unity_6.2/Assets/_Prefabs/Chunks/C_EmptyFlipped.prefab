@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4c7d6a70d3808b045bca066ac2c82efe, type: 2}
+  - {fileID: 2100000, guid: 64be6e75af3d0d84eb07e9b3bd1a3501, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,10 +120,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3855813081380700655}
-  - component: {fileID: -8408927144860305530}
-  - component: {fileID: 9184531329749485221}
+  - component: {fileID: 2930663859588178422}
+  - component: {fileID: 8947061018925570147}
   m_Layer: 0
-  m_Name: Empty
+  m_Name: C_EmptyFlipped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ Transform:
   - {fileID: 434813099288866109}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8408927144860305530
+--- !u!114 &2930663859588178422
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf929714eea116428f91d88d50efe5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChunkController
---- !u!54 &9184531329749485221
+--- !u!54 &8947061018925570147
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -252,7 +252,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 64be6e75af3d0d84eb07e9b3bd1a3501, type: 2}
+  - {fileID: 2100000, guid: 4c7d6a70d3808b045bca066ac2c82efe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
