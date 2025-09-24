@@ -11,9 +11,10 @@ using UnityEngine.InputSystem;
 /// Holds player behaviours
 /// Handles player state machine
 ///     state machine handles movement
+/// Handles coin collection
 /// </summary>
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : SingletonNonPersisit<PlayerController>
 {
     // turn on to start the run
     [Header("Turn On To Start The Run")]
@@ -32,13 +33,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _accelSpeed = 1f;
     // amount of time passed before player accelerates
     [SerializeField] private float _accelTime = 5f;
-    // distance travelled
-    [SerializeField] private int _score = 0;
-    // highest distance ever travelled
-    [SerializeField] private int _highScore = 0;
     // number of player's lives
     // player dies when lives hits 0
     [SerializeField] private int _lives = 1;
+    [SerializeField] private int _coinValue = 10;
 
     // position at the start of a run
     private Vector3 _spawnPos;
@@ -46,6 +44,7 @@ public class PlayerController : MonoBehaviour
     private bool _waitingToAccelerate = false;
     // references to inputs
     private PlayerInputs _playerInputs;
+    private InputAction _grappleActionKeyboard;
     private InputAction _grappleAction;
 
     // reference to player rigidbody
@@ -88,7 +87,10 @@ public class PlayerController : MonoBehaviour
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
 
-        _grappleAction = _playerInputs.ControlsTemp.GrappleTemp;
+        _grappleActionKeyboard = _playerInputs.ControlsTemp.GrappleTemp;
+        _grappleActionKeyboard.performed += OnGrapplePerformed;
+        _grappleActionKeyboard.canceled += OnGrappleCanceled;
+        _grappleAction = _playerInputs.ControlsTemp.Grapple;
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
     }
@@ -136,7 +138,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // start a run when _StartRun is set to true
-        // dev tool, presumedly remove for build
+        // dev tool, remove for build
         if (_StartRun)
         {
             EventBus.Publish(EventType.RunStart);
@@ -148,15 +150,11 @@ public class PlayerController : MonoBehaviour
         {
             // increase speed by 1 every 5 seconds
             if (!_waitingToAccelerate)
-            {
                 StartCoroutine(Accelerate());
-            }
 
             // handle score
             // player MUST start run at x = 0 for score to be accurate
-            _score = (int)transform.position.x;
-            if (_highScore < _score)
-                _highScore = _score;
+            GameManager.Instance.score = (int)transform.position.x;
 
             // if the player runs out of lives end the run
             if (_lives <= 0)
@@ -167,8 +165,32 @@ public class PlayerController : MonoBehaviour
     // handles collision interactions
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
-            _lives--;
+        print("player collided with something");
+        // only do logic inside run
+        if (InRun)
+        {
+            if (collision.gameObject.CompareTag("Obstacle"))
+            {
+                print("player collided with obstacle");
+                _lives--;
+                Destroy(collision.gameObject);
+            }
+        }
+    }
+
+    // handles triger collisions
+    private void OnTriggerEnter(Collider other)
+    {
+        // only do logic inside run
+        if (InRun)
+        {
+            // if collide with coin destroy it and add to score
+            if (other.gameObject.CompareTag("Coin"))
+            {
+                GameManager.Instance.score += _coinValue;
+                Destroy(other.gameObject);
+            }
+        }
     }
 
     // wait _accelTime amount of seconds before increasing speed by _accelSpeed
@@ -193,21 +215,10 @@ public class PlayerController : MonoBehaviour
     {
         InputtingGrapple = true;
     }
+
     // called when player stops inputting grapple
     private void OnGrappleCanceled(InputAction.CallbackContext context)
     {
         InputtingGrapple = false;
-    }
-
-    // temp prototyping ui
-    private void OnGUI()
-    {
-        GUIStyle customStyle = new GUIStyle(GUI.skin.label);
-        customStyle.fontSize = 30;
-
-        Rect scoreText = new Rect(10, 10, 200, 40); // x, y, width, height
-        GUI.Label(scoreText, "Score: " + _score, customStyle);
-        Rect highScoreText = new Rect(10, 50, 200, 40); // x, y, width, height
-        GUI.Label(highScoreText, "High Score: " + _highScore, customStyle);
     }
 }
