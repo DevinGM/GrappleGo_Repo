@@ -31,9 +31,9 @@ public class GameManager : Singleton<GameManager>
         GUIStyle customStyle = new GUIStyle(GUI.skin.label);
         customStyle.fontSize = 30;
 
-        Rect scoreText = new Rect(10, 10, 300, 40); // x, y, width, height
+        Rect scoreText = new Rect(30, 30, 300, 40); // x, y, width, height
         GUI.Label(scoreText, "Score: " + score, customStyle);
-        Rect highScoreText = new Rect(10, 50, 300, 40); // x, y, width, height
+        Rect highScoreText = new Rect(30, 90, 300, 40); // x, y, width, height
         GUI.Label(highScoreText, "High Score: " + highScore, customStyle);
     }
 }

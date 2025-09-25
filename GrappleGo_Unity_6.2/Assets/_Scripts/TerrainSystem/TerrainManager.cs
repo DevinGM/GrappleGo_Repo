@@ -14,16 +14,20 @@ public class TerrainManager : MonoBehaviour
     // every prefab MUST be 10 meters long
     [Header("List of Chunk Prefabs \nEach chunk MUST be 10 meters long")]
     public List <GameObject> chunkList;
-
+    
+    // prefab for beginning 4 chunks of level
+    [Header("Prefab of beginning 4 chunks of level")]
+    [SerializeField] private GameObject _startingTerrain;
     // x position chunk spawns at, defaults to 40
     [Header("Spawn X Coordinate of Chunk \nSet to coordinate first chunk will spawn at")]
-    [SerializeField] private float _spawnXPos = 40f;
-
+    [SerializeField] private float _startSpawnXPos = 40f;
     [Header("Max number of reserved chunks")]
     [SerializeField] private int _maxPoolSize = 10;
     [Header("Initial amount of reserved memory reserved for pool")]
     [SerializeField] private int _stackDefaultCapacity = 10;
 
+    // spawn position of chunks, gets updated during run and reset at end
+    private float _currentSpawnXPos = 40f;
     // pool of chunks
     private IObjectPool<ChunkController> _pool;
 
@@ -48,11 +52,27 @@ public class TerrainManager : MonoBehaviour
     {
         // subscribe to events
         EventBus.Subscribe(EventType.ChunkSteppedOn, SpawnChunk);
+        EventBus.Subscribe(EventType.RunEnd, EndRun);
+
+        // set current spawn posiiton
+        _currentSpawnXPos = _startSpawnXPos;
     }
     void OnDisable()
     {
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.ChunkSteppedOn, SpawnChunk);
+        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
+    }
+
+    // called upon end of run
+    private void EndRun()
+    {
+        // spawn starter terrain
+        Instantiate(_startingTerrain, Vector3.zero, transform.rotation);
+        // reset current spawn posiiton
+        _currentSpawnXPos = _startSpawnXPos;
+        // reset pool
+        _pool.Clear();
     }
 
     // instantiates a new random chunk
@@ -63,7 +83,7 @@ public class TerrainManager : MonoBehaviour
         if (chunkList.Count > 0)
         {
             int random = Random.Range(0, chunkList.Count);
-            GameObject chunk = Instantiate(chunkList[random], new Vector3(_spawnXPos, 0f, 0f), transform.rotation);
+            GameObject chunk = Instantiate(chunkList[random], new Vector3(_startSpawnXPos, 0f, 0f), transform.rotation);
             ChunkController chunkController = chunk.GetComponent<ChunkController>();
             chunkController.StartRun();
             chunkController.Pool = _pool;
@@ -116,7 +136,7 @@ public class TerrainManager : MonoBehaviour
     {
         // grab a chunk from the pool and place it in line
         var chunk = Pool.Get();
-        chunk.transform.position = new Vector3(_spawnXPos, 0f, 0f);
-        _spawnXPos += 10f;
+        chunk.transform.position = new Vector3(_startSpawnXPos, 0f, 0f);
+        _startSpawnXPos += 10f;
     }
 }
