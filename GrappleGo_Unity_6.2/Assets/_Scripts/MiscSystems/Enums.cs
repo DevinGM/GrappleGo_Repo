@@ -6,5 +6,5 @@
 
 public enum EventType
 {
-    RunStart, RunEnd, BeginClimbing, PlayerReachedCeiling, ChunkSteppedOn
+    RunStart, RunEnd, BeginClimbing, PlayerReachedCeiling
 }

@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/16/2025
+/// 9/7/2025
 /// Holds player behaviours
 /// Handles player state machine
-///     state machine handles movement
-/// Handles coin collection
+///     state machnie handles movement
 /// </summary>
 
-public class PlayerController : SingletonNonPersisit<PlayerController>
+public class PlayerController : MonoBehaviour
 {
     // turn on to start the run
     [Header("Turn On To Start The Run")]
@@ -33,19 +31,18 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     [SerializeField] private float _accelSpeed = 1f;
     // amount of time passed before player accelerates
     [SerializeField] private float _accelTime = 5f;
+    // distance travelled
+    [SerializeField] private int _score = 0;
+    // highest distance ever travelled
+    [SerializeField] private int _highScore = 0;
     // number of player's lives
     // player dies when lives hits 0
     [SerializeField] private int _lives = 1;
-    [SerializeField] private int _coinValue = 10;
 
     // position at the start of a run
     private Vector3 _spawnPos;
     // is the player currently moving
     private bool _waitingToAccelerate = false;
-    // references to inputs
-    private PlayerInputs _playerInputs;
-    private InputAction _grappleActionKeyboard;
-    private InputAction _grappleAction;
 
     // reference to player rigidbody
     public Rigidbody RBRef { get; private set; }
@@ -82,17 +79,6 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         // get references
         RBRef = this.GetComponent<Rigidbody>();
         GrappleRef = this.GetComponentInChildren<GrappleController>();
-
-        // add inputs
-        _playerInputs = new PlayerInputs();
-        _playerInputs.Enable();
-
-        _grappleActionKeyboard = _playerInputs.ControlsTemp.GrappleTemp;
-        _grappleActionKeyboard.performed += OnGrapplePerformed;
-        _grappleActionKeyboard.canceled += OnGrappleCanceled;
-        _grappleAction = _playerInputs.ControlsTemp.Grapple;
-        _grappleAction.performed += OnGrapplePerformed;
-        _grappleAction.canceled += OnGrappleCanceled;
     }
 
     void OnDisable()
@@ -138,7 +124,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     void Update()
     {
         // start a run when _StartRun is set to true
-        // dev tool, remove for build
+        // dev tool, presumedly remove for build
         if (_StartRun)
         {
             EventBus.Publish(EventType.RunStart);
@@ -148,13 +134,20 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         // logic only happens when in a run
         if (InRun)
         {
+            // get inputs
+            TempInputs();
+
             // increase speed by 1 every 5 seconds
             if (!_waitingToAccelerate)
+            {
                 StartCoroutine(Accelerate());
+            }
 
             // handle score
             // player MUST start run at x = 0 for score to be accurate
-            GameManager.Instance.score = (int)transform.position.x;
+            _score = (int)transform.position.x;
+            if (_highScore < _score)
+                _highScore = _score;
 
             // if the player runs out of lives end the run
             if (_lives <= 0)
@@ -165,32 +158,8 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     // handles collision interactions
     private void OnCollisionEnter(Collision collision)
     {
-        print("player collided with something");
-        // only do logic inside run
-        if (InRun)
-        {
-            if (collision.gameObject.CompareTag("Obstacle"))
-            {
-                print("player collided with obstacle");
-                _lives--;
-                Destroy(collision.gameObject);
-            }
-        }
-    }
-
-    // handles triger collisions
-    private void OnTriggerEnter(Collider other)
-    {
-        // only do logic inside run
-        if (InRun)
-        {
-            // if collide with coin destroy it and add to score
-            if (other.gameObject.CompareTag("Coin"))
-            {
-                GameManager.Instance.score += _coinValue;
-                Destroy(other.gameObject);
-            }
-        }
+        if (collision.gameObject.CompareTag("Obstacle"))
+            _lives--;
     }
 
     // wait _accelTime amount of seconds before increasing speed by _accelSpeed
@@ -210,15 +179,25 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         CurrentState.Handle(this);
     }
 
-    // called when player inputs grapple
-    private void OnGrapplePerformed(InputAction.CallbackContext context)
+    // temp prototyping inputs
+    private void TempInputs()
     {
-        InputtingGrapple = true;
+        // hold W to grapple
+        if (Input.GetKey(KeyCode.W))
+            InputtingGrapple = true;
+        else
+            InputtingGrapple = false;
     }
 
-    // called when player stops inputting grapple
-    private void OnGrappleCanceled(InputAction.CallbackContext context)
+    // temp prototyping ui
+    private void OnGUI()
     {
-        InputtingGrapple = false;
+        GUIStyle customStyle = new GUIStyle(GUI.skin.label);
+        customStyle.fontSize = 30;
+
+        Rect scoreText = new Rect(10, 10, 200, 40); // x, y, width, height
+        GUI.Label(scoreText, "Score: " + _score, customStyle);
+        Rect highScoreText = new Rect(10, 50, 200, 40); // x, y, width, height
+        GUI.Label(highScoreText, "High Score: " + _highScore, customStyle);
     }
 }
