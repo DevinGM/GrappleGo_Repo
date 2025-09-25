@@ -61,7 +61,7 @@ public class ChunkController : MonoBehaviour
     // called when run ends
     private void EndRun()
     {
-        _inRun = false;
+        Destroy(this.gameObject);
     }
 
     // release this chunk into the pool
