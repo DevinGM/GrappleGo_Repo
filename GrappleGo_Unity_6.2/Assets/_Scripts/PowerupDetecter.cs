@@ -13,7 +13,7 @@ public class PowerupDetecter : MonoBehaviour
     // is the player currently in a run?
     private bool _inRun = false;
     // references to powerup scripts
-    private PowerupParent _shieldPowerup, _boostPowerUp, _dashPowerup, _gunPowerUp, _dynamitePowerUp;
+    private PowerupParent _shieldPowerup, _boostPowerup, _dashPowerup, _gunPowerUp, _dynamitePowerUp;
 
     void OnEnable()
     {
@@ -23,6 +23,7 @@ public class PowerupDetecter : MonoBehaviour
 
         // get powerup references
         _shieldPowerup = this.GetComponent<ShieldPowerup>();
+        _boostPowerup = this.GetComponent<BoostPowerup>();
     }
     void OnDisable()
     {
@@ -55,13 +56,13 @@ public class PowerupDetecter : MonoBehaviour
                 OnPowerupPickUp(_shieldPowerup);
                 Destroy(other.gameObject);
             }
-            /* ///////////////////////////////////// Add these in when made corresponding powerup
             // if collide with boost powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("BoostPowerup"))
             {
-                OnPowerupPickUp(_boostPowerUp);
+                OnPowerupPickUp(_boostPowerup);
                 Destroy(other.gameObject);
             }
+            /* ///////////////////////////////////// Add these in when made corresponding powerup
             // if collide with dash powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("DashPowerup"))
             {

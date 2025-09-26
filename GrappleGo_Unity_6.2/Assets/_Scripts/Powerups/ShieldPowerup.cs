@@ -39,6 +39,7 @@ public class ShieldPowerup : PowerupParent
         // turn on shield model
         _shieldModelRef.SetActive(true);
     }
+
     protected override void Deactivate()
     {
         // mark powerup as inactive

@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 /// <summary>
 /// Devin G Monaghan
@@ -32,7 +30,7 @@ public class GrappleController : MonoBehaviour
         EventBus.Subscribe(EventType.RunStart, StartRun);
         EventBus.Subscribe(EventType.RunEnd, EndRun);
 
-        // set spawnY
+        // set spawnPos
         _spawnPos = transform.localPosition;
     }
 
@@ -58,6 +56,7 @@ public class GrappleController : MonoBehaviour
         transform.localPosition = _spawnPos;
     }
 
+    // Update is called once per frame
     private void Update()
     {
         // only do logic if in run
@@ -106,10 +105,10 @@ public class GrappleController : MonoBehaviour
         // detect when off ceiling
         if (other.CompareTag("Ceiling"))
         {
-            // only announce player has left ceiling when they move beneath ceiling height
+            // only announce player has left ceiling when grapple moves beneath ceiling height
             if (_ceilingHeight > transform.position.y)
                 _onCeiling = false;
-            // if player moved up, reset to ceiling height
+            // if grapple moved up, reset to ceiling height
             else if (_ceilingHeight < transform.position.y)
                 transform.position = new Vector3(transform.position.x, _ceilingHeight, 0f);
         }

@@ -30,13 +30,6 @@ public class PlayerClimbingState : MonoBehaviour, IPlayerState
         // only do logic if in this state and have a _playerController
         if (_playerController != null && _playerController.CurrentState == (IPlayerState)this)
         {
-            // if player stops inputting grapple transition to running state
-            if (!_playerController.InputtingGrapple)
-            {
-                _playerController.TransitionToState(_playerController.IdleState);
-                return;
-            }
-
             // move up
             transform.Translate(_playerController.ClimbSpeed * Time.deltaTime * transform.up);
             // move grapple down at same rate so it stays in the same place

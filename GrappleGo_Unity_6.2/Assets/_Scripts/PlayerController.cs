@@ -16,9 +16,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : SingletonNonPersisit<PlayerController>
 {
-    // turn on to start the run
-    [Header("Turn On To Start The Run")]
-    [SerializeField] private bool _StartRun = false;
     // display current state in the editor, remove for build
     [Header("Current State Display")]
     [SerializeField] private MonoBehaviour _CurrentState;
@@ -58,6 +55,8 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     public bool InRun { get; private set; } = false;
     // is the player currently moving
     public bool InputtingGrapple { get; private set; } = false;
+    // is the player currently invincible
+    public bool Invincible { get; set; } = false;
     // references to states
     public IPlayerState IdleState { get; private set; }
     public IPlayerState ClimbingState { get; private set; }
@@ -135,14 +134,6 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     // Update is called once per frame
     void Update()
     {
-        // start a run when _StartRun is set to true
-        // dev tool, remove for build
-        if (_StartRun)
-        {
-            EventBus.Publish(EventType.RunStart);
-            _StartRun = false;
-        }
-
         // logic only happens when in a run
         if (InRun)
         {
@@ -155,6 +146,10 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
             // handle score
             // player MUST start at x = 0 for score to be accurate
             GameManager.Instance.distanceScore = (int)transform.position.x;
+
+            // if player stops inputting grapple out of idle state, transition to idle state
+            if (!InputtingGrapple && CurrentState != IdleState)
+                TransitionToState(IdleState);
         }
     }
 
@@ -164,10 +159,12 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         // only do logic inside run
         if (InRun)
         {
-            // player collides with an obstacle take damage and destroy obstacle
+            // if player collides with an obstacle take damage and destroy obstacle
             if (collision.gameObject.CompareTag("Obstacle"))
             {
-                TakeDamage();
+                // don't take damage if invincible
+                if (!Invincible)
+                    TakeDamage();
                 Destroy(collision.gameObject);
             }
         }

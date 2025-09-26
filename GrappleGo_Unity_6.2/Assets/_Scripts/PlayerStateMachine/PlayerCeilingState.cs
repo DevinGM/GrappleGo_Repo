@@ -23,16 +23,4 @@ public class PlayerCeilingState : MonoBehaviour, IPlayerState
         // make sure gravity is off on ceiling
         _playerController.RBRef.useGravity = false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // only do logic if in this state and have a _playerController
-        if (_playerController != null && _playerController.CurrentState == (IPlayerState)this)
-        {
-            // if player stops inputting grapple transition to running state
-            if (!_playerController.InputtingGrapple)
-                _playerController.TransitionToState(_playerController.IdleState);
-        }
-    }
 }
