@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/7/2025
+/// 9/26/2025
 /// Handles grapple up state behaviour
 /// </summary>
 
@@ -15,36 +15,33 @@ public class GrappleUpState : MonoBehaviour, IGrappleState
 
     // Handle is called when GrappleController switches to up state
     public void Handle(GrappleController grappleController)
-    {
+    {/*
         // if _bikeController is not set, set it
         if (!_grappleController)
             _grappleController = grappleController;
-    }
+    */}
 
     // Update is called once per frame
     void Update()
-    {
-        if (_grappleController != null)
+    {/*
+        // only do logic if in this state and have a _grappleController
+        if (_grappleController != null && _grappleController.CurrentState == (IGrappleState)this)
         {
-            // while grapple is in up state move up and check for stopping input
-            if (_grappleController.CurrentState == (IGrappleState)this)
+            // if player stops inputting grapple, transition to down state
+            if (!PlayerController.Instance.InputtingGrapple)
             {
-                // if player stops inputting grapple, transition to down state
-                if (!_grappleController.PlayerRef.InputtingGrapple)
-                {
-                    _grappleController.TransitionToState(_grappleController.DownState);
-                    return;
-                }
-
-                // move up
-                transform.position += _grappleController.GrappleSpeed * Time.deltaTime * transform.up;
+                _grappleController.TransitionToState(_grappleController.DownState);
+                return;
             }
+
+            // move up
+            transform.position += _grappleController.GrappleSpeed * Time.deltaTime * transform.up;
         }
-    }
+    */}
 
     // handles trigger collision enters
     public void OnTriggerEnter(Collider other)
-    {
+    {/*
         // only do logic if in this state and have a _grappleController
         if (_grappleController != null && _grappleController.CurrentState == (IGrappleState)this)
         {
@@ -52,5 +49,5 @@ public class GrappleUpState : MonoBehaviour, IGrappleState
             if (other.CompareTag("Ceiling"))
                 _grappleController.TransitionToState(_grappleController.CeilingState);
         }
-    }
+    */}
 }

@@ -49,5 +49,6 @@ MonoBehaviour:
   - {fileID: 6887751548412757613, guid: 7db83b59e01bdf8458a2736038d3e058, type: 3}
   - {fileID: 6887751548412757613, guid: fa88a6f3b16b7a24e98067e8b0023474, type: 3}
   - {fileID: 2447134036493374778, guid: ac9173adc2bac9d4f8a808c87fce78eb, type: 3}
+  - {fileID: 6887751548412757613, guid: 1abf480bbcdbe1742890b8572b14b8f2, type: 3}
   _startingTerrain: {fileID: 7206048471078834422, guid: 0051d7140305df14584779837a405098, type: 3}
   _startSpawnXPos: 40

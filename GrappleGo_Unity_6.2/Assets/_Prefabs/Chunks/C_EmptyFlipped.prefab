@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8137647622726374656}
   - component: {fileID: 4725214155846091707}
   m_Layer: 0
-  m_Name: Ceilng
+  m_Name: Ceiling
   m_TagString: Ceiling
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1.2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6887751548412757613
 GameObject:
@@ -173,7 +173,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1128319419286519216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,5 +363,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ece54928d9ebf44d87f1c81d3ca102c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDetecter
-  inRun: 0
-  steppedOn: 0

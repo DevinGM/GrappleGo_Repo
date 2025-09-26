@@ -8,6 +8,7 @@ TagManager:
   - Ceiling
   - Grapple
   - Coin
+  - ShieldPowerup
   layers:
   - Default
   - TransparentFX

@@ -32,7 +32,7 @@ public class PlayerCeilingState : MonoBehaviour, IPlayerState
         {
             // if player stops inputting grapple transition to running state
             if (!_playerController.InputtingGrapple)
-                _playerController.TransitionToState(_playerController.RunningState);
+                _playerController.TransitionToState(_playerController.IdleState);
         }
     }
 }
