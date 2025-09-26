@@ -14,27 +14,19 @@ public class WalkEnemy : MonoBehaviour, IEnemy
     [SerializeField] private float _moveSpeed = 10f;
 
     // is the player currently in a run?
-    private bool _inRun = false;
-    public bool InRun { get { return _inRun; } }
+    private bool _inRun = true;
 
     void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.RunStart, StartRun);
         EventBus.Subscribe(EventType.RunEnd, EndRun);
     }
     void OnDisable()
     {
         // unsubscribe to events
-        EventBus.Unsubscribe(EventType.RunStart, StartRun);
         EventBus.Unsubscribe(EventType.RunEnd, EndRun);
     }
 
-    // called when run begins
-    public void StartRun()
-    {
-        _inRun = true;
-    }
     // called when run ends
     public void EndRun()
     {
@@ -46,9 +38,7 @@ public class WalkEnemy : MonoBehaviour, IEnemy
     {
         // only do logic if in run
         if (_inRun)
-        {
             Movement();
-        }
     }
 
     // movement behaviour

@@ -44,7 +44,6 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     private bool _waitingToAccelerate = false;
     // references to inputs
     private PlayerInputs _playerInputs;
-    private InputAction _grappleActionKeyboard;
     private InputAction _grappleAction;
 
     // reference to player rigidbody
@@ -87,10 +86,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
 
-        _grappleActionKeyboard = _playerInputs.ControlsTemp.GrappleTemp;
-        _grappleActionKeyboard.performed += OnGrapplePerformed;
-        _grappleActionKeyboard.canceled += OnGrappleCanceled;
-        _grappleAction = _playerInputs.ControlsTemp.Grapple;
+        _grappleAction = _playerInputs.Controls.Grapple;
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
     }
@@ -120,6 +116,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         transform.position = _spawnPos;
         InRun = false;
         _lives = 1;
+        InputtingGrapple = false;
     }
 
     // called when grapple reaches ceiling
@@ -165,13 +162,11 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     // handles collision interactions
     private void OnCollisionEnter(Collision collision)
     {
-        print("player collided with something");
         // only do logic inside run
         if (InRun)
         {
             if (collision.gameObject.CompareTag("Obstacle"))
             {
-                print("player collided with obstacle");
                 _lives--;
                 Destroy(collision.gameObject);
             }
@@ -213,12 +208,19 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     // called when player inputs grapple
     private void OnGrapplePerformed(InputAction.CallbackContext context)
     {
-        InputtingGrapple = true;
+        // only do logic inside run
+        if (InRun)
+            InputtingGrapple = true;
+        // player is not in run so start run upon pressing grapple
+        else
+            EventBus.Publish(EventType.RunStart);
     }
 
     // called when player stops inputting grapple
     private void OnGrappleCanceled(InputAction.CallbackContext context)
     {
-        InputtingGrapple = false;
+        // only do logic inside run
+        if (InRun)
+            InputtingGrapple = false;
     }
 }

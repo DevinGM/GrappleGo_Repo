@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ece54928d9ebf44d87f1c81d3ca102c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDetecter
+  inRun: 0
   steppedOn: 0
 --- !u!1 &5514482948604876558
 GameObject:
@@ -176,7 +177,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6887751548412757613
 GameObject:
@@ -187,8 +188,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3855813081380700655}
-  - component: {fileID: -8408927144860305530}
   - component: {fileID: 9184531329749485221}
+  - component: {fileID: 9170734159519256996}
   m_Layer: 0
   m_Name: C_Empty
   m_TagString: Untagged
@@ -214,20 +215,6 @@ Transform:
   - {fileID: 434813099288866109}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8408927144860305530
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6887751548412757613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf929714eea116428f91d88d50efe5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ChunkController
-  _manualPlaced: 0
-  consumable: 0
 --- !u!54 &9184531329749485221
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -255,6 +242,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9170734159519256996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6887751548412757613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 485599e87cb134d46bc5d3ccce9630b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChunkController
 --- !u!1 &7085305160119157961
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,5 +363,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

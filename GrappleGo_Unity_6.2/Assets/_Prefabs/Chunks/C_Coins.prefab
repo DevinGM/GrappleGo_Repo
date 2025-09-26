@@ -109,7 +109,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3055852687190576248
 GameObject:
@@ -120,8 +120,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1938158438671163228}
-  - component: {fileID: 3018344500971814940}
   - component: {fileID: 6465451721202270977}
+  - component: {fileID: 471775975961386711}
   m_Layer: 0
   m_Name: C_Coins
   m_TagString: Untagged
@@ -150,20 +150,6 @@ Transform:
   - {fileID: 8238310663330646353}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3018344500971814940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3055852687190576248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf929714eea116428f91d88d50efe5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ChunkController
-  _manualPlaced: 0
-  consumable: 1
 --- !u!54 &6465451721202270977
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -191,6 +177,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &471775975961386711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3055852687190576248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 485599e87cb134d46bc5d3ccce9630b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChunkController
 --- !u!1 &5394916839189723430
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ece54928d9ebf44d87f1c81d3ca102c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDetecter
+  inRun: 0
   steppedOn: 0
 --- !u!1 &8169963979365190115
 GameObject:
@@ -367,7 +366,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &826189535945231803
 PrefabInstance:

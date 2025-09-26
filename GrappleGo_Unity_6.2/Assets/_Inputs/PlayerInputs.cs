@@ -89,22 +89,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     ""name"": ""PlayerInputs"",
     ""maps"": [
         {
-            ""name"": ""ControlsTemp"",
+            ""name"": ""Controls"",
             ""id"": ""251d8a6a-aa20-4548-8630-efba688a49a3"",
             ""actions"": [
                 {
-                    ""name"": ""GrappleTemp"",
-                    ""type"": ""Button"",
-                    ""id"": ""1272ded1-b237-4e1c-976d-80c5e743433f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Grapple"",
                     ""type"": ""Button"",
-                    ""id"": ""ff207bcc-92b3-45a6-ab2c-5aaadf8cc7e0"",
+                    ""id"": ""1272ded1-b237-4e1c-976d-80c5e743433f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -119,17 +110,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GrappleTemp"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0425f837-32a7-4563-933a-6d843cb44eed"",
-                    ""path"": ""<Touchscreen>/Press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
                     ""action"": ""Grapple"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -139,15 +119,14 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
-        // ControlsTemp
-        m_ControlsTemp = asset.FindActionMap("ControlsTemp", throwIfNotFound: true);
-        m_ControlsTemp_GrappleTemp = m_ControlsTemp.FindAction("GrappleTemp", throwIfNotFound: true);
-        m_ControlsTemp_Grapple = m_ControlsTemp.FindAction("Grapple", throwIfNotFound: true);
+        // Controls
+        m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
+        m_Controls_Grapple = m_Controls.FindAction("Grapple", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
     {
-        UnityEngine.Debug.Assert(!m_ControlsTemp.enabled, "This will cause a leak and performance issues, PlayerInputs.ControlsTemp.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Controls.enabled, "This will cause a leak and performance issues, PlayerInputs.Controls.Disable() has not been called.");
     }
 
     /// <summary>
@@ -220,34 +199,29 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // ControlsTemp
-    private readonly InputActionMap m_ControlsTemp;
-    private List<IControlsTempActions> m_ControlsTempActionsCallbackInterfaces = new List<IControlsTempActions>();
-    private readonly InputAction m_ControlsTemp_GrappleTemp;
-    private readonly InputAction m_ControlsTemp_Grapple;
+    // Controls
+    private readonly InputActionMap m_Controls;
+    private List<IControlsActions> m_ControlsActionsCallbackInterfaces = new List<IControlsActions>();
+    private readonly InputAction m_Controls_Grapple;
     /// <summary>
-    /// Provides access to input actions defined in input action map "ControlsTemp".
+    /// Provides access to input actions defined in input action map "Controls".
     /// </summary>
-    public struct ControlsTempActions
+    public struct ControlsActions
     {
         private @PlayerInputs m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public ControlsTempActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public ControlsActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "ControlsTemp/GrappleTemp".
+        /// Provides access to the underlying input action "Controls/Grapple".
         /// </summary>
-        public InputAction @GrappleTemp => m_Wrapper.m_ControlsTemp_GrappleTemp;
-        /// <summary>
-        /// Provides access to the underlying input action "ControlsTemp/Grapple".
-        /// </summary>
-        public InputAction @Grapple => m_Wrapper.m_ControlsTemp_Grapple;
+        public InputAction @Grapple => m_Wrapper.m_Controls_Grapple;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_ControlsTemp; }
+        public InputActionMap Get() { return m_Wrapper.m_Controls; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -255,9 +229,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="ControlsTempActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="ControlsActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(ControlsTempActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(ControlsActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -265,14 +239,11 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="ControlsTempActions" />
-        public void AddCallbacks(IControlsTempActions instance)
+        /// <seealso cref="ControlsActions" />
+        public void AddCallbacks(IControlsActions instance)
         {
-            if (instance == null || m_Wrapper.m_ControlsTempActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_ControlsTempActionsCallbackInterfaces.Add(instance);
-            @GrappleTemp.started += instance.OnGrappleTemp;
-            @GrappleTemp.performed += instance.OnGrappleTemp;
-            @GrappleTemp.canceled += instance.OnGrappleTemp;
+            if (instance == null || m_Wrapper.m_ControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ControlsActionsCallbackInterfaces.Add(instance);
             @Grapple.started += instance.OnGrapple;
             @Grapple.performed += instance.OnGrapple;
             @Grapple.canceled += instance.OnGrapple;
@@ -284,24 +255,21 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="ControlsTempActions" />
-        private void UnregisterCallbacks(IControlsTempActions instance)
+        /// <seealso cref="ControlsActions" />
+        private void UnregisterCallbacks(IControlsActions instance)
         {
-            @GrappleTemp.started -= instance.OnGrappleTemp;
-            @GrappleTemp.performed -= instance.OnGrappleTemp;
-            @GrappleTemp.canceled -= instance.OnGrappleTemp;
             @Grapple.started -= instance.OnGrapple;
             @Grapple.performed -= instance.OnGrapple;
             @Grapple.canceled -= instance.OnGrapple;
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ControlsTempActions.UnregisterCallbacks(IControlsTempActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ControlsActions.UnregisterCallbacks(IControlsActions)" />.
         /// </summary>
-        /// <seealso cref="ControlsTempActions.UnregisterCallbacks(IControlsTempActions)" />
-        public void RemoveCallbacks(IControlsTempActions instance)
+        /// <seealso cref="ControlsActions.UnregisterCallbacks(IControlsActions)" />
+        public void RemoveCallbacks(IControlsActions instance)
         {
-            if (m_Wrapper.m_ControlsTempActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_ControlsActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -311,35 +279,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="ControlsTempActions.AddCallbacks(IControlsTempActions)" />
-        /// <seealso cref="ControlsTempActions.RemoveCallbacks(IControlsTempActions)" />
-        /// <seealso cref="ControlsTempActions.UnregisterCallbacks(IControlsTempActions)" />
-        public void SetCallbacks(IControlsTempActions instance)
+        /// <seealso cref="ControlsActions.AddCallbacks(IControlsActions)" />
+        /// <seealso cref="ControlsActions.RemoveCallbacks(IControlsActions)" />
+        /// <seealso cref="ControlsActions.UnregisterCallbacks(IControlsActions)" />
+        public void SetCallbacks(IControlsActions instance)
         {
-            foreach (var item in m_Wrapper.m_ControlsTempActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_ControlsActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_ControlsTempActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_ControlsActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="ControlsTempActions" /> instance referencing this action map.
+    /// Provides a new <see cref="ControlsActions" /> instance referencing this action map.
     /// </summary>
-    public ControlsTempActions @ControlsTemp => new ControlsTempActions(this);
+    public ControlsActions @Controls => new ControlsActions(this);
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ControlsTemp" which allows adding and removing callbacks.
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Controls" which allows adding and removing callbacks.
     /// </summary>
-    /// <seealso cref="ControlsTempActions.AddCallbacks(IControlsTempActions)" />
-    /// <seealso cref="ControlsTempActions.RemoveCallbacks(IControlsTempActions)" />
-    public interface IControlsTempActions
+    /// <seealso cref="ControlsActions.AddCallbacks(IControlsActions)" />
+    /// <seealso cref="ControlsActions.RemoveCallbacks(IControlsActions)" />
+    public interface IControlsActions
     {
-        /// <summary>
-        /// Method invoked when associated input action "GrappleTemp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnGrappleTemp(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Grapple" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

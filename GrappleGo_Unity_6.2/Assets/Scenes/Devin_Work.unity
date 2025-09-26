@@ -638,6 +638,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4969435033237049084, guid: 6521af9981582d3489fb32958d7ca4ad, type: 3}
+      propertyPath: m_ControlPath
+      value: <Keyboard>/w
+      objectReference: {fileID: 0}
     - target: {fileID: 6103297540962747263, guid: 6521af9981582d3489fb32958d7ca4ad, type: 3}
       propertyPath: m_Name
       value: LevelHUD
@@ -655,10 +659,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3797630628691150263, guid: f01c303ac4e437a409ee7795ffd10ad4, type: 3}
-      propertyPath: _startingTerrain
-      value: 
-      objectReference: {fileID: 7206048471078834422, guid: 0051d7140305df14584779837a405098, type: 3}
     - target: {fileID: 3883962651664762302, guid: f01c303ac4e437a409ee7795ffd10ad4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
