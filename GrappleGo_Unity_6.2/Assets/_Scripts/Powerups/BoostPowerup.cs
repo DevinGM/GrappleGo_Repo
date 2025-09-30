@@ -24,25 +24,23 @@ public class BoostPowerup : PowerupParent
         // get reference to shield model
         _boostModelRef = transform.Find("BoostModel").gameObject;
         // set duration
-        Duration = _duration;
+        base.Duration = _duration;
 
         // activate upon enabling
         Activate();
     }
-    protected override void OnDisable()
-    {
-    }
+    protected override void OnDisable() {}
 
     protected override void Activate()
     {
         // mark powerup as active
         _active = true;
         // get starting speed
-        _startingSpeed = PlayerController.Instance.MoveSpeed;
+        _startingSpeed = PlayerController.Instance.currentMoveSpeed;
         // increase player speed
-        PlayerController.Instance.MoveSpeed += _speedBoost;
+        PlayerController.Instance.currentMoveSpeed += _speedBoost;
         // set player invincible
-        PlayerController.Instance.Invincible = true;
+        PlayerController.Instance.boosting = true;
         // turn on shield model
         _boostModelRef.SetActive(true);
         // begin disable duration
@@ -54,9 +52,9 @@ public class BoostPowerup : PowerupParent
         // mark powerup as inactive
         _active = false;
         // reset player speed
-        PlayerController.Instance.MoveSpeed = _startingSpeed;
+        PlayerController.Instance.currentMoveSpeed = _startingSpeed;
         // set player invincibility off
-        PlayerController.Instance.Invincible = false;
+        PlayerController.Instance.boosting = false;
         // turn off shield model
         _boostModelRef.SetActive(false);
         // disable powerup component

@@ -5,21 +5,16 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/26/2025
+/// 9/30/2025
 /// Holds player behaviours
-/// Handles player state machine
-///     state machine handles movement
+/// Handles player movement
 /// Gets inputs
 /// Handles coin collection
 /// Handles enemy collision and player damage
 /// </summary>
 
-public class PlayerController : SingletonNonPersisit<PlayerController>
+public class PlayerController : SingletonNonPersist<PlayerController>
 {
-    // display current state in the editor, remove for build
-    [Header("Current State Display")]
-    [SerializeField] private MonoBehaviour _CurrentState;
-
     // speed player begins moving at
     [SerializeField] private float _startSpeed = 10f;
     // speed player begins climbing at
@@ -33,36 +28,31 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
 
     // position at the start of a run
     private Vector3 _spawnPos;
+    // speed player is currently climbing at
+    private float _currentClimbSpeed;
     // is the acceleration cooldown on?
     private bool _accelCooldown = false;
+    // is the player currently climbing the grapple?
+    private bool _climbing = false;
+    // is the player currently on the ceiling?
+    private bool _onCeiling = false;
     // references to inputs
     private PlayerInputs _playerInputs;
     private InputAction _grappleAction;
+    // reference to player rigidbody
+    private Rigidbody _rbRef;
 
     // number of player's lives
     // player dies when lives hits 0
     public int lives = 1;
 
-    // reference to player rigidbody
-    public Rigidbody RBRef { get; private set; }
-    // reference to grapple
-    public GrappleController GrappleRef { get; private set; }
-    // speed player is moving at
-    public float MoveSpeed { get; set; }
-    // speed player climbs at
-    public float ClimbSpeed { get; private set; }
-    // is the player currently in a run
-    public bool InRun { get; private set; } = false;
-    // is the player currently moving
+    // speed player is currently moving at
+    public float currentMoveSpeed;
+    // is the player currently boosting
+    public bool boosting = false;
+
+    // is the player currently inputting grapple?
     public bool InputtingGrapple { get; private set; } = false;
-    // is the player currently invincible
-    public bool Invincible { get; set; } = false;
-    // references to states
-    public IPlayerState IdleState { get; private set; }
-    public IPlayerState ClimbingState { get; private set; }
-    public IPlayerState CeilingState { get; private set; }
-    // reference to current state
-    public IPlayerState CurrentState { get; private set; }
 
     void OnEnable()
     {
@@ -70,21 +60,13 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         EventBus.Subscribe(EventType.RunStart, StartRun);
         EventBus.Subscribe(EventType.RunEnd, EndRun);
         EventBus.Subscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
-        EventBus.Subscribe(EventType.PlayerHitCeiling, OnPlayerHitCeiling);
-        
-        // add states to this gameobject
-        IdleState = gameObject.AddComponent<PlayerIdleState>();
-        ClimbingState = gameObject.AddComponent<PlayerClimbingState>();
-        CeilingState = gameObject.AddComponent<PlayerCeilingState>();
         
         // get references
-        RBRef = this.GetComponent<Rigidbody>();
-        GrappleRef = this.GetComponentInChildren<GrappleController>();
+        _rbRef = this.GetComponent<Rigidbody>();
 
         // add inputs
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
-
         _grappleAction = _playerInputs.Controls.Grapple;
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
@@ -96,91 +78,115 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
         EventBus.Unsubscribe(EventType.RunStart, StartRun);
         EventBus.Unsubscribe(EventType.RunEnd, EndRun);
         EventBus.Unsubscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
-        EventBus.Unsubscribe(EventType.PlayerHitCeiling, OnPlayerHitCeiling);
     }
 
     // called when run starts
     private void StartRun()
     {
         _spawnPos = transform.position;
-        InRun = true;
-        MoveSpeed = _startSpeed;
-        ClimbSpeed = _startClimbSpeed;
-        TransitionToState(IdleState);
+        currentMoveSpeed = _startSpeed;
+        _currentClimbSpeed = _startClimbSpeed;
     }
 
     // called when run ends
     private void EndRun()
     {
-        InRun = false;
         // reset player position
         transform.position = _spawnPos;
+        // reset player lives
         lives = 1;
-        InputtingGrapple = false;
+
+        _climbing = false;
+        _onCeiling = false;
     }
 
     // called when grapple reaches ceiling
     private void OnGrappleHitCeiling()
     {
-        TransitionToState(ClimbingState);
-    }
-
-    // called when player reaches ceiling
-    private void OnPlayerHitCeiling()
-    {
-        TransitionToState(CeilingState);
+        // begin climbing
+        _climbing = true;
+        // turn off gravity so player can climb
+        _rbRef.useGravity = false;
+        // zero player's downward momentum in case they were previously falling
+        Vector3 velocity = _rbRef.linearVelocity;
+        velocity.y = 0f;
+        _rbRef.linearVelocity = velocity;
     }
 
     // Update is called once per frame
     void Update()
     {
         // logic only happens when in a run
-        if (InRun)
+        if (GameManager.Instance.InRun)
         {
             // increase speed by 1 every 5 seconds
             if (!_accelCooldown)
                 StartCoroutine(Accelerate());
-            // move forward constantly
-            transform.Translate(MoveSpeed * Time.deltaTime * transform.right);
 
-            // handle score
+            Move();
+
+            // add to distance score
             // player MUST start at x = 0 for score to be accurate
             GameManager.Instance.distanceScore = (int)transform.position.x;
-
-            // if player stops inputting grapple out of idle state, transition to idle state
-            if (!InputtingGrapple && CurrentState != IdleState)
-                TransitionToState(IdleState);
         }
     }
 
-    // handles collision interactions
-    private void OnCollisionEnter(Collision collision)
+    // handles movement behaviors
+    private void Move()
     {
-        // only do logic inside run
-        if (InRun)
+        // move forward constantly
+        transform.Translate(currentMoveSpeed * Time.deltaTime * transform.right);
+
+        // when player is climbing but hasn't reached the ceiling yet
+        if (_climbing && !_onCeiling && InputtingGrapple)
         {
-            // if player collides with an obstacle take damage and destroy obstacle
-            if (collision.gameObject.CompareTag("Obstacle"))
+            // move up
+            transform.Translate(_currentClimbSpeed * Time.deltaTime * transform.up);
+
+            // check if player has reached ceiling
+            // detect an object above the player
+            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.1f))
             {
-                // don't take damage if invincible
-                if (!Invincible)
-                    TakeDamage();
-                Destroy(collision.gameObject);
+                // check if object is the ceiling and player isn't already on the ceiling and make sure they're inputting grapple
+                if (hit.collider.transform.CompareTag("Ceiling") && InputtingGrapple)
+                    _onCeiling = true;
             }
         }
+
+        // if player stops inputting grapple stop climbing and reactivate gravity
+        if (!InputtingGrapple)
+        {
+            _onCeiling = false;
+            _climbing = false;
+            _rbRef.useGravity = true;
+        }
     }
 
-    // handles triger collisions
+    // handles trigger collisions
     private void OnTriggerEnter(Collider other)
     {
         // only do logic inside run
-        if (InRun)
+        if (GameManager.Instance.InRun)
         {
             // if collide with coin destroy it and add to score
             if (other.gameObject.CompareTag("Coin"))
             {
                 GameManager.Instance.pickupsScore += _coinValue;
                 Destroy(other.gameObject);
+            }
+
+            // if player collides with an obstacle take damage and destroy obstacle
+            if (other.gameObject.CompareTag("Obstacle"))
+            {
+                // don't take damage if invincible
+                if (!boosting)
+                    TakeDamage();
+
+                // if collided obstacle is an enemy, let it kill itself, otherwise kill obstacle
+                if (other.gameObject.GetComponent<IEnemy>() != null)
+                    other.gameObject.GetComponent<IEnemy>().Dead = true;
+                else
+                    Destroy(other.gameObject);
             }
         }
     }
@@ -202,23 +208,15 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     {
         _accelCooldown = true;
         yield return new WaitForSeconds(_accelTime);
-        MoveSpeed += _accelSpeed;
+        currentMoveSpeed += _accelSpeed;
         _accelCooldown = false;
-    }
-
-    // activate specific state's Handle function
-    public void TransitionToState(IPlayerState state)
-    {
-        CurrentState = state;
-        _CurrentState = (MonoBehaviour)CurrentState;
-        CurrentState.Handle(this);
     }
 
     // called when player inputs grapple
     private void OnGrapplePerformed(InputAction.CallbackContext context)
     {
         // only do logic inside run
-        if (InRun)
+        if (GameManager.Instance.InRun)
             InputtingGrapple = true;
         // player is not in run so start run upon pressing grapple
         else
@@ -229,7 +227,7 @@ public class PlayerController : SingletonNonPersisit<PlayerController>
     private void OnGrappleCanceled(InputAction.CallbackContext context)
     {
         // only do logic inside run
-        if (InRun)
+        if (GameManager.Instance.InRun)
             InputtingGrapple = false;
     }
 }
