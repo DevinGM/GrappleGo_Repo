@@ -9,7 +9,7 @@ using UnityEngine;
 /// holds score
 /// holds temp ui
 /// holds game state bools:
-///     InRun, InputtingGrapple
+///     InRun
 /// </summary>
 
 public class GameManager : Singleton<GameManager>
@@ -23,16 +23,12 @@ public class GameManager : Singleton<GameManager>
 
     // is the player in a run?
     public bool InRun { get; private set; } = false;
-    // is the player inputting grapple?
-    public bool InputtingGrapple { get; private set; } = false;
 
     void OnEnable()
     {
         // subscribe to events
         EventBus.Subscribe(EventType.RunStart, OnRunStart);
         EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Subscribe(EventType.StartGrapple, OnStartGrapple);
-        EventBus.Subscribe(EventType.StopGrapple, OnStopGrapple);
     }
 
     void OnDisable()
@@ -40,8 +36,6 @@ public class GameManager : Singleton<GameManager>
         // unsubsribe to events
         EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
         EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Unsubscribe(EventType.StartGrapple, OnStartGrapple);
-        EventBus.Unsubscribe(EventType.StopGrapple, OnStopGrapple);
     }
 
     // called when run starts
@@ -54,19 +48,6 @@ public class GameManager : Singleton<GameManager>
     private void OnRunEnd()
     {
         InRun = false;
-        InputtingGrapple = false;
-    }
-
-    // called when player starts inputting grapple
-    private void OnStartGrapple()
-    {
-        InputtingGrapple = true;
-    }
-
-    // called when player stops inputting grapple
-    private void OnStopGrapple()
-    { 
-        InputtingGrapple = false;
     }
 
     // Update is called once per frame

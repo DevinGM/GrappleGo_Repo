@@ -51,13 +51,15 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     // is the player currently boosting
     public bool boosting = false;
 
+    // is the player currently inputting grapple?
+    public bool InputtingGrapple { get; private set; } = false;
+
     void OnEnable()
     {
         // subscribe to events
         EventBus.Subscribe(EventType.RunStart, StartRun);
         EventBus.Subscribe(EventType.RunEnd, EndRun);
         EventBus.Subscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
-        EventBus.Subscribe(EventType.StopGrapple, OnStopGrapple);
         
         // get references
         _rbRef = this.GetComponent<Rigidbody>();
@@ -76,7 +78,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         EventBus.Unsubscribe(EventType.RunStart, StartRun);
         EventBus.Unsubscribe(EventType.RunEnd, EndRun);
         EventBus.Unsubscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
-        EventBus.Unsubscribe(EventType.StopGrapple, OnStopGrapple);
     }
 
     // called when run starts
@@ -112,15 +113,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         _rbRef.linearVelocity = velocity;
     }
 
-    // if player ever stops inputting grapple, stop climbing
-    private void OnStopGrapple()
-    {
-        // turn back on gravity
-        _rbRef.useGravity = true;
-        _climbing = false;
-        _onCeiling = false;
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -146,7 +138,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         transform.Translate(currentMoveSpeed * Time.deltaTime * transform.right);
 
         // when player is climbing but hasn't reached the ceiling yet
-        if (_climbing && !_onCeiling)
+        if (_climbing && !_onCeiling && InputtingGrapple)
         {
             // move up
             transform.Translate(_currentClimbSpeed * Time.deltaTime * transform.up);
@@ -155,13 +147,18 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             // detect an object above the player
             if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.1f))
             {
-                // check if object is the ceiling and player isn't already on the ceiling
-                if (hit.collider.gameObject.CompareTag("Ceiling") && !_onCeiling)
-                {
-                    print("Player collided with ceiling");
+                // check if object is the ceiling and player isn't already on the ceiling and make sure they're inputting grapple
+                if (hit.collider.transform.CompareTag("Ceiling") && InputtingGrapple)
                     _onCeiling = true;
-                }
             }
+        }
+
+        // if player stops inputting grapple stop climbing and reactivate gravity
+        if (!InputtingGrapple)
+        {
+            _onCeiling = false;
+            _climbing = false;
+            _rbRef.useGravity = true;
         }
     }
 
@@ -185,9 +182,11 @@ public class PlayerController : SingletonNonPersist<PlayerController>
                 if (!boosting)
                     TakeDamage();
 
-                print("player hit an obstacle");
-
-                Destroy(other.gameObject);
+                // if collided obstacle is an enemy, let it kill itself, otherwise kill obstacle
+                if (other.gameObject.GetComponent<IEnemy>() != null)
+                    other.gameObject.GetComponent<IEnemy>().Dead = true;
+                else
+                    Destroy(other.gameObject);
             }
         }
     }
@@ -218,7 +217,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     {
         // only do logic inside run
         if (GameManager.Instance.InRun)
-            EventBus.Publish(EventType.StartGrapple);
+            InputtingGrapple = true;
         // player is not in run so start run upon pressing grapple
         else
             EventBus.Publish(EventType.RunStart);
@@ -229,9 +228,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     {
         // only do logic inside run
         if (GameManager.Instance.InRun)
-        {
-            EventBus.Publish(EventType.StopGrapple);
-            
-        }
+            InputtingGrapple = false;
     }
 }

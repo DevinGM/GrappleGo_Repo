@@ -6,5 +6,5 @@
 
 public enum EventType
 {
-    RunStart, RunEnd, StartGrapple, StopGrapple, GrappleHitCeiling, ChunkSteppedOn, PlayerDamaged
+    RunStart, RunEnd, GrappleHitCeiling, ChunkSteppedOn, PlayerDamaged
 }

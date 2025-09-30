@@ -11,24 +11,23 @@ using UnityEngine;
 public class GrappleController : MonoBehaviour
 {
     // speed the grapple moves up and down
-    [SerializeField] private float _grappleSpeed = 5f;
+    [SerializeField] private float _grappleSpeed = 10f;
+    // speed grapple falls down
+    [SerializeField] private float _fallSpeed = 5f;
 
     // spawn position
     private Vector3 _spawnPos;
     // is the grapple currently on the ceiling?
     private bool _onCeiling = false;
     // is the grapple currently on the floor?
-    private bool _onFloor = true;
-    // reference to grapple rigidbody
-    private Rigidbody _rbRef;
+    private bool _onFloor = false;
+    // is the grapple currently on the player?
+    private bool _onPlayer = false;
 
     void OnEnable()
     {
         // subscribe to events
         EventBus.Subscribe(EventType.RunEnd, EndRun);
-
-        // set references
-        _rbRef = GetComponent<Rigidbody>();
 
         // set spawnPos
         _spawnPos = transform.position;
@@ -58,19 +57,19 @@ public class GrappleController : MonoBehaviour
             transform.Translate(PlayerController.Instance.currentMoveSpeed * Time.deltaTime * transform.right);
 
             // move up when inputting grapple and not on ceiling
-            if (GameManager.Instance.InputtingGrapple && !_onCeiling)
+            if (PlayerController.Instance.InputtingGrapple && !_onCeiling)
             {
                 if (_onFloor)
                     _onFloor = false;
                 transform.Translate(_grappleSpeed * Time.deltaTime * transform.up);
             }
 
-            // move down when not inputting grapple and not on floor
-            if (!GameManager.Instance.InputtingGrapple && !_onFloor)
+            // move down when not inputting grapple but don't let it go farther than the player
+            if (!PlayerController.Instance.InputtingGrapple && !_onFloor && !_onPlayer)
             {
                 if (_onCeiling)
                     _onCeiling = false;
-                transform.Translate(_grappleSpeed * Time.deltaTime * -transform.up);
+                transform.Translate(_fallSpeed * Time.deltaTime * -transform.up);
             }
 
             // check if grapple has reached floor
@@ -78,17 +77,27 @@ public class GrappleController : MonoBehaviour
                 _onFloor = true;
 
             // check if grapple has reached ceiling
-            // detect an object above the player
-            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, .275f))
+            // detect an object above the grapple
+            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit1, .275f))
             {
-                // check if object is the ceiling and player isn't already on the ceiling
-                if (hit.collider.gameObject.CompareTag("Ceiling") && !_onCeiling)
+                // check if object is the ceiling and grapple isn't already on the ceiling
+                if (hit1.collider.gameObject.CompareTag("Ceiling") && !_onCeiling)
                 {
-                    print("Grapple collided with ceiling");
                     _onCeiling = true;
                     EventBus.Publish(EventType.GrappleHitCeiling);
                 }
             }
+
+            // check if grapple has reached the player
+            // detect an object to the left of the grapple
+            if (Physics.Raycast(transform.position, -transform.right, out RaycastHit hit2, 1f))
+            {
+                // check if object is the player
+                if (hit2.collider.gameObject.CompareTag("Player"))
+                    _onPlayer = true;
+            }
+            else
+                _onPlayer = false;
         }
     }
 }
