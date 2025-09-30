@@ -4,19 +4,70 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/25/2024
+/// 9/30/2024
 /// handles game manager
 /// holds score
 /// holds temp ui
+/// holds game state bools:
+///     InRun, InputtingGrapple
 /// </summary>
 
 public class GameManager : Singleton<GameManager>
 {
-    // player score
+    // score gained from distance traversed
     public int distanceScore = 0;
+    // score gained from pickups like coins
     public int pickupsScore = 0;
     // highest score ever gained
     public int highScore = 0;
+
+    // is the player in a run?
+    public bool InRun { get; private set; } = false;
+    // is the player inputting grapple?
+    public bool InputtingGrapple { get; private set; } = false;
+
+    void OnEnable()
+    {
+        // subscribe to events
+        EventBus.Subscribe(EventType.RunStart, OnRunStart);
+        EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
+        EventBus.Subscribe(EventType.StartGrapple, OnStartGrapple);
+        EventBus.Subscribe(EventType.StopGrapple, OnStopGrapple);
+    }
+
+    void OnDisable()
+    {
+        // unsubsribe to events
+        EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
+        EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
+        EventBus.Unsubscribe(EventType.StartGrapple, OnStartGrapple);
+        EventBus.Unsubscribe(EventType.StopGrapple, OnStopGrapple);
+    }
+
+    // called when run starts
+    private void OnRunStart()
+    {
+        InRun = true;
+    }
+
+    // called when run ends
+    private void OnRunEnd()
+    {
+        InRun = false;
+        InputtingGrapple = false;
+    }
+
+    // called when player starts inputting grapple
+    private void OnStartGrapple()
+    {
+        InputtingGrapple = true;
+    }
+
+    // called when player stops inputting grapple
+    private void OnStopGrapple()
+    { 
+        InputtingGrapple = false;
+    }
 
     // Update is called once per frame
     void Update()
@@ -30,11 +81,11 @@ public class GameManager : Singleton<GameManager>
     private void OnGUI()
     {
         GUIStyle customStyle = new GUIStyle(GUI.skin.label);
-        customStyle.fontSize = 30;
+        customStyle.fontSize = 60;
 
-        Rect scoreText = new Rect(30, 30, 300, 40); // x, y, width, height
+        Rect scoreText = new Rect(30, 30, 600, 80); // x, y, width, height
         GUI.Label(scoreText, "Score: " + (distanceScore + pickupsScore), customStyle);
-        Rect highScoreText = new Rect(30, 90, 300, 40); // x, y, width, height
+        Rect highScoreText = new Rect(30, 120, 600, 80); // x, y, width, height
         GUI.Label(highScoreText, "High Score: " + highScore, customStyle);
     }
 }

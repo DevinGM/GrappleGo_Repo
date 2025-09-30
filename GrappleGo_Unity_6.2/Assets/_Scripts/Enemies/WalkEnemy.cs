@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/19/2025
+/// 9/30/2025
 /// Handles walk enemy behaviour
 /// </summary>
 
@@ -43,6 +43,6 @@ public class WalkEnemy : MonoBehaviour, IEnemy
     // movement behaviour
     public void Movement()
     {
-        transform.position += _moveSpeed * Time.deltaTime * -transform.right;
+        transform.Translate(_moveSpeed * Time.deltaTime * -transform.right);
     }
 }
