@@ -51,5 +51,8 @@ MonoBehaviour:
   - {fileID: 2447134036493374778, guid: ac9173adc2bac9d4f8a808c87fce78eb, type: 3}
   - {fileID: 6887751548412757613, guid: 1abf480bbcdbe1742890b8572b14b8f2, type: 3}
   - {fileID: 2447134036493374778, guid: ca17b7745df965c4d8ccdb19a819bd8d, type: 3}
+  - {fileID: 2447134036493374778, guid: 1852f8d71b884174694c50324a676dd8, type: 3}
+  - {fileID: 2447134036493374778, guid: 76f8e102c0573d04ea58b86081ed98b6, type: 3}
+  - {fileID: 6887751548412757613, guid: 197b569a17ddea249bb757e284f17588, type: 3}
   _startingTerrain: {fileID: 7206048471078834422, guid: 0051d7140305df14584779837a405098, type: 3}
   _startSpawnXPos: 40

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1098932729475973662}
   - component: {fileID: 3027112206809231142}
   m_Layer: 0
-  m_Name: WHAT IS THIS!!!!!!!!!!
+  m_Name: Death Hazerd
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
