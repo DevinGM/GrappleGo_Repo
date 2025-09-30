@@ -3,22 +3,13 @@
     "name": "PlayerInputs",
     "maps": [
         {
-            "name": "ControlsTemp",
+            "name": "Controls",
             "id": "251d8a6a-aa20-4548-8630-efba688a49a3",
             "actions": [
                 {
-                    "name": "GrappleTemp",
-                    "type": "Button",
-                    "id": "1272ded1-b237-4e1c-976d-80c5e743433f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Grapple",
                     "type": "Button",
-                    "id": "ff207bcc-92b3-45a6-ab2c-5aaadf8cc7e0",
+                    "id": "1272ded1-b237-4e1c-976d-80c5e743433f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -30,17 +21,6 @@
                     "name": "",
                     "id": "e0c34aa7-8cdf-4c8c-a244-35dd2bfbd11e",
                     "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "GrappleTemp",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0425f837-32a7-4563-933a-6d843cb44eed",
-                    "path": "<Touchscreen>/Press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

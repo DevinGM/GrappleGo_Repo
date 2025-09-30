@@ -8,6 +8,11 @@ TagManager:
   - Ceiling
   - Grapple
   - Coin
+  - ShieldPowerup
+  - BoostPowerup
+  - DashPowerup
+  - GunPowerup
+  - DynamitePowerup
   layers:
   - Default
   - TransparentFX
