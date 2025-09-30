@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/17/2024
+/// 9/25/2024
 /// handles game manager
 /// holds score
 /// holds temp ui
@@ -13,16 +13,17 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     // player score
-    public int score = 0;
-    // highest distance ever travelled
+    public int distanceScore = 0;
+    public int pickupsScore = 0;
+    // highest score ever gained
     public int highScore = 0;
 
     // Update is called once per frame
     void Update()
     {
         // manage high score
-        if (highScore < score)
-            highScore = score;
+        if (highScore < (distanceScore + pickupsScore))
+            highScore = distanceScore + pickupsScore;
     }
 
     // temp prototyping ui
@@ -32,7 +33,7 @@ public class GameManager : Singleton<GameManager>
         customStyle.fontSize = 30;
 
         Rect scoreText = new Rect(30, 30, 300, 40); // x, y, width, height
-        GUI.Label(scoreText, "Score: " + score, customStyle);
+        GUI.Label(scoreText, "Score: " + (distanceScore + pickupsScore), customStyle);
         Rect highScoreText = new Rect(30, 90, 300, 40); // x, y, width, height
         GUI.Label(highScoreText, "High Score: " + highScore, customStyle);
     }

@@ -9,20 +9,3 @@ public interface IPlayerState
 {
     void Handle(PlayerController controller);
 }
-
-/*
- * add state machine for player
- * out of run
- * run dead??
- * running normal
- *          normal running logic
- *          if in normal state or climbing state move forward
- * climbing grapple
- *          turn off gravity
- * on ceiling
- *          turn off gravity
- * 
- * 
- * 
- * 
- */

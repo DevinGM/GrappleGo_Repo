@@ -1,10 +1,10 @@
 /// <summary>
 /// Devin G Monaghan
-/// 9/3/2025
+/// 9/26/2025
 /// holds enums
 /// </summary>
 
 public enum EventType
 {
-    RunStart, RunEnd, BeginClimbing, PlayerReachedCeiling
+    RunStart, RunEnd, GrappleHitCeiling, PlayerHitCeiling, ChunkSteppedOn, PlayerDamaged
 }

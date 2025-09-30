@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3883962651664762302}
-  - component: {fileID: 3797630628691150263}
+  - component: {fileID: 2013591225800105012}
   m_Layer: 0
   m_Name: TerrainManager
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3797630628691150263
+--- !u!114 &2013591225800105012
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,14 +41,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 4459289987875161178}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fc7a96474513ac449f1b17cae8eee08, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fdd6bc29a8166d4ea17d416759de02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainManager
-  chunkList:
+  _chunkList:
+  - {fileID: 3055852687190576248, guid: 769025c896b84c7498ba398392c003c9, type: 3}
   - {fileID: 6887751548412757613, guid: 7db83b59e01bdf8458a2736038d3e058, type: 3}
   - {fileID: 6887751548412757613, guid: fa88a6f3b16b7a24e98067e8b0023474, type: 3}
-  - {fileID: 3055852687190576248, guid: 769025c896b84c7498ba398392c003c9, type: 3}
   - {fileID: 2447134036493374778, guid: ac9173adc2bac9d4f8a808c87fce78eb, type: 3}
-  _spawnXPos: 40
-  _maxPoolSize: 30
-  _stackDefaultCapacity: 10
+  - {fileID: 6887751548412757613, guid: 1abf480bbcdbe1742890b8572b14b8f2, type: 3}
+  - {fileID: 2447134036493374778, guid: ca17b7745df965c4d8ccdb19a819bd8d, type: 3}
+  - {fileID: 2447134036493374778, guid: 1852f8d71b884174694c50324a676dd8, type: 3}
+  - {fileID: 2447134036493374778, guid: 76f8e102c0573d04ea58b86081ed98b6, type: 3}
+  - {fileID: 6887751548412757613, guid: 197b569a17ddea249bb757e284f17588, type: 3}
+  - {fileID: 3055852687190576248, guid: 073cfb2692e376e4bbcc057f02358388, type: 3}
+  - {fileID: 3055852687190576248, guid: 3841aedb69fb59347b0240602789644c, type: 3}
+  - {fileID: 3055852687190576248, guid: c1ff70806a6c96c459e081f4f06b974c, type: 3}
+  - {fileID: 3055852687190576248, guid: b9ed29ba65cfd3040a0bcf54f8df59a1, type: 3}
+  - {fileID: 3055852687190576248, guid: f2b8118ad16128f42955771902da84c7, type: 3}
+  - {fileID: 6887751548412757613, guid: e49e1a8c6c8b0de41877bd13e3b3da89, type: 3}
+  - {fileID: 2447134036493374778, guid: 7092b8e43e29a3d46a8f5ff48033cb18, type: 3}
+  - {fileID: 2447134036493374778, guid: 270992f38d9d66c4c8bd405a8a877304, type: 3}
+  - {fileID: 2447134036493374778, guid: 8d48a8d97d33a204b93827d356db03f8, type: 3}
+  - {fileID: 2447134036493374778, guid: baa6c5c607e11b542a8091f83f48f7c1, type: 3}
+  - {fileID: 2447134036493374778, guid: 65f7fac890a8faa44b774523262231bb, type: 3}
+  - {fileID: 2447134036493374778, guid: 03742e2bfffd3b244b7ba58a9d4e2a3c, type: 3}
+  - {fileID: 2447134036493374778, guid: 483e9d9d5d255914da2da8ba20b963e3, type: 3}
+  - {fileID: 2447134036493374778, guid: 991344019711c0843bcfe7cd90ecf77d, type: 3}
+  - {fileID: 2447134036493374778, guid: bc01c04b70cea4541a122b5fb49cb630, type: 3}
+  - {fileID: 2447134036493374778, guid: 61873b8f8d325004b852e0f2a88017a2, type: 3}
+  _startingTerrain: {fileID: 7206048471078834422, guid: 0051d7140305df14584779837a405098, type: 3}
+  _startSpawnXPos: 40

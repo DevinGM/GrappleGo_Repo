@@ -4,53 +4,113 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/6/2025
+/// 9/26/2025
 /// Handles grapple behaviour
-/// Holds grapple state machine client
 /// </summary>
 
 public class GrappleController : MonoBehaviour
 {
-    // display current state in the editor, remove for build
-    [Header("Current State Display")]
-    [SerializeField] private MonoBehaviour _CurrentState;
-
-    // reference to player script
-    public PlayerController PlayerRef { get; private set; }
     // speed the grapple moves up and down
-    public float GrappleSpeed { get; private set; } = 5f;
-    // idle position
-    public float IdlePositionY { get; private set; }
-    // references to states
-    public IGrappleState IdleState { get; private set; }
-    public IGrappleState UpState { get; private set; }
-    public IGrappleState DownState { get; private set; }
-    public IGrappleState CeilingState { get; private set; }
-    // reference to current state
-    public IGrappleState CurrentState { get; private set; }
-    
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float _grappleSpeed = 5f;
+
+    // spawn y height
+    private Vector3 _spawnPos;
+    // height of when the player last hit the ceiling
+    private float _ceilingHeight = 0f;
+    // is the grapple currently on the ceiling?
+    private bool _onCeiling = false;
+    // is the grapple currently on the player?
+    private bool _onPlayer = true;
+    // is the player currently in a run?
+    private bool _inRun = false;
+
+    void OnEnable()
     {
-        // get player reference
-        PlayerRef = gameObject.GetComponentInParent<PlayerController>();
+        // subscribe to events
+        EventBus.Subscribe(EventType.RunStart, StartRun);
+        EventBus.Subscribe(EventType.RunEnd, EndRun);
 
-        // add states to this gameobject
-        IdleState = gameObject.AddComponent<GrappleIdleState>();
-        UpState = gameObject.AddComponent<GrappleUpState>();
-        DownState = gameObject.AddComponent<GrappleDownState>();
-        CeilingState = gameObject.AddComponent<GrappleCeilingState>();
-
-        // default to idle state
-        IdlePositionY = transform.localPosition.y;
-        TransitionToState(IdleState);
+        // set spawnPos
+        _spawnPos = transform.localPosition;
     }
 
-    // activate specific state's Handle function
-    public void TransitionToState(IGrappleState state)
+    void OnDisable()
     {
-        CurrentState = state;
-        _CurrentState = (MonoBehaviour)CurrentState;
-        CurrentState.Handle(this);
+        // unsubsribe to events
+        EventBus.Unsubscribe(EventType.RunStart, StartRun);
+        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
+    }
+
+    // called when run starts
+    private void StartRun()
+    {
+        _inRun = true;
+    }
+
+    // called when run ends
+    private void EndRun()
+    {
+        _inRun = false;
+        _onPlayer = true;
+        _onCeiling = false;
+        transform.localPosition = _spawnPos;
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        // only do logic if in run
+        if (_inRun)
+        {
+            // move up when inputting grapple and not on ceiling
+            if (PlayerController.Instance.InputtingGrapple && !_onCeiling)
+                transform.Translate(_grappleSpeed * Time.deltaTime * transform.up);
+
+            // move down when not inputting grapple and not on floor
+            if (!PlayerController.Instance.InputtingGrapple && !_onPlayer)
+                transform.Translate(_grappleSpeed * Time.deltaTime * -transform.up);
+
+            // detect when on the player
+            if (transform.localPosition.y < _spawnPos.y)
+            {
+                // tell player if they reached the grapple while on the ceiling
+                if (_onCeiling)
+                    EventBus.Publish(EventType.PlayerHitCeiling);
+                // only reset grapple position when not on the ceiling
+                else
+                    transform.localPosition = _spawnPos;
+
+                _onPlayer = true;
+            }
+            else
+                _onPlayer = false;
+        }
+    }
+
+    // handles trigger collision enters
+    public void OnTriggerEnter(Collider other)
+    {
+        // detect when on ceiling
+        if (other.CompareTag("Ceiling"))
+        {
+            _onCeiling = true;
+            _ceilingHeight = transform.position.y;
+            EventBus.Publish(EventType.GrappleHitCeiling);
+        }
+    }
+
+    // handles trigger collision exits
+    public void OnTriggerExit(Collider other)
+    {
+        // detect when off ceiling
+        if (other.CompareTag("Ceiling"))
+        {
+            // only announce player has left ceiling when grapple moves beneath ceiling height
+            if (_ceilingHeight > transform.position.y)
+                _onCeiling = false;
+            // if grapple moved up, reset to ceiling height
+            else if (_ceilingHeight < transform.position.y)
+                transform.position = new Vector3(transform.position.x, _ceilingHeight, 0f);
+        }
     }
 }

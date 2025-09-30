@@ -30,32 +30,10 @@ public class PlayerClimbingState : MonoBehaviour, IPlayerState
         // only do logic if in this state and have a _playerController
         if (_playerController != null && _playerController.CurrentState == (IPlayerState)this)
         {
-            // if player stops inputting grapple transition to running state
-            if (!_playerController.InputtingGrapple)
-            {
-                _playerController.TransitionToState(_playerController.RunningState);
-                return;
-            }
-
             // move up
-            transform.position += _playerController.ClimbSpeed * Time.deltaTime * transform.up;
+            transform.Translate(_playerController.ClimbSpeed * Time.deltaTime * transform.up);
             // move grapple down at same rate so it stays in the same place
-            _playerController.GrappleRef.transform.position -= _playerController.ClimbSpeed * Time.deltaTime * transform.up;
-        }
-    }
-
-    // handles trigger collision enters
-    public void OnTriggerEnter(Collider other)
-    {
-        // only do logic if in this state and have a _playerController
-        if (_playerController != null && _playerController.CurrentState == (IPlayerState)this)
-        {
-            // if collided with grapple transition to ceiling state
-            if (other.CompareTag("Grapple"))
-            {
-                _playerController.TransitionToState(_playerController.CeilingState);
-                print("player has collided with grapple");
-            }
+            _playerController.GrappleRef.transform.Translate(_playerController.ClimbSpeed * Time.deltaTime * -transform.up);
         }
     }
 }
