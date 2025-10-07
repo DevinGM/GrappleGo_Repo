@@ -13,6 +13,7 @@ TagManager:
   - DashPowerup
   - GunPowerup
   - DynamitePowerup
+  - TriggerBox
   layers:
   - Default
   - TransparentFX
