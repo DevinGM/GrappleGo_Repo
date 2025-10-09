@@ -4,63 +4,43 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/26/2025
+/// 9/30/2025
 /// Detects player's powerup pickups
 /// </summary>
 
 public class PowerupDetecter : MonoBehaviour
 {
-    // is the player currently in a run?
-    private bool _inRun = false;
     // references to powerup scripts
     private PowerupParent _shieldPowerup, _boostPowerup, _dashPowerup, _gunPowerUp, _dynamitePowerUp;
 
     void OnEnable()
     {
-        // subscribe to events
-        EventBus.Subscribe(EventType.RunStart, StartRun);
-        EventBus.Subscribe(EventType.RunEnd, EndRun);
-
         // get powerup references
         _shieldPowerup = this.GetComponent<ShieldPowerup>();
         _boostPowerup = this.GetComponent<BoostPowerup>();
     }
-    void OnDisable()
-    {
-        // unsubsribe to events
-        EventBus.Unsubscribe(EventType.RunStart, StartRun);
-        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
-    }
 
-    // called when run starts
-    private void StartRun()
-    {
-        _inRun = true;
-    }
-
-    // called when run ends
-    private void EndRun()
-    {
-        _inRun = false;
-    }
-
-    // handles triger collisions
+    // handles trigger collisions
     private void OnTriggerEnter(Collider other)
     {
         // only do logic inside run
-        if (_inRun)
+        if (GameManager.Instance.InRun)
         {
             // if collide with shield powerup activate it and then destroy the pickup object
             if (other.gameObject.CompareTag("ShieldPowerup"))
             {
-                OnPowerupPickUp(_shieldPowerup);
+                PickUpPowerup(_shieldPowerup);
                 Destroy(other.gameObject);
             }
             // if collide with boost powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("BoostPowerup"))
             {
-                OnPowerupPickUp(_boostPowerup);
-                Destroy(other.gameObject);
+                // don't pick up another boost powerup if the player already has one
+                if (!PlayerController.Instance.boosting)
+                {
+                    PickUpPowerup(_boostPowerup);
+                    Destroy(other.gameObject);
+                }
             }
             /* ///////////////////////////////////// Add these in when made corresponding powerup
             // if collide with dash powerup activate it and then destroy the pickup object
@@ -84,8 +64,8 @@ public class PowerupDetecter : MonoBehaviour
         }
     }
 
-    // called when player picks up a powerup
-    private void OnPowerupPickUp(PowerupParent powerup)
+    // apply given powerup
+    private void PickUpPowerup(PowerupParent powerup)
     {
         if (powerup != null)
             powerup.enabled = true;
