@@ -23,7 +23,7 @@ public class Trigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == ("Player"))
-        {
+        {       
             Debug.Log("This box is triggered");
 
         }
