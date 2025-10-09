@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: m_StreetV1
+  m_Name: m_StreetV2
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,11 +28,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: fab08798e02904e4691a25659fc15e16, type: 3}
+        m_Texture: {fileID: 2800000, guid: 069c6e39893ad8b4ea5ed1c976c7f8e7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: f2920b55cc9d2d3439c0315f20bd7140, type: 3}
+        m_Texture: {fileID: 2800000, guid: a79000ea1003d1a4286a4fc3cb9b5ebf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -52,11 +52,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fab08798e02904e4691a25659fc15e16, type: 3}
+        m_Texture: {fileID: 2800000, guid: 069c6e39893ad8b4ea5ed1c976c7f8e7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 267a35c7f075489479cb372fb61d7b5c, type: 3}
+        m_Texture: {fileID: 2800000, guid: d674fd06551b67d4182186bb8ecfb333, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -124,7 +124,7 @@ Material:
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &3906106327549153029
+--- !u!114 &7501275974281171476
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
