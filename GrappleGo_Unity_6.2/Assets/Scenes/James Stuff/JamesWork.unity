@@ -1073,6 +1073,7 @@ GameObject:
   - component: {fileID: 561542131}
   - component: {fileID: 561542130}
   - component: {fileID: 561542129}
+  - component: {fileID: 561542133}
   m_Layer: 0
   m_Name: TriggerBox_Test
   m_TagString: TriggerBox
@@ -1108,7 +1109,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 561542128}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1172,6 +1173,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &561542133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561542128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9bb11478e957e048b45de0062ec6543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Trigger
 --- !u!1 &623527811
 GameObject:
   m_ObjectHideFlags: 0
@@ -2812,7 +2825,7 @@ PrefabInstance:
     - target: {fileID: 4541986581889542339, guid: e9fd46e57a051dd45a633af295accdd1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 191ea36cbfd2fc9418e1b6ad0839131a, type: 2}
+      objectReference: {fileID: 2100000, guid: 4a142ffad2a580c46bdf2acb9f4a2ba7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -22,10 +22,9 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("This box is triggered");
-
+            Debug.Log("Box be hit");
         }
     }
 
