@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7149714395376691764}
   - component: {fileID: 5921619594897880591}
   - component: {fileID: 7234838516849636606}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Grapple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 7880123571245777691}
   - component: {fileID: 5556066152058024551}
   - component: {fileID: 7962502342647441953}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Grapple
   m_TagString: Grapple
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155b17e400559294fab79a3995ebbd30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grappleSpeed: 7
+  _grappleSpeed: 15
   _fallSpeed: 5
 --- !u!1 &2151675268367150807
 GameObject:
@@ -167,9 +167,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5081436914365591392}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Grapple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

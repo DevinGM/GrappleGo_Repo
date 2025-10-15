@@ -81,7 +81,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -134,12 +134,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startSpeed: 10
-  _startClimbSpeed: 10
   _accelSpeed: 1
   _accelTime: 5
-  _coinValue: 10
   lives: 1
-  currentMoveSpeed: 5
+  currentMoveSpeed: 10
   boosting: 0
 --- !u!114 &546808104161545762
 MonoBehaviour:
@@ -245,7 +243,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ebcbc5673df09c643a908b281ba0adbe, type: 2}
+  - {fileID: 2100000, guid: 19b849c3981d7e94987d1dbc390902a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -519,7 +517,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 19b849c3981d7e94987d1dbc390902a8, type: 2}
+  - {fileID: 2100000, guid: ebcbc5673df09c643a908b281ba0adbe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

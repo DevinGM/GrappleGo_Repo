@@ -4,12 +4,12 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/30/2024
+/// 10/14/2024
 /// handles game manager
 /// holds score
 /// holds temp ui
-/// holds game state bools:
-///     InRun
+/// holds InRun reference
+/// holds stats and upgrade values
 /// </summary>
 
 public class GameManager : Singleton<GameManager>
@@ -20,9 +20,55 @@ public class GameManager : Singleton<GameManager>
     public int pickupsScore = 0;
     // highest score ever gained
     public int highScore = 0;
+    // player's current amount of currency
+    public int currency = 0;
 
     // is the player in a run?
     public bool InRun { get; private set; } = false;
+
+    [Header("Player stats and upgrades")]
+
+    // value of coin pickups, defaults to 10
+    public int coinValue = 10;
+    // amount coin value is increased per upgrade
+    public int coinUpgradeValue = 10;
+
+    // speed player climbs at
+    public float playerClimbSpeed = 12f;
+    // amount player climb speed is increased per upgrade
+    public float playerClimbSpeedUpgradeValue = 1f;
+
+    // speed grapple climbs at
+    public float grappleClimbSpeed = 15f;
+    // amount grapple climb speed is increased per upgrade
+    public float grappleClimbSpeedUpgradeValue = 1f;
+
+    // boost powerup bonus duration
+    public float boostDurationBonus = 0f;
+    // amount boost bonus is increased per upgrade
+    public float boostDurationBonusUpgradeValue = 1f;
+
+    // dash powerup bonus duration
+    public float dashDurationBonus = 0f;
+    // amount dash bonus is increased per upgrade
+    public float dashDurationBonusUpgradeValue = 1f;
+
+    // dynamite powerup bonus duration
+    public float dynamiteDurationBonus = 0f;
+    // amount dynamite bonus is increased per upgrade
+    public float dynamiteDurationBonusUpgradeValue = 1f;
+
+    // gun powerup bonus duration
+    public float gunDurationBonus = 0f;
+    // amount gun bonus is increased per upgrade
+    public float gunDurationBonusUpgradeValue = 1f;
+
+    // turns on when player purchases extra life upgrade
+    public bool purchasedExtraLife = false;
+
+    // turns on when player purchases headstart upgrade
+    public bool purchasedHeadstart = false;
+
 
     void OnEnable()
     {
@@ -48,6 +94,13 @@ public class GameManager : Singleton<GameManager>
     private void OnRunEnd()
     {
         InRun = false;
+
+        // add to currency
+        currency += (pickupsScore + distanceScore);
+
+        // reset score
+        pickupsScore = 0;
+        distanceScore = 0;
     }
 
     // Update is called once per frame

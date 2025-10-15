@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/26/2024
+/// 10/14/2024
 /// handles boost powerup behavior
 /// </summary>
 
@@ -24,7 +24,7 @@ public class BoostPowerup : PowerupParent
         // get reference to shield model
         _boostModelRef = transform.Find("BoostModel").gameObject;
         // set duration
-        base.Duration = _duration;
+        base.Duration = _duration + GameManager.Instance.boostDurationBonus;
 
         // activate upon enabling
         Activate();

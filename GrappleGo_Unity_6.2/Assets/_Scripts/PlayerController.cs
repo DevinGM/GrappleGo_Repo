@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/30/2025
+/// 10/14/2025
 /// Holds player behaviours
 /// Handles player movement
 /// Gets inputs
@@ -17,25 +17,21 @@ public class PlayerController : SingletonNonPersist<PlayerController>
 {
     // speed player begins moving at
     [SerializeField] private float _startSpeed = 10f;
-    // speed player begins climbing at
-    [SerializeField] private float _startClimbSpeed = 10f;
     // amount player accelerates by
     [SerializeField] private float _accelSpeed = 1f;
     // amount of time passed before player accelerates
     [SerializeField] private float _accelTime = 5f;
-    // amount of score added upon coin pickup
-    [SerializeField] private int _coinValue = 10;
 
-    // position at the start of a run
-    private Vector3 _spawnPos;
     // speed player is currently climbing at
-    private float _currentClimbSpeed;
+    private float _climbSpeed = 12f;
     // is the acceleration cooldown on?
     private bool _accelCooldown = false;
     // is the player currently climbing the grapple?
     private bool _climbing = false;
     // is the player currently on the ceiling?
     private bool _onCeiling = false;
+    // position at the start of a run
+    private Vector3 _spawnPos;
     // references to inputs
     private PlayerInputs _playerInputs;
     private InputAction _grappleAction;
@@ -85,7 +81,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     {
         _spawnPos = transform.position;
         currentMoveSpeed = _startSpeed;
-        _currentClimbSpeed = _startClimbSpeed;
+        _climbSpeed = GameManager.Instance.playerClimbSpeed;
     }
 
     // called when run ends
@@ -141,7 +137,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         if (_climbing && !_onCeiling && InputtingGrapple)
         {
             // move up
-            transform.Translate(_currentClimbSpeed * Time.deltaTime * transform.up);
+            transform.Translate(_climbSpeed * Time.deltaTime * transform.up);
 
             // check if player has reached ceiling
             // detect an object above the player
@@ -171,7 +167,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             // if collide with coin destroy it and add to score
             if (other.gameObject.CompareTag("Coin"))
             {
-                GameManager.Instance.pickupsScore += _coinValue;
+                GameManager.Instance.pickupsScore += GameManager.Instance.coinValue;
                 Destroy(other.gameObject);
             }
 
