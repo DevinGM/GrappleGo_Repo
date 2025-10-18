@@ -10,9 +10,6 @@ using UnityEngine.Pool;
 
 public interface IEnemy
 {
-    // should this enemy die?
-    public bool Dead { get; set; }
-
     // movement behaviour
     void Movement();
 }

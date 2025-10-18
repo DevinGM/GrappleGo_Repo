@@ -313,7 +313,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7206048471078834422, guid: 0051d7140305df14584779837a405098, type: 3}
       propertyPath: m_Name
-      value: BeginningTerrain
+      value: StartingTerrain
       objectReference: {fileID: 0}
     - target: {fileID: 9064357548629756629, guid: 0051d7140305df14584779837a405098, type: 3}
       propertyPath: m_LocalPosition.x

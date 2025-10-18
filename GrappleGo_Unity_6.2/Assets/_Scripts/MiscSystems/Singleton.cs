@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/17/2024
+/// 10/17/2024
 /// handles singleton
 /// </summary>
 
@@ -47,13 +47,10 @@ public class Singleton<T> : MonoBehaviour where T : Component
             // set private ref to self
             _instance = this as T;
             // allow object to persist across scenes
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
-        // if private ref ISN'T empty, that means there's already an object of this type in the scene,
-        // so kill self
+        // if private ref ISN'T empty, that means there's already an object of this type in the scene, so kill self
         else
-        {
-            Destroy(gameObject);
-        }
+            Destroy(this.gameObject);
     }
 }

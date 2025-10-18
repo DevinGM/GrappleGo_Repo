@@ -26,6 +26,7 @@ public abstract class PowerupParent : MonoBehaviour
     protected virtual IEnumerator AutoDisable()
     {
         yield return new WaitForSeconds(Duration);
-        Deactivate();
+        // disable powerup component
+        this.enabled = false;
     }
 }

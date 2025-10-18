@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/26/2024
+/// 10/14/2024
 /// handles shield powerup behavior
 /// </summary>
 

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 
 /// <summary>
@@ -21,9 +20,6 @@ public class FlyEnemy : MonoBehaviour, IEnemy
     private Transform _pointA;
     private Transform _pointB;
 
-    // is this enemy dead?
-    public bool Dead { get; set; } = false;
-
     void OnEnable()
     {
         // get references to children
@@ -40,12 +36,6 @@ public class FlyEnemy : MonoBehaviour, IEnemy
         // only do logic if in run
         if (GameManager.Instance.InRun)
         {
-            // if enemy should be dead but isn't dying yet, start dying
-            if (Dead)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
             Movement();
         }
     }
@@ -57,7 +47,7 @@ public class FlyEnemy : MonoBehaviour, IEnemy
         if (_movingAtoB)
         {
             // make sure enemy isn't dead
-            if (!Dead && _model != null)
+            if (_model != null)
             {
                 _model.position = Vector3.MoveTowards(_model.position, _pointB.position, _moveSpeed * Time.deltaTime);
                 if (_model.position == _pointB.position)
@@ -68,7 +58,7 @@ public class FlyEnemy : MonoBehaviour, IEnemy
         else
         {
             // make sure enemy isn't dead
-            if (!Dead && _model != null)
+            if (_model != null)
             {
                 _model.position = Vector3.MoveTowards(_model.position, _pointA.position, _moveSpeed * Time.deltaTime);
                 if (_model.position == _pointA.position)
