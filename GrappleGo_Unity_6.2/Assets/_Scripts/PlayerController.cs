@@ -5,12 +5,12 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/14/2025
-/// Holds player behaviours
-/// Handles player movement
-/// Gets inputs
-/// Handles coin collection
-/// Handles enemy collision and player damage
+/// 10/17/2025
+/// HANDLES PLAYER BEHAVIOR
+/// handles player movement
+/// gets inputs
+/// handles coin collision and collection
+/// handles enemy collision and player damage
 /// </summary>
 
 public class PlayerController : SingletonNonPersist<PlayerController>
@@ -24,6 +24,10 @@ public class PlayerController : SingletonNonPersist<PlayerController>
 
     // speed player is currently climbing at
     private float _climbSpeed = 12f;
+    // length of cooldown after taking damage
+    private float _damageCooldownTime = .5f;
+    // is the damge cooldown on?
+    private bool _damageCooldown = false;
     // is the acceleration cooldown on?
     private bool _accelCooldown = false;
     // is the player currently climbing the grapple?
@@ -32,16 +36,15 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     private bool _onCeiling = false;
     // position at the start of a run
     private Vector3 _spawnPos;
+    // reference to player rigidbody
+    private Rigidbody _rbRef;
     // references to inputs
     private PlayerInputs _playerInputs;
     private InputAction _grappleAction;
-    // reference to player rigidbody
-    private Rigidbody _rbRef;
 
     // number of player's lives
     // player dies when lives hits 0
     public int lives = 1;
-
     // speed player is currently moving at
     public float currentMoveSpeed;
     // is the player currently boosting
@@ -49,6 +52,8 @@ public class PlayerController : SingletonNonPersist<PlayerController>
 
     // is the player currently inputting grapple?
     public bool InputtingGrapple { get; private set; } = false;
+
+    #region OnEnable & OnDisable
 
     void OnEnable()
     {
@@ -66,6 +71,9 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         _grappleAction = _playerInputs.Controls.Grapple;
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
+
+        // get stats
+        _climbSpeed = GameManager.Instance.playerClimbSpeed;
     }
 
     void OnDisable()
@@ -75,6 +83,10 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         EventBus.Unsubscribe(EventType.RunEnd, EndRun);
         EventBus.Unsubscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
     }
+
+    #endregion
+
+    #region Functions Called by Events
 
     // called when run starts
     private void StartRun()
@@ -109,6 +121,8 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         _rbRef.linearVelocity = velocity;
     }
 
+    #endregion
+
     // Update is called once per frame
     void Update()
     {
@@ -126,6 +140,33 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             GameManager.Instance.distanceScore = (int)transform.position.x;
         }
     }
+
+    // handles trigger collisions
+    private void OnTriggerEnter(Collider other)
+    {
+        // only do logic inside run
+        if (GameManager.Instance.InRun)
+        {
+            // if collide with coin destroy it and add to score
+            if (other.gameObject.CompareTag("Coin"))
+            {
+                GameManager.Instance.pickupsScore += GameManager.Instance.coinValue;
+                Destroy(other.gameObject);
+            }
+
+            // if player collides with an obstacle take damage and destroy obstacle
+            if (other.gameObject.CompareTag("Obstacle"))
+            {
+                // don't take damage if invincible
+                if (!boosting)
+                    TakeDamage();
+
+                Destroy(other.gameObject);
+            }
+        }
+    }
+
+    #region Movement
 
     // handles movement behaviors
     private void Move()
@@ -158,47 +199,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         }
     }
 
-    // handles trigger collisions
-    private void OnTriggerEnter(Collider other)
-    {
-        // only do logic inside run
-        if (GameManager.Instance.InRun)
-        {
-            // if collide with coin destroy it and add to score
-            if (other.gameObject.CompareTag("Coin"))
-            {
-                GameManager.Instance.pickupsScore += GameManager.Instance.coinValue;
-                Destroy(other.gameObject);
-            }
-
-            // if player collides with an obstacle take damage and destroy obstacle
-            if (other.gameObject.CompareTag("Obstacle"))
-            {
-                // don't take damage if invincible
-                if (!boosting)
-                    TakeDamage();
-
-                // if collided obstacle is an enemy, let it kill itself, otherwise kill obstacle
-                if (other.gameObject.GetComponent<IEnemy>() != null)
-                    other.gameObject.GetComponent<IEnemy>().Dead = true;
-                else
-                    Destroy(other.gameObject);
-            }
-        }
-    }
-
-    // called when player takes damage
-    private void TakeDamage()
-    {
-        // reduce lives
-        lives--;
-        // announce player has taken damage
-        EventBus.Publish(EventType.PlayerDamaged);
-        // if lives drop to 0, end run
-        if (lives <= 0)
-            EventBus.Publish(EventType.RunEnd);
-    }
-
     // wait _accelTime amount of seconds before increasing speed by _accelSpeed
     private IEnumerator Accelerate()
     {
@@ -207,6 +207,40 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         currentMoveSpeed += _accelSpeed;
         _accelCooldown = false;
     }
+
+    #endregion
+
+    #region Damage
+
+    // called when player takes damage
+    private void TakeDamage()
+    {
+        // don't take damage if on cooldown
+        if (!_damageCooldown)
+        {
+            // reduce lives
+            lives--;
+            // announce player has taken damage
+            EventBus.Publish(EventType.PlayerDamaged);
+            // if lives drop to 0, end run
+            if (lives <= 0)
+                EventBus.Publish(EventType.RunEnd);
+            // start damage cooldown
+            StartCoroutine(DamageCooldown());
+        }
+    }
+
+    // dissallow damage for _damageCooldownTime seconds
+    private IEnumerator DamageCooldown()
+    {
+        _damageCooldown = true;
+        yield return new WaitForSeconds(_damageCooldownTime);
+        _damageCooldown = false;
+    }
+
+    #endregion
+
+    #region Input Functions
 
     // called when player inputs grapple
     private void OnGrapplePerformed(InputAction.CallbackContext context)
@@ -226,4 +260,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         if (GameManager.Instance.InRun)
             InputtingGrapple = false;
     }
+
+    #endregion
 }

@@ -78,50 +78,50 @@ public class Shop : MonoBehaviour
         // coin value upgrade
         _coinText.text = "Coin Value\n¢" + _coinPrice + "\n" + GameManager.Instance.coinValue + " > " 
             + (GameManager.Instance.coinValue + _coinValue);
-        if (GameManager.Instance.currency < _coinPrice)
+        if (GameManager.Instance.currencyAmount < _coinPrice)
             _coinButton.interactable = false;
 
         // player climb speed upgrade
         _playerClimbSpeedText.text = "Climbing Speed\n¢" + _playerClimbSpeedPrice + "\n" + GameManager.Instance.playerClimbSpeed + " > "
             + (GameManager.Instance.playerClimbSpeed + _playerClimbSpeedValue);
-        if (GameManager.Instance.currency < _playerClimbSpeedPrice)
+        if (GameManager.Instance.currencyAmount < _playerClimbSpeedPrice)
             _playerClimbSpeedButton.interactable = false;
 
         // grapple climb speed upgrade
         _grappleClimbSpeedText.text = "Grapple Speed\n¢" + _grappleClimbSpeedPrice + "\n" + GameManager.Instance.grappleClimbSpeed + " > "
             + (GameManager.Instance.grappleClimbSpeed + _grappleClimbSpeedValue);
-        if (GameManager.Instance.currency < _grappleClimbSpeedPrice)
+        if (GameManager.Instance.currencyAmount < _grappleClimbSpeedPrice)
             _grappleClimbSpeedButton.interactable = false;
 
         // boost duration upgrade
         _boostDurationText.text = "Boost Duration\n¢" + _boostDurationPrice + "\n" + GameManager.Instance.boostDuration + " > "
             + (GameManager.Instance.boostDuration + _boostDurationValue);
-        if (GameManager.Instance.currency < _boostDurationPrice)
+        if (GameManager.Instance.currencyAmount < _boostDurationPrice)
             _boostDurationButton.interactable = false;
 
         // dash duration upgrade
         _dashDurationText.text = "Dash Duration\n¢" + _dashDurationPrice + "\n" + GameManager.Instance.dashDuration + " > "
             + (GameManager.Instance.dashDuration + _dashDurationValue);
-        if (GameManager.Instance.currency < _dashDurationPrice)
+        if (GameManager.Instance.currencyAmount < _dashDurationPrice)
             _dashDurationButton.interactable = false;
 
         // dynamite duration upgrade
         _dynamiteDurationText.text = "Dynamite Duration\n¢" + _dynamiteDurationPrice + "\n" + GameManager.Instance.dynamiteDuration + " > "
             + (GameManager.Instance.dynamiteDuration + _dynamiteDurationValue);
-        if (GameManager.Instance.currency < _dynamiteDurationPrice)
+        if (GameManager.Instance.currencyAmount < _dynamiteDurationPrice)
             _dynamiteDurationButton.interactable = false;
 
         // gun duration upgrade
         _gunDurationText.text = "Gun Duration\n¢" + _gunDurationPrice + "\n" + GameManager.Instance.gunDuration + " > "
             + (GameManager.Instance.gunDuration + _gunDurationValue);
-        if (GameManager.Instance.currency < _gunDurationPrice)
+        if (GameManager.Instance.currencyAmount < _gunDurationPrice)
             _gunDurationButton.interactable = false;
 
         /// extra life
         if (!GameManager.Instance.purchasedExtraLife)
         {
             _extraLifeText.text = "Extra Life\n¢" + _extraLifePrice;
-            if (GameManager.Instance.currency < _extraLifePrice)
+            if (GameManager.Instance.currencyAmount < _extraLifePrice)
                 _extraLifeButton.interactable = false;
         }
         // if player has purchased extra life, turn off button and change text to purchased
@@ -135,7 +135,7 @@ public class Shop : MonoBehaviour
         if (!GameManager.Instance.purchasedHeadStart)
         {
             _headStartText.text = "Head Start\n¢" + _headStartPrice;
-            if (GameManager.Instance.currency < _headStartPrice)
+            if (GameManager.Instance.currencyAmount < _headStartPrice)
                 _headStartButton.interactable = false;
         }
         // if player has purchased head start, turn off button and change text to purchased
@@ -146,59 +146,61 @@ public class Shop : MonoBehaviour
         }
     }
 
+    #region Button Press Functions
     /// Applies corresponding upgrade and updates UI
     public void UpgradeCoinValue()
     {
         GameManager.Instance.coinValue += _coinValue;
-        GameManager.Instance.currency -= _coinPrice;
+        GameManager.Instance.currencyAmount -= _coinPrice;
         SetButtons();
     }
     public void UpgradePlayerClimbSpeed()
     {
         GameManager.Instance.playerClimbSpeed += _playerClimbSpeedValue;
-        GameManager.Instance.currency -= _playerClimbSpeedPrice;
+        GameManager.Instance.currencyAmount -= _playerClimbSpeedPrice;
         SetButtons();
     }
     public void UpgradeGrappleClimbSpeed()
     {
         GameManager.Instance.grappleClimbSpeed += _grappleClimbSpeedValue;
-        GameManager.Instance.currency -= _grappleClimbSpeedPrice;
+        GameManager.Instance.currencyAmount -= _grappleClimbSpeedPrice;
         SetButtons();
     }
     public void UpgradeBoostDuration()
     {
         GameManager.Instance.boostDuration += _boostDurationValue;
-        GameManager.Instance.currency -= _boostDurationPrice;
+        GameManager.Instance.currencyAmount -= _boostDurationPrice;
         SetButtons();
     }
     public void UpgradeDashDuration()
     {
         GameManager.Instance.dashDuration += _dashDurationValue;
-        GameManager.Instance.currency -= _dashDurationPrice;
+        GameManager.Instance.currencyAmount -= _dashDurationPrice;
         SetButtons();
     }
     public void UpgradeDynamiteDuration()
     {
         GameManager.Instance.dynamiteDuration += _dynamiteDurationValue;
-        GameManager.Instance.currency -= _dynamiteDurationPrice;
+        GameManager.Instance.currencyAmount -= _dynamiteDurationPrice;
         SetButtons();
     }
     public void UpgradeGunDuration()
     {
         GameManager.Instance.gunDuration += _gunDurationValue;
-        GameManager.Instance.currency -= _gunDurationPrice;
+        GameManager.Instance.currencyAmount -= _gunDurationPrice;
         SetButtons();
     }
     public void UpgradeExtraLife()
     {
         GameManager.Instance.purchasedExtraLife = true;
-        GameManager.Instance.currency -= _extraLifePrice;
+        GameManager.Instance.currencyAmount -= _extraLifePrice;
         SetButtons();
     }
     public void UpgradeHeadStart()
     {
         GameManager.Instance.purchasedHeadStart = true;
-        GameManager.Instance.currency -= _headStartPrice;
+        GameManager.Instance.currencyAmount -= _headStartPrice;
         SetButtons();
     }
+    #endregion
 }

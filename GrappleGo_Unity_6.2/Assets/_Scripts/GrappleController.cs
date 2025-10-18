@@ -4,17 +4,17 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/14/2025
+/// 10/17/2025
 /// Handles grapple behaviour
 /// </summary>
 
 public class GrappleController : MonoBehaviour
 {
-    // speed the grapple moves up and down
-    [SerializeField] private float _grappleSpeed = 15f;
     // speed grapple falls down
     [SerializeField] private float _fallSpeed = 5f;
 
+    // speed the grapple moves up and down
+    private float _grappleSpeed = 12f;
     // spawn position
     private Vector3 _spawnPos;
     // is the grapple currently on the ceiling?
@@ -31,6 +31,8 @@ public class GrappleController : MonoBehaviour
 
         // set spawnPos
         _spawnPos = transform.position;
+        // get grapple speed
+        _grappleSpeed = GameManager.Instance.grappleClimbSpeed;
     }
 
     void OnDisable()

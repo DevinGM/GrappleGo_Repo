@@ -156,7 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155b17e400559294fab79a3995ebbd30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grappleSpeed: 15
   _fallSpeed: 5
 --- !u!1 &2151675268367150807
 GameObject:
