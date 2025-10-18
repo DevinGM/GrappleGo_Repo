@@ -1074,8 +1074,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159936399}
-        m_TargetAssemblyTypeName: MenuButtons, Assembly-CSharp
+      - m_Target: {fileID: 1159936401}
+        m_TargetAssemblyTypeName: Menu_UI, Assembly-CSharp
         m_MethodName: ReturnToMenu
         m_Mode: 1
         m_Arguments:
@@ -2089,8 +2089,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1159936399}
-        m_TargetAssemblyTypeName: MenuButtons, Assembly-CSharp
+      - m_Target: {fileID: 1159936401}
+        m_TargetAssemblyTypeName: Menu_UI, Assembly-CSharp
         m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
@@ -2153,6 +2153,7 @@ GameObject:
   - component: {fileID: 1159936395}
   - component: {fileID: 1159936399}
   - component: {fileID: 1159936400}
+  - component: {fileID: 1159936401}
   m_Layer: 5
   m_Name: ShopUI
   m_TagString: Untagged
@@ -2305,6 +2306,18 @@ MonoBehaviour:
   _gunDurationPrice: 1000
   _extraLifePrice: 1000
   _headStartPrice: 1000
+--- !u!114 &1159936401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159936394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83dfb62a9b921b34dbc4a828f2624614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Menu_UI
 --- !u!1 &1199989794
 GameObject:
   m_ObjectHideFlags: 0

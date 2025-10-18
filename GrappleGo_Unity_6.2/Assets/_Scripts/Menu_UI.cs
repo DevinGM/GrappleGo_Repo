@@ -23,7 +23,7 @@ public class Menu_UI : MonoBehaviour
     public void EnterShop()
     {
         Debug.Log("Enter Shop");
-        SceneManager.LoadScene("Shop");
+        SceneManager.LoadScene("Devin_Shop");
     }
 
     public void EnterSetting()
