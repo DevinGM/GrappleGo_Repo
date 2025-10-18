@@ -26,49 +26,25 @@ public class GameManager : Singleton<GameManager>
     // is the player in a run?
     public bool InRun { get; private set; } = false;
 
-    [Header("Player stats and upgrades")]
-
+    [Header("Player stats")]
     // value of coin pickups, defaults to 10
     public int coinValue = 10;
-    // amount coin value is increased per upgrade
-    public int coinUpgradeValue = 10;
-
     // speed player climbs at
     public float playerClimbSpeed = 12f;
-    // amount player climb speed is increased per upgrade
-    public float playerClimbSpeedUpgradeValue = 1f;
-
     // speed grapple climbs at
     public float grappleClimbSpeed = 15f;
-    // amount grapple climb speed is increased per upgrade
-    public float grappleClimbSpeedUpgradeValue = 1f;
-
-    // boost powerup bonus duration
-    public float boostDurationBonus = 0f;
-    // amount boost bonus is increased per upgrade
-    public float boostDurationBonusUpgradeValue = 1f;
-
-    // dash powerup bonus duration
-    public float dashDurationBonus = 0f;
-    // amount dash bonus is increased per upgrade
-    public float dashDurationBonusUpgradeValue = 1f;
-
-    // dynamite powerup bonus duration
-    public float dynamiteDurationBonus = 0f;
-    // amount dynamite bonus is increased per upgrade
-    public float dynamiteDurationBonusUpgradeValue = 1f;
-
-    // gun powerup bonus duration
-    public float gunDurationBonus = 0f;
-    // amount gun bonus is increased per upgrade
-    public float gunDurationBonusUpgradeValue = 1f;
-
+    // extra boost powerup duration
+    public float boostDuration = 0f;
+    // extra dash powerup duration
+    public float dashDuration = 0f;
+    // extra dynamite powerup duration
+    public float dynamiteDuration = 0f;
+    // extra gun powerup duration
+    public float gunDuration = 0f;
     // turns on when player purchases extra life upgrade
     public bool purchasedExtraLife = false;
-
     // turns on when player purchases headstart upgrade
-    public bool purchasedHeadstart = false;
-
+    public bool purchasedHeadStart = false;
 
     void OnEnable()
     {

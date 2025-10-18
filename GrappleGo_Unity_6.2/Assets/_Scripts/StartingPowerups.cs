@@ -32,7 +32,7 @@ public class StartingPowerups : MonoBehaviour
         if (GameManager.Instance.purchasedExtraLife)
             shieldPowerup.gameObject.SetActive(true);
         // if player has purchased the head start upgrade, find and turn on the starting boost powerup
-        if (GameManager.Instance.purchasedHeadstart)
+        if (GameManager.Instance.purchasedHeadStart)
             boostPowerup.gameObject.SetActive(true);
     }
 

@@ -24,7 +24,7 @@ public class BoostPowerup : PowerupParent
         // get reference to shield model
         _boostModelRef = transform.Find("BoostModel").gameObject;
         // set duration
-        base.Duration = _duration + GameManager.Instance.boostDurationBonus;
+        base.Duration = _duration + GameManager.Instance.boostDuration;
 
         // activate upon enabling
         Activate();
