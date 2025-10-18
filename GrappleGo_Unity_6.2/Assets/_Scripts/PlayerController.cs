@@ -36,22 +36,23 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     private bool _onCeiling = false;
     // position at the start of a run
     private Vector3 _spawnPos;
-    // reference to player rigidbody
-    private Rigidbody _rbRef;
     // references to inputs
     private PlayerInputs _playerInputs;
     private InputAction _grappleAction;
+    //reference to grapple
+    private GrappleController _grappleRef;
 
     // number of player's lives
     // player dies when lives hits 0
     public int lives = 1;
     // speed player is currently moving at
     public float currentMoveSpeed;
+    // is the player currently inputting grapple?
+    public bool inputtingGrapple = false;
     // is the player currently boosting
     public bool boosting = false;
-
-    // is the player currently inputting grapple?
-    public bool InputtingGrapple { get; private set; } = false;
+    // reference to player rigidbody
+    public Rigidbody rbRef;
 
     #region OnEnable & OnDisable
 
@@ -63,7 +64,8 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         EventBus.Subscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
         
         // get references
-        _rbRef = this.GetComponent<Rigidbody>();
+        rbRef = this.GetComponent<Rigidbody>();
+        _grappleRef = FindAnyObjectByType<GrappleController>();
 
         // add inputs
         _playerInputs = new PlayerInputs();
@@ -114,11 +116,11 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         // begin climbing
         _climbing = true;
         // turn off gravity so player can climb
-        _rbRef.useGravity = false;
+        rbRef.useGravity = false;
         // zero player's downward momentum in case they were previously falling
-        Vector3 velocity = _rbRef.linearVelocity;
+        Vector3 velocity = rbRef.linearVelocity;
         velocity.y = 0f;
-        _rbRef.linearVelocity = velocity;
+        rbRef.linearVelocity = velocity;
     }
 
     #endregion
@@ -157,11 +159,21 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             // if player collides with an obstacle take damage and destroy obstacle
             if (other.gameObject.CompareTag("Obstacle"))
             {
-                // don't take damage if invincible
+                // don't take damage if boosting
                 if (!boosting)
                     TakeDamage();
-
                 Destroy(other.gameObject);
+            }
+
+            // if player collides with platform via a trigger, take damage and destroy platform 
+            if (other.gameObject.CompareTag("Ceiling"))
+            {
+                // don't take damage if boosting
+                if (!boosting)
+                    TakeDamage();
+                Destroy(other.gameObject);
+
+                print("Player collided with platform");
             }
         }
     }
@@ -175,7 +187,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         transform.Translate(currentMoveSpeed * Time.deltaTime * transform.right);
 
         // when player is climbing but hasn't reached the ceiling yet
-        if (_climbing && !_onCeiling && InputtingGrapple)
+        if (_climbing && !_onCeiling && inputtingGrapple)
         {
             // move up
             transform.Translate(_climbSpeed * Time.deltaTime * transform.up);
@@ -185,17 +197,19 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.1f))
             {
                 // check if object is the ceiling and player isn't already on the ceiling and make sure they're inputting grapple
-                if (hit.collider.transform.CompareTag("Ceiling") && InputtingGrapple)
+                if (hit.collider.transform.CompareTag("Ceiling") && inputtingGrapple)
                     _onCeiling = true;
             }
         }
 
-        // if player stops inputting grapple stop climbing and reactivate gravity
-        if (!InputtingGrapple)
+        // if player stops inputting grapple or grapple is not on ceiling stop climbing and reactivate gravity
+        if (!inputtingGrapple || !_grappleRef.onCeiling)
         {
             _onCeiling = false;
             _climbing = false;
-            _rbRef.useGravity = true;
+            // don't turn gravity back on if player is boosting
+            if (!boosting)
+                rbRef.useGravity = true;
         }
     }
 
@@ -231,7 +245,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     }
 
     // dissallow damage for _damageCooldownTime seconds
-    private IEnumerator DamageCooldown()
+    public IEnumerator DamageCooldown()
     {
         _damageCooldown = true;
         yield return new WaitForSeconds(_damageCooldownTime);
@@ -247,7 +261,11 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     {
         // only do logic inside run
         if (GameManager.Instance.InRun)
-            InputtingGrapple = true;
+        {
+            // turn off inputs during boost
+            if (!boosting)
+                inputtingGrapple = true;
+        }
         // player is not in run so start run upon pressing grapple
         else
             EventBus.Publish(EventType.RunStart);
@@ -258,7 +276,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     {
         // only do logic inside run
         if (GameManager.Instance.InRun)
-            InputtingGrapple = false;
+            inputtingGrapple = false;
     }
 
     #endregion

@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/14/2024
+/// 10/17/2024
 /// handles boost powerup behavior
 /// </summary>
 
@@ -12,7 +12,7 @@ public class BoostPowerup : PowerupParent
 {
     // boost duration
     [SerializeField] private float _duration = 10f;
-    [SerializeField] private float _speedBoost = 10f;
+    [SerializeField] private float _speedBoost = 15f;
 
     // speed player is at at beginning of powerup
     private float _startingSpeed;
@@ -29,7 +29,10 @@ public class BoostPowerup : PowerupParent
         // activate upon enabling
         Activate();
     }
-    protected override void OnDisable() {}
+    protected override void OnDisable()
+    {
+        Deactivate();
+    }
 
     protected override void Activate()
     {
@@ -41,6 +44,14 @@ public class BoostPowerup : PowerupParent
         PlayerController.Instance.currentMoveSpeed += _speedBoost;
         // set player invincible
         PlayerController.Instance.boosting = true;
+        // turn gravity off so player doesn't fall through floor
+        PlayerController.Instance.rbRef.useGravity = false;
+        // zero velocity in case player was mid fall
+        PlayerController.Instance.rbRef.linearVelocity = Vector3.zero;
+        // set player collider to trigger so they don't collide with anything
+        PlayerController.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = true;
+        // make sure the player isn't stuck in any grappling state
+        PlayerController.Instance.inputtingGrapple = false;
         // turn on shield model
         _boostModelRef.SetActive(true);
         // begin disable duration
@@ -55,9 +66,13 @@ public class BoostPowerup : PowerupParent
         PlayerController.Instance.currentMoveSpeed = _startingSpeed;
         // set player invincibility off
         PlayerController.Instance.boosting = false;
+        // turn gravity back on
+        PlayerController.Instance.rbRef.useGravity = true;
+        // set collider back to NOT a trigger
+        PlayerController.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
+        // start damage cooldown so player doesn't immediately take damage after coming out of boost
+        PlayerController.Instance.StartCoroutine(PlayerController.Instance.DamageCooldown());
         // turn off shield model
         _boostModelRef.SetActive(false);
-        // disable powerup component
-        this.enabled = false;
     }
 }

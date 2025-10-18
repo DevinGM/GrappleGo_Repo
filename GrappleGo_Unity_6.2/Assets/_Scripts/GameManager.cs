@@ -34,9 +34,9 @@ public class GameManager : Singleton<GameManager>
     // value of coin pickups, defaults to 10
     public int coinValue = 10;
     // speed player climbs at
-    public float playerClimbSpeed = 12f;
+    public float playerClimbSpeed = 7f;
     // speed grapple climbs at
-    public float grappleClimbSpeed = 12f;
+    public float grappleClimbSpeed = 7f;
     // extra boost powerup duration
     public float boostDuration = 0f;
     // extra dash powerup duration
