@@ -14,7 +14,6 @@ TagManager:
   - GunPowerup
   - DynamitePowerup
   - TriggerBox
-  - Tutorial
   layers:
   - Default
   - TransparentFX
