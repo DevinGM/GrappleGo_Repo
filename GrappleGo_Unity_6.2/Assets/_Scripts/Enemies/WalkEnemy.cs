@@ -1,9 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/30/2025
+/// 10/19/2025
 /// Handles walk enemy behaviour
 /// </summary>
 
@@ -12,9 +13,6 @@ public class WalkEnemy : MonoBehaviour, IEnemy
     // movement speed
     [SerializeField] private float _moveSpeed = 10f;
 
-    // is this enemy dead?
-    public bool Dead { get; set; } = false;
-
     // Update is called once per frame
     void Update()
     {
@@ -22,9 +20,6 @@ public class WalkEnemy : MonoBehaviour, IEnemy
         if (GameManager.Instance.InRun)
         {
             Movement();
-
-            if (Dead)
-                Destroy(this.gameObject);
         }
     }
 
