@@ -34,12 +34,5 @@ public class Tutorial : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-      
-    }
-
-    
-
 
 }
