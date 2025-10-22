@@ -11,9 +11,11 @@ using TMPro;
 
 public class TriggerText : MonoBehaviour
 {
+    [Header("The desired Text Object (TextMeshPro) under any Canvas. ")]
     // Get the selected gameObject, in this case, the Text under Tutorial Canvas. 
     public GameObject textObject;
 
+    [Header("The timing before the text vanish during gameplay.")]
     // The desired time for text to vanish during gameplay.
     public float fadeTime;
 
