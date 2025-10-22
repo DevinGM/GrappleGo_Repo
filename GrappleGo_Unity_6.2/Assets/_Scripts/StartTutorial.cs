@@ -27,16 +27,11 @@ public class StartTutorial : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             uiObject.SetActive(false);
-            //StartCoroutine("WaitForSec");
+            Destroy(uiObject);
+            Destroy(gameObject);
 
         }
     }
 
-   /* IEnumerator WaitForSec()
-    {
-        yield return new WaitForSeconds(5);
-        Destroy(uiObject);
-        Destroy(gameObject);
-    }*/
 
 }
