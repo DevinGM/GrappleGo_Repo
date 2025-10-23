@@ -4,11 +4,12 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/18/2024
-/// singleton without object persisiting through scenes
+/// 9/30/2024
+/// handles singleton
+/// does not let object persist on load
 /// </summary>
 
-public class SingletonNonPersisit<T> : MonoBehaviour where T : Component
+public class SingletonNonPersist<T> : MonoBehaviour where T : Component
 {
     // private reference to this object
     private static T _instance;

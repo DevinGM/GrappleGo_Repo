@@ -10,8 +10,9 @@ using UnityEngine.Pool;
 
 public interface IEnemy
 {
-    // called when run ends
-    void EndRun();
+    // should this enemy die?
+    public bool Dead { get; set; }
+
     // movement behaviour
     void Movement();
 }
