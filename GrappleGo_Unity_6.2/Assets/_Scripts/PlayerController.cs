@@ -5,52 +5,50 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/17/2025
+/// 11/1/2025
 /// HANDLES PLAYER BEHAVIOR
 /// handles player movement
 /// gets inputs
 /// handles coin collision and collection
 /// handles enemy collision and player damage
+/// handles dash action
+/// handles gun action
+/// handles dynamite action
 /// </summary>
 
 public class PlayerController : SingletonNonPersist<PlayerController>
 {
-    // speed player begins moving at
-    [SerializeField] private float _startSpeed = 10f;
-    // amount player accelerates by
-    [SerializeField] private float _accelSpeed = 1f;
-    // amount of time passed before player accelerates
-    [SerializeField] private float _accelTime = 5f;
-
     // speed player is currently climbing at
     private float _climbSpeed = 12f;
     // length of cooldown after taking damage
     private float _damageCooldownTime = .5f;
     // is the damge cooldown on?
     private bool _damageCooldown = false;
-    // is the acceleration cooldown on?
-    private bool _accelCooldown = false;
     // is the player currently climbing the grapple?
     private bool _climbing = false;
     // is the player currently on the ceiling?
     private bool _onCeiling = false;
-    // position at the start of a run
+    // location player spawns at
     private Vector3 _spawnPos;
     // references to inputs
     private PlayerInputs _playerInputs;
     private InputAction _grappleAction;
+    private InputAction _gunAction; ////////////////////////////////////// move this to gun powerup
+    private InputAction _dynamiteAction; //////////////////////////// move this to dynamite powerup
     //reference to grapple
     private GrappleController _grappleRef;
 
     // number of player's lives
     // player dies when lives hits 0
     public int lives = 1;
-    // speed player is currently moving at
-    public float currentMoveSpeed;
     // is the player currently inputting grapple?
     public bool inputtingGrapple = false;
     // is the player currently boosting
     public bool boosting = false;
+    // is the player currently invincible?
+    public bool invincible = false;
+    // is the player currently using a powerup with inputs?
+    public bool powerupInputting = false;
     // reference to player rigidbody
     public Rigidbody rbRef;
 
@@ -59,18 +57,25 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.RunStart, StartRun);
-        EventBus.Subscribe(EventType.RunEnd, EndRun);
+        EventBus.Subscribe(EventType.RunStart, OnRunStart);
+        EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
+        EventBus.Subscribe(EventType.DashStart, TurnOnPowerupInputting);
+        EventBus.Subscribe(EventType.DashEnd, TurnOffPowerupInputting);
         EventBus.Subscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
-        
+
         // get references
         rbRef = this.GetComponent<Rigidbody>();
         _grappleRef = FindAnyObjectByType<GrappleController>();
+
+        // get spawn position
+        _spawnPos = transform.position;
 
         // add inputs
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
         _grappleAction = _playerInputs.Controls.Grapple;
+        _gunAction = _playerInputs.Controls.Gun; //////////////////////////// move this to gun powerup
+        _dynamiteAction = _playerInputs.Controls.Dynamite; ///////////// move this to dynamite powerup
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
 
@@ -80,34 +85,48 @@ public class PlayerController : SingletonNonPersist<PlayerController>
 
     void OnDisable()
     {
-        // unsubsribe to events
-        EventBus.Unsubscribe(EventType.RunStart, StartRun);
-        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
+        // unsubscribe to events
+        EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
+        EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
         EventBus.Unsubscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
     }
 
     #endregion
 
-    #region Functions Called by Events
+    #region Event Calls
 
     // called when run starts
-    private void StartRun()
+    private void OnRunStart()
     {
-        _spawnPos = transform.position;
-        currentMoveSpeed = _startSpeed;
         _climbSpeed = GameManager.Instance.playerClimbSpeed;
     }
 
     // called when run ends
-    private void EndRun()
+    private void OnRunEnd()
     {
-        // reset player position
-        transform.position = _spawnPos;
         // reset player lives
         lives = 1;
 
+        // reset postion
+        transform.position = _spawnPos;
+        // reset velocity
+        rbRef.linearVelocity = Vector3.zero;
+
+        // reset climbing
         _climbing = false;
         _onCeiling = false;
+    }
+
+    // mark player as using powerup inputs
+    private void TurnOnPowerupInputting()
+    {
+        powerupInputting = true;
+    }
+
+    // mark player as not using powerup inputs
+    private void TurnOffPowerupInputting()
+    {
+        powerupInputting = false;
     }
 
     // called when grapple reaches ceiling
@@ -131,15 +150,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         // logic only happens when in a run
         if (GameManager.Instance.InRun)
         {
-            // increase speed by 1 every 5 seconds
-            if (!_accelCooldown)
-                StartCoroutine(Accelerate());
-
-            Move();
-
-            // add to distance score
-            // player MUST start at x = 0 for score to be accurate
-            GameManager.Instance.distanceScore = (int)transform.position.x;
+            Grapple();
         }
     }
 
@@ -159,8 +170,8 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             // if player collides with an obstacle take damage and destroy obstacle
             if (other.gameObject.CompareTag("Obstacle"))
             {
-                // don't take damage if boosting
-                if (!boosting)
+                // don't take damage if invincible
+                if (!invincible)
                     TakeDamage();
                 Destroy(other.gameObject);
             }
@@ -168,8 +179,8 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             // if player collides with platform via a trigger, take damage and destroy platform 
             if (other.gameObject.CompareTag("Ceiling"))
             {
-                // don't take damage if boosting
-                if (!boosting)
+                // don't take damage if invincible
+                if (!invincible)
                     TakeDamage();
                 Destroy(other.gameObject);
 
@@ -178,14 +189,9 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         }
     }
 
-    #region Movement
-
-    // handles movement behaviors
-    private void Move()
+    // handles grapple behaviors
+    private void Grapple()
     {
-        // move forward constantly
-        transform.Translate(currentMoveSpeed * Time.deltaTime * transform.right);
-
         // when player is climbing but hasn't reached the ceiling yet
         if (_climbing && !_onCeiling && inputtingGrapple)
         {
@@ -212,17 +218,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
                 rbRef.useGravity = true;
         }
     }
-
-    // wait _accelTime amount of seconds before increasing speed by _accelSpeed
-    private IEnumerator Accelerate()
-    {
-        _accelCooldown = true;
-        yield return new WaitForSeconds(_accelTime);
-        currentMoveSpeed += _accelSpeed;
-        _accelCooldown = false;
-    }
-
-    #endregion
 
     #region Damage
 

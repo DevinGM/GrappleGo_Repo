@@ -10,8 +10,9 @@ public class Menu_UI : MonoBehaviour
 {
     public void PlayGame()
     {
-        Debug.Log("Entering Game");
-        SceneManager.LoadScene("Devin_Work");
+        Debug.Log("Starting Level");
+        //SceneManager.LoadScene("Devin_Work");
+        SceneManager.LoadScene(1);
     }
 
     public void QuitGame()
@@ -23,18 +24,20 @@ public class Menu_UI : MonoBehaviour
     public void EnterShop()
     {
         Debug.Log("Enter Shop");
-        SceneManager.LoadScene("Devin_Shop");
+        //SceneManager.LoadScene("Devin_Shop");
+        SceneManager.LoadScene(3);
     }
 
     public void EnterSetting()
     {
         Debug.Log("Enter Settings");
-        SceneManager.LoadScene("SettingMenu");
+        //SceneManager.LoadScene("SettingMenu");
+        SceneManager.LoadScene(4);
     }
 
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        //SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(0);
     }
-
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/30/2025
+/// 10/29/2025
 /// Detects player's powerup pickups
 /// </summary>
 
@@ -18,6 +18,7 @@ public class PowerupDetecter : MonoBehaviour
         // get powerup references
         _shieldPowerup = this.GetComponent<ShieldPowerup>();
         _boostPowerup = this.GetComponent<BoostPowerup>();
+        _dashPowerup = this.GetComponent<DashPowerup>();
     }
 
     // handles trigger collisions
@@ -42,24 +43,37 @@ public class PowerupDetecter : MonoBehaviour
                     Destroy(other.gameObject);
                 }
             }
-            /* ///////////////////////////////////// Add these in when made corresponding powerup
             // if collide with dash powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("DashPowerup"))
             {
-                OnPowerupPickUp(_dashPowerup);
-                Destroy(other.gameObject);
+                // don't pick up another inputting powerup if the player already has one
+                if (!PlayerController.Instance.powerupInputting)
+                {
+                    PickUpPowerup(_dashPowerup);
+                    Destroy(other.gameObject);
+                }
             }
+            ///////////////////////////////////// Add these in once made corresponding powerup
+            /*
             // if collide with gun powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("GunPowerup"))
             {
-                OnPowerupPickUp(_gunPowerUp);
-                Destroy(other.gameObject);
+                // don't pick up another inputting powerup if the player already has one
+                if (!PlayerController.Instance.usingPowerupInput)
+                {
+                    PickUpPowerup(_gunPowerup);
+                    Destroy(other.gameObject);
+                }
             }
             // if collide with dynamite powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("DynamitePowerup"))
             {
-                OnPowerupPickUp(_dynamitePowerUp);
-                Destroy(other.gameObject);
+                // don't pick up another inputting powerup if the player already has one
+                if (!PlayerController.Instance.usingPowerupInput)
+                {
+                    PickUpPowerup(_dynamitePowerup);
+                    Destroy(other.gameObject);
+                }
             }*/
         }
     }

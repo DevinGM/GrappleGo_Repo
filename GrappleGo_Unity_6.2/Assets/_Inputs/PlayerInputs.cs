@@ -100,6 +100,33 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""da9837ab-1932-4cf8-b21f-312d678c8052"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Gun"",
+                    ""type"": ""Button"",
+                    ""id"": ""f485128e-b846-4def-9ae1-923b552d348d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dynamite"",
+                    ""type"": ""Button"",
+                    ""id"": ""aebc25c5-7eb7-4d75-b37e-fedba9bae7af"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -113,6 +140,39 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Grapple"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6e65504-220a-4da1-90eb-15210bb7edd1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ecaac16f-0d8c-4f0b-b923-1b18a068f773"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Gun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50844dd8-da5a-4ad7-96c3-c7b727b86804"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dynamite"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +182,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         // Controls
         m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
         m_Controls_Grapple = m_Controls.FindAction("Grapple", throwIfNotFound: true);
+        m_Controls_Dash = m_Controls.FindAction("Dash", throwIfNotFound: true);
+        m_Controls_Gun = m_Controls.FindAction("Gun", throwIfNotFound: true);
+        m_Controls_Dynamite = m_Controls.FindAction("Dynamite", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -203,6 +266,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Controls;
     private List<IControlsActions> m_ControlsActionsCallbackInterfaces = new List<IControlsActions>();
     private readonly InputAction m_Controls_Grapple;
+    private readonly InputAction m_Controls_Dash;
+    private readonly InputAction m_Controls_Gun;
+    private readonly InputAction m_Controls_Dynamite;
     /// <summary>
     /// Provides access to input actions defined in input action map "Controls".
     /// </summary>
@@ -218,6 +284,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Controls/Grapple".
         /// </summary>
         public InputAction @Grapple => m_Wrapper.m_Controls_Grapple;
+        /// <summary>
+        /// Provides access to the underlying input action "Controls/Dash".
+        /// </summary>
+        public InputAction @Dash => m_Wrapper.m_Controls_Dash;
+        /// <summary>
+        /// Provides access to the underlying input action "Controls/Gun".
+        /// </summary>
+        public InputAction @Gun => m_Wrapper.m_Controls_Gun;
+        /// <summary>
+        /// Provides access to the underlying input action "Controls/Dynamite".
+        /// </summary>
+        public InputAction @Dynamite => m_Wrapper.m_Controls_Dynamite;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -247,6 +325,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Grapple.started += instance.OnGrapple;
             @Grapple.performed += instance.OnGrapple;
             @Grapple.canceled += instance.OnGrapple;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
+            @Gun.started += instance.OnGun;
+            @Gun.performed += instance.OnGun;
+            @Gun.canceled += instance.OnGun;
+            @Dynamite.started += instance.OnDynamite;
+            @Dynamite.performed += instance.OnDynamite;
+            @Dynamite.canceled += instance.OnDynamite;
         }
 
         /// <summary>
@@ -261,6 +348,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Grapple.started -= instance.OnGrapple;
             @Grapple.performed -= instance.OnGrapple;
             @Grapple.canceled -= instance.OnGrapple;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
+            @Gun.started -= instance.OnGun;
+            @Gun.performed -= instance.OnGun;
+            @Gun.canceled -= instance.OnGun;
+            @Dynamite.started -= instance.OnDynamite;
+            @Dynamite.performed -= instance.OnDynamite;
+            @Dynamite.canceled -= instance.OnDynamite;
         }
 
         /// <summary>
@@ -308,5 +404,26 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnGrapple(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Dash" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Gun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Dynamite" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDynamite(InputAction.CallbackContext context);
     }
 }

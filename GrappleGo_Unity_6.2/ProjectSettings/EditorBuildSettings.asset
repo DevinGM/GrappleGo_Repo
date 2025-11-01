@@ -12,7 +12,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Devin_Work.unity
     guid: 04ab0d323a8e7ea41a45125181b5e3be
   - enabled: 1
-    path: Assets/Scenes/Devin_Shop.unity
+    path: Assets/Scenes/D_DeathMenu.unity
+    guid: 3f2d855840393894592a6febd947952c
+  - enabled: 1
+    path: Assets/Scenes/D_Shop.unity
     guid: 643482c6a87fd744591b3c3ab00b709c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
