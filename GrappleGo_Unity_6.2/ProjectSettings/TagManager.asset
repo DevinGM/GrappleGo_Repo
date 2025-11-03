@@ -13,11 +13,12 @@ TagManager:
   - DashPowerup
   - GunPowerup
   - DynamitePowerup
+  - TriggerBox
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Grapple
   - Water
   - UI
   - 

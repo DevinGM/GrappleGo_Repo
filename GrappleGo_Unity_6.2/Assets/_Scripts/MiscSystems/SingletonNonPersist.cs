@@ -52,7 +52,7 @@ public class SingletonNonPersist<T> : MonoBehaviour where T : Component
         // so kill self
         else
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }
