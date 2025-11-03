@@ -17,26 +17,25 @@ public class TerrainManager : MonoBehaviour
     // prefab for beginning 4 chunks of level
     [Header("Prefab of beginning 4 chunks of level")]
     [SerializeField] private GameObject _startingTerrain;
-    // x position chunk spawns at, defaults to 40
-    [Header("Spawn X Coordinate of Chunk \nSet to coordinate first chunk will spawn at")]
-    [SerializeField] private float _startSpawnXPos = 40f;
+    // last spawned chunk
+    private GameObject _lastChunk;
 
-    // spawn position of chunks, gets updated during run and reset at end
-    private float _currentSpawnXPos = 40f;
-    
+    // reference to terrain mover
+    private Transform _terrainMover;
+
     void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.ChunkSteppedOn, SpawnChunk);
+        EventBus.Subscribe(EventType.SpawnChunk, OnSpawnChunk);
         EventBus.Subscribe(EventType.RunEnd, EndRun);
 
-        // set current spawn posiiton
-        _currentSpawnXPos = _startSpawnXPos;
+        // get _terrainMover
+        _terrainMover = transform.Find("TerrainMover");
     }
     void OnDisable()
     {
         // unsubscribe to events
-        EventBus.Unsubscribe(EventType.ChunkSteppedOn, SpawnChunk);
+        EventBus.Unsubscribe(EventType.SpawnChunk, OnSpawnChunk);
         EventBus.Unsubscribe(EventType.RunEnd, EndRun);
     }
 
@@ -45,18 +44,16 @@ public class TerrainManager : MonoBehaviour
     {
         // spawn starter terrain
         Instantiate(_startingTerrain, Vector3.zero, transform.rotation);
-        // reset current spawn posiiton
-        _currentSpawnXPos = _startSpawnXPos;
     }
 
-    // spawn a random chunk and place it in line
-    public void SpawnChunk()
+    // spawn a random chunk
+    public void OnSpawnChunk()
     {
         int random = Random.Range(0, _chunkList.Count);
-        GameObject chunk = Instantiate(_chunkList[random], new Vector3(_startSpawnXPos, 0f, 0f), transform.rotation);
-        ChunkController chunkController = chunk.GetComponent<ChunkController>();
-        chunkController.StartRun();
-        chunk.transform.position = new Vector3(_currentSpawnXPos, 0f, 0f);
-        _currentSpawnXPos += 10f;
+        GameObject chunk = Instantiate(_chunkList[random], new Vector3(30f, 0f, 0f), transform.rotation);
+        chunk.transform.SetParent(_terrainMover);
+        if (_lastChunk != null)
+            chunk.transform.position = new Vector3(_lastChunk.transform.position.x + 10f, 0f, 0f);
+        _lastChunk = chunk;
     }
 }

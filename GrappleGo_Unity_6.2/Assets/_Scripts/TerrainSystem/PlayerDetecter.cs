@@ -18,7 +18,7 @@ public class PlayerDetecter : MonoBehaviour
     {
         if (!_steppedOn && other.gameObject.CompareTag("Player"))
         {
-            EventBus.Publish(EventType.ChunkSteppedOn);
+           // EventBus.Publish(EventType.SpawnChunk);
             _steppedOn = true;
         }
     }

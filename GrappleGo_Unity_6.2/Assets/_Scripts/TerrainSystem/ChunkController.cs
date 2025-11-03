@@ -1,48 +1,41 @@
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Pool;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/25/2025
+/// 11/1/2025
 /// Handles chunk behaviours
 /// </summary>
 
 public class ChunkController : MonoBehaviour
 {
-    // is the player currently in a run?
-    private bool _inRun = false;
-
     void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.RunStart, StartRun);
-        EventBus.Subscribe(EventType.RunEnd, EndRun);
+        EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
     }
+
     void OnDisable()
     {
         // unsubscribe to events
-        EventBus.Unsubscribe(EventType.RunStart, StartRun);
-        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
+        EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
     }
 
     private void Update()
     {
-        if (_inRun)
+        // only do logic during run
+        if (GameManager.Instance.InRun)
         {
-            // if the player gets too far away cull this chunk
-            if (Vector3.Distance(PlayerController.Instance.transform.position, transform.position) > 50f)
+            // if chunk passes -20 x in world space, cull it
+            if (transform.position.x < -20)
                 Destroy(this.gameObject);
         }
     }
 
-    // called when run begins
-    public void StartRun()
-    {
-        _inRun = true;
-    }
     // called when run ends
-    private void EndRun()
+    private void OnRunEnd()
     {
         Destroy(this.gameObject);
     }

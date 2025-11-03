@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/17/2025
+/// 10/21/2025
 /// Handles grapple behaviour
 /// </summary>
 
@@ -29,7 +29,8 @@ public class GrappleController : MonoBehaviour
     void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.RunEnd, EndRun);
+        EventBus.Subscribe(EventType.RunStart, OnRunStart);
+        EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
 
         // set spawnPos
         _spawnPos = transform.position;
@@ -40,11 +41,21 @@ public class GrappleController : MonoBehaviour
     void OnDisable()
     {
         // unsubsribe to events
-        EventBus.Unsubscribe(EventType.RunEnd, EndRun);
+        EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
+        EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
+    }
+
+    // called when run starts
+    private void OnRunStart()
+    {
+        _onFloor = true;
+        onCeiling = false;
+        _onPlayer = true;
+        transform.position = _spawnPos;
     }
 
     // called when run ends
-    private void EndRun()
+    private void OnRunEnd()
     {
         _onFloor = true;
         onCeiling = false;
@@ -58,9 +69,6 @@ public class GrappleController : MonoBehaviour
         // only do logic if in run
         if (GameManager.Instance.InRun)
         {
-            // while player is in run, move grapple at same speed as player
-            transform.Translate(PlayerController.Instance.currentMoveSpeed * Time.deltaTime * transform.right);
-
             // move up when inputting grapple and not on ceiling
             if (PlayerController.Instance.inputtingGrapple && !onCeiling)
             {
@@ -105,16 +113,6 @@ public class GrappleController : MonoBehaviour
             }
             else
                 _onPlayer = false;
-
-            // raycast to the right of the grapple
-            if (Physics.Raycast(transform.position, transform.right, out RaycastHit hit3, 1f))
-            {
-                // if cast hits a ceiling
-                if (hit3.collider.gameObject.CompareTag("Ceiling"))
-                {
-                    print("grapple ran into platform");
-                }
-            }
         }
     }
 }

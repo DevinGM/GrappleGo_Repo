@@ -5,9 +5,10 @@ using System.IO;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/14/2024
+/// 11/1/2024
 /// HANDLES GAME MANAGER
 /// holds temp ui
+/// handles world acceleration
 /// holds InRun reference
 /// holds saved variables
 ///     upgradeable stats
@@ -17,6 +18,15 @@ using System.IO;
 
 public class GameManager : Singleton<GameManager>
 {
+    // is the acceleration cooldown on?
+    private bool _accelCooldown = false;
+    // length in seconds before world accelerates again
+    private float _accelTime = 5f;
+    // beginning world speed
+    private float _startSpeed = 8f;
+    // amount world speed accelerates at a time
+    private float _accelSpeed = 1f;
+
     // is the player in a run?
     public bool InRun { get; private set; } = false;
 
@@ -24,6 +34,10 @@ public class GameManager : Singleton<GameManager>
     public int distanceScore = 0;
     // score gained from pickups like coins
     public int pickupsScore = 0;
+    // speed world is currently moving at
+    public float currentMoveSpeed;
+    // amount of force applied to world upon player dash
+    public float dashForce = 20f;
 
     #region Saved Stats
 
@@ -52,7 +66,7 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
-    #region OnEnable & OnDisable
+    #region OnEnable, OnDisable, & OnApplicationQuit
 
     void OnEnable()
     {
@@ -74,6 +88,13 @@ public class GameManager : Singleton<GameManager>
         SaveSystem.Save();
     }
 
+    // save on application quit
+    private void OnApplicationQuit()
+    {
+        // save data
+        SaveSystem.Save();
+    }
+
     #endregion
 
     #region OnRunStart & OnRunEnd
@@ -82,6 +103,12 @@ public class GameManager : Singleton<GameManager>
     private void OnRunStart()
     {
         InRun = true;
+
+        currentMoveSpeed = _startSpeed;
+
+
+        // save data
+        SaveSystem.Save();
     }
 
     // called when run ends
@@ -95,6 +122,9 @@ public class GameManager : Singleton<GameManager>
         // reset score
         pickupsScore = 0;
         distanceScore = 0;
+
+        // save data
+        SaveSystem.Save();
     }
 
     #endregion
@@ -105,6 +135,23 @@ public class GameManager : Singleton<GameManager>
         // manage high score
         if (highScore < (distanceScore + pickupsScore))
             highScore = distanceScore + pickupsScore;
+
+        // only do logic during run
+        if (InRun)
+        {
+            // increase speed by 1 every 5 seconds
+            if (!_accelCooldown)
+                StartCoroutine(Accelerate());
+        }
+    }
+
+    // wait _accelTime amount of seconds before increasing speed by _accelSpeed
+    private IEnumerator Accelerate()
+    {
+        _accelCooldown = true;
+        yield return new WaitForSeconds(_accelTime);
+        currentMoveSpeed += _accelSpeed;
+        _accelCooldown = false;
     }
 
     // temp prototyping ui
@@ -120,6 +167,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     #region Save & Load
+
     // save stats to the given struct
     public void Save(ref GameManagerSaveData data)
     {
@@ -151,6 +199,7 @@ public class GameManager : Singleton<GameManager>
         purchasedExtraLife = data.purchasedExtraLife;
         purchasedHeadStart = data.purchasedHeadStart;
     }
+
     #endregion
 }
 

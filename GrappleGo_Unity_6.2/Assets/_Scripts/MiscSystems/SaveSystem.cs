@@ -25,7 +25,7 @@ public class SaveSystem
     // creates a save file name and path and puts it in a string using the persistent data path
     public static string SaveFileName()
     {
-        string saveFile = Application.persistentDataPath + "/save" + ".save";
+        string saveFile = Application.persistentDataPath + "/save" + ".json";
         return saveFile;
     }
 

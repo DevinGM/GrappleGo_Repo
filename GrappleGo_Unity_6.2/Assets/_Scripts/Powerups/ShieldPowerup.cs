@@ -19,21 +19,30 @@ public class ShieldPowerup : PowerupParent
         _shieldModelRef = transform.Find("ShieldModel").gameObject;
 
         // subscribe to events
+        EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
         EventBus.Subscribe(EventType.PlayerDamaged, OnPlayerDamaged);
 
         // activate upon enabling
         Activate();
     }
+
     protected override void OnDisable()
     {
         // unsubscribe to events
+        EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
         EventBus.Unsubscribe(EventType.PlayerDamaged, OnPlayerDamaged);
+
+        Deactivate();
+    }
+
+    // called when run ends
+    protected override void OnRunEnd()
+    {
+        this.enabled = false;
     }
 
     protected override void Activate()
     {
-        // mark powerup as active
-        _active = true;
         // increase player lives by 1
         PlayerController.Instance.lives++;
         // turn on shield model
@@ -42,12 +51,8 @@ public class ShieldPowerup : PowerupParent
 
     protected override void Deactivate()
     {
-        // mark powerup as inactive
-        _active = false;
         // turn off shield model
         _shieldModelRef.SetActive(false);
-        // disable powerup component
-        this.enabled = false;
     }
 
     // called when player takes damage
@@ -55,6 +60,6 @@ public class ShieldPowerup : PowerupParent
     {
         // check if player is on last life, in which case deactivate shield
         if (PlayerController.Instance.lives == 1)
-            Deactivate();
+            this.enabled = false;
     }
 }
