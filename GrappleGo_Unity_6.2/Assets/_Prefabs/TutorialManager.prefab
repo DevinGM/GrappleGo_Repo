@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 3883962651664762302}
   - component: {fileID: 2013591225800105012}
   m_Layer: 0
-  m_Name: TerrainManager
+  m_Name: TutorialManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,35 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainManager
   _chunkList:
-  - {fileID: 3055852687190576248, guid: 769025c896b84c7498ba398392c003c9, type: 3}
-  - {fileID: 6887751548412757613, guid: 7db83b59e01bdf8458a2736038d3e058, type: 3}
-  - {fileID: 6887751548412757613, guid: fa88a6f3b16b7a24e98067e8b0023474, type: 3}
-  - {fileID: 2447134036493374778, guid: ac9173adc2bac9d4f8a808c87fce78eb, type: 3}
-  - {fileID: 6887751548412757613, guid: 1abf480bbcdbe1742890b8572b14b8f2, type: 3}
-  - {fileID: 2447134036493374778, guid: 1852f8d71b884174694c50324a676dd8, type: 3}
-  - {fileID: 2447134036493374778, guid: 76f8e102c0573d04ea58b86081ed98b6, type: 3}
-  - {fileID: 6887751548412757613, guid: 197b569a17ddea249bb757e284f17588, type: 3}
-  - {fileID: 3055852687190576248, guid: 073cfb2692e376e4bbcc057f02358388, type: 3}
-  - {fileID: 3055852687190576248, guid: 3841aedb69fb59347b0240602789644c, type: 3}
-  - {fileID: 3055852687190576248, guid: c1ff70806a6c96c459e081f4f06b974c, type: 3}
-  - {fileID: 3055852687190576248, guid: b9ed29ba65cfd3040a0bcf54f8df59a1, type: 3}
-  - {fileID: 3055852687190576248, guid: f2b8118ad16128f42955771902da84c7, type: 3}
-  - {fileID: 6887751548412757613, guid: e49e1a8c6c8b0de41877bd13e3b3da89, type: 3}
-  - {fileID: 2447134036493374778, guid: 7092b8e43e29a3d46a8f5ff48033cb18, type: 3}
-  - {fileID: 2447134036493374778, guid: 270992f38d9d66c4c8bd405a8a877304, type: 3}
-  - {fileID: 2447134036493374778, guid: 8d48a8d97d33a204b93827d356db03f8, type: 3}
-  - {fileID: 2447134036493374778, guid: baa6c5c607e11b542a8091f83f48f7c1, type: 3}
-  - {fileID: 2447134036493374778, guid: 65f7fac890a8faa44b774523262231bb, type: 3}
-  - {fileID: 2447134036493374778, guid: 03742e2bfffd3b244b7ba58a9d4e2a3c, type: 3}
-  - {fileID: 2447134036493374778, guid: 483e9d9d5d255914da2da8ba20b963e3, type: 3}
-  - {fileID: 2447134036493374778, guid: 991344019711c0843bcfe7cd90ecf77d, type: 3}
-  - {fileID: 2447134036493374778, guid: bc01c04b70cea4541a122b5fb49cb630, type: 3}
-  - {fileID: 2447134036493374778, guid: 61873b8f8d325004b852e0f2a88017a2, type: 3}
-  - {fileID: 2447134036493374778, guid: 61873b8f8d325004b852e0f2a88017a2, type: 3}
-  - {fileID: 2447134036493374778, guid: 23a9b0fa9795dd54c83018e9b35013f0, type: 3}
-  - {fileID: 2447134036493374778, guid: 46201889a068b8349b5cfb448be386cd, type: 3}
-  - {fileID: 2447134036493374778, guid: b45cf7df90ab4774f8f6d807cbfe43ea, type: 3}
-  - {fileID: 2447134036493374778, guid: c5d88cbe98be16a47b0f0f370b091f13, type: 3}
+  - {fileID: 0}
   _startingTerrain: {fileID: 7206048471078834422, guid: 0051d7140305df14584779837a405098, type: 3}
 --- !u!1 &4927411391824237082
 GameObject:

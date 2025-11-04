@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 50363525261273919}
   m_Layer: 0
   m_Name: Gear_Type_3
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8440568591323221361}
   - component: {fileID: 4795550736545792724}
   - component: {fileID: 7307583755084641822}
+  - component: {fileID: 4425855567252956357}
   m_Layer: 0
   m_Name: Gear_3
   m_TagString: Untagged
@@ -121,3 +122,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &4425855567252956357
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108878540129146827}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 395.51334
+  m_Center: {x: 0, y: -3.6379797e-12, z: 0.000015258793}
