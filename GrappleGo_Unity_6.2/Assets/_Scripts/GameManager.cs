@@ -169,18 +169,6 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(index);
     }
 
-    // temp prototyping ui
-    private void OnGUI()
-    {
-        GUIStyle customStyle = new GUIStyle(GUI.skin.label);
-        customStyle.fontSize = 60;
-
-        Rect scoreText = new Rect(30, 30, 600, 80); // x, y, width, height
-        GUI.Label(scoreText, "Score: " + (distanceScore + pickupsScore), customStyle);
-        Rect highScoreText = new Rect(30, 120, 600, 80); // x, y, width, height
-        GUI.Label(highScoreText, "High Score: " + highScore, customStyle);
-    }
-
     #region Save & Load
 
     // save stats to the given struct

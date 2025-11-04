@@ -197,7 +197,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
 
             // check if player has reached ceiling
             // detect an object above the player
-            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.1f))
+            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.2f))
             {
                 // check if object is the ceiling and player isn't already on the ceiling and make sure they're inputting grapple
                 if (hit.collider.transform.CompareTag("Ceiling") && inputtingGrapple)

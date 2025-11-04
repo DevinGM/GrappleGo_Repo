@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/1/2025
+/// 11/3/2025
 /// Handles level hud behaviors
 /// </summary>
 
 public class HUD_Controller : MonoBehaviour
 {
+    // references to text boxes
+    public TMP_Text highscoreDisplay;
+    public TMP_Text scoreDisplay;
+
     // references to powerup buttons
     private GameObject dashButton;
     private GameObject gunButton;
@@ -34,6 +39,15 @@ public class HUD_Controller : MonoBehaviour
         EventBus.Unsubscribe(EventType.DashStart, OnDashStart);
         EventBus.Unsubscribe(EventType.DashEnd, TurnOffButtons);
         EventBus.Unsubscribe(EventType.RunEnd, TurnOffButtons);
+    }
+
+    // update is called every frame
+    private void Update()
+    {
+        // // set highscore and score text
+        highscoreDisplay.text = "Highscore: " + GameManager.Instance.highScore;
+        scoreDisplay.text = "Score: " + (GameManager.Instance.distanceScore + 
+            GameManager.Instance.pickupsScore);
     }
 
     // turn on dash button
