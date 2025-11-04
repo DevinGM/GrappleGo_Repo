@@ -192,17 +192,21 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         // when player is climbing but hasn't reached the ceiling yet
         if (_climbing && !_onCeiling && inputtingGrapple)
         {
-            // move up
-            transform.Translate(_climbSpeed * Time.deltaTime * transform.up);
-
-            // check if player has reached ceiling
-            // detect an object above the player
-            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.2f))
+            // don't let player move above 10f in world space
+            if (transform.position.y < 10f)
             {
-                // check if object is the ceiling and player isn't already on the ceiling and make sure they're inputting grapple
-                if (hit.collider.transform.CompareTag("Ceiling") && inputtingGrapple)
-                    _onCeiling = true;
+                // move up
+                transform.Translate(_climbSpeed * Time.deltaTime * transform.up);
             }
+        }
+
+        // check if player has reached ceiling
+        // detect an object above the player
+        if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, 1.2f))
+        {
+            // check if object is the ceiling and make sure player is inputting grapple
+            if (hit.collider.transform.CompareTag("Ceiling") && inputtingGrapple)
+                _onCeiling = true;
         }
 
         // if player stops inputting grapple or grapple is not on ceiling stop climbing and reactivate gravity

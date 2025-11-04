@@ -74,7 +74,12 @@ public class GrappleController : MonoBehaviour
             {
                 if (_onFloor)
                     _onFloor = false;
-                transform.Translate(_grappleSpeed * Time.deltaTime * transform.up);
+
+                // dissallow grapple from going through ceiling
+                if (transform.position.y < 10.75f)
+                {
+                    transform.Translate(_grappleSpeed * Time.deltaTime * transform.up);
+                }
             }
 
             // move down when not inputting grapple but don't let it go farther than the player

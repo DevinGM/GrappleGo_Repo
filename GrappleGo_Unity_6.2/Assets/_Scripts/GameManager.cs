@@ -23,11 +23,11 @@ public class GameManager : Singleton<GameManager>
     // is the acceleration cooldown on?
     private bool _accelCooldown = false;
     // length in seconds before world accelerates again
-    private float _accelTime = 5f;
+    private float _accelTime = 7.5f;
     // beginning world speed
-    private float _startSpeed = 8f;
+    private float _startSpeed = 7f;
     // amount world speed accelerates at a time
-    private float _accelSpeed = 1f;
+    private float _accelSpeed = .5f;
 
     // is the player in a run?
     public bool InRun { get; private set; } = false;
