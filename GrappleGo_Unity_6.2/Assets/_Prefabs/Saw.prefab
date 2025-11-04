@@ -63,6 +63,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2853224030475544372}
+  - component: {fileID: 3271967395899679329}
   m_Layer: 0
   m_Name: Model
   m_TagString: Obstacle
@@ -86,6 +87,28 @@ Transform:
   - {fileID: 6989195809013021570}
   m_Father: {fileID: 2055887051405149912}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3271967395899679329
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7362190409274894768}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 101c347f5a1a5a144aee9f6038e4040e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &2486151615940788084
 PrefabInstance:
   m_ObjectHideFlags: 0
