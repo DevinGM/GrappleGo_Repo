@@ -158,6 +158,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7268042498043566509, guid: 52f523901424a6c458f06b846201a0bc, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 7439012029606728192, guid: 52f523901424a6c458f06b846201a0bc, type: 3}
       propertyPath: m_Name
       value: Gear_Type_4
