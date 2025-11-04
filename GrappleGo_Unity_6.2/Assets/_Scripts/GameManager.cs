@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/1/2024
+/// 11/3/2024
 /// HANDLES GAME MANAGER
 /// holds temp ui
 /// handles world acceleration
 /// holds InRun reference
+/// holds world movement speed
+/// moves to death scene on run end
 /// holds saved variables
 ///     upgradeable stats
 ///     currency
@@ -34,6 +36,8 @@ public class GameManager : Singleton<GameManager>
     public int distanceScore = 0;
     // score gained from pickups like coins
     public int pickupsScore = 0;
+    // score of most recent run
+    public int lastScore = 0;
     // speed world is currently moving at
     public float currentMoveSpeed;
     // amount of force applied to world upon player dash
@@ -106,7 +110,6 @@ public class GameManager : Singleton<GameManager>
 
         currentMoveSpeed = _startSpeed;
 
-
         // save data
         SaveSystem.Save();
     }
@@ -118,6 +121,8 @@ public class GameManager : Singleton<GameManager>
 
         // add to currency
         currencyAmount += (pickupsScore + distanceScore);
+        // set last score
+        lastScore = (pickupsScore + distanceScore);
 
         // reset score
         pickupsScore = 0;
@@ -125,6 +130,9 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
+
+        // move to death scene
+        MoveToScene(2);
     }
 
     #endregion
@@ -152,6 +160,13 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(_accelTime);
         currentMoveSpeed += _accelSpeed;
         _accelCooldown = false;
+    }
+
+    // move to scene at given build index
+    //      0 = Main Menu, 1 = Level, 2 = Death Menu, 3 = Shop
+    private void MoveToScene(int index)
+    {
+        SceneManager.LoadScene(index);
     }
 
     // temp prototyping ui
@@ -203,7 +218,7 @@ public class GameManager : Singleton<GameManager>
     #endregion
 }
 
-// struct for holding GameManger's save data
+// struct for holding GameManager's save data
 [System.Serializable]
 public struct GameManagerSaveData
 {

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -8,6 +10,7 @@ using UnityEngine;
 
 public class HUD_Controller : MonoBehaviour
 {
+    // references to powerup buttons
     private GameObject dashButton;
     private GameObject gunButton;
     private GameObject dynamiteButton;

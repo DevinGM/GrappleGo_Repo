@@ -5,15 +5,12 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/1/2025
+/// 11/3/2025
 /// HANDLES PLAYER BEHAVIOR
 /// handles player movement
 /// gets inputs
 /// handles coin collision and collection
 /// handles enemy collision and player damage
-/// handles dash action
-/// handles gun action
-/// handles dynamite action
 /// </summary>
 
 public class PlayerController : SingletonNonPersist<PlayerController>
