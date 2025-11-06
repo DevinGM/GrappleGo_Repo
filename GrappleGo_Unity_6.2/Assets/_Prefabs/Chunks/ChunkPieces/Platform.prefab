@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7849499208367585273}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Ceiling
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 2712610502242728663}
   m_Layer: 0
   m_Name: Platform
-  m_TagString: Ceiling
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,8 +155,12 @@ PrefabInstance:
       value: PlatformCon (3)
       objectReference: {fileID: 0}
     - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
       propertyPath: m_TagString
-      value: Ceiling
+      value: Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -233,8 +237,12 @@ PrefabInstance:
       value: PlatformCon (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
       propertyPath: m_TagString
-      value: Ceiling
+      value: Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -311,8 +319,12 @@ PrefabInstance:
       value: PlatformCon
       objectReference: {fileID: 0}
     - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
       propertyPath: m_TagString
-      value: Ceiling
+      value: Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -389,8 +401,12 @@ PrefabInstance:
       value: PlatformCon (4)
       objectReference: {fileID: 0}
     - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
       propertyPath: m_TagString
-      value: Ceiling
+      value: Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -467,8 +483,12 @@ PrefabInstance:
       value: PlatformCon (2)
       objectReference: {fileID: 0}
     - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773677737771188602, guid: dfc72733616c1d54ea2ddbb646d9144b, type: 3}
       propertyPath: m_TagString
-      value: Ceiling
+      value: Platform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

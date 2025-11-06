@@ -37,7 +37,7 @@ public class PowerupDetecter : MonoBehaviour
             else if (other.gameObject.CompareTag("BoostPowerup"))
             {
                 // don't pick up another boost powerup if the player already has one
-                if (!PlayerController.Instance.boosting)
+                if (!PlayerController_Tap.Instance.boosting)
                 {
                     PickUpPowerup(_boostPowerup);
                     Destroy(other.gameObject);
@@ -47,7 +47,7 @@ public class PowerupDetecter : MonoBehaviour
             else if (other.gameObject.CompareTag("DashPowerup"))
             {
                 // don't pick up another inputting powerup if the player already has one
-                if (!PlayerController.Instance.powerupInputting)
+                if (!PlayerController_Tap.Instance.powerupInputting)
                 {
                     PickUpPowerup(_dashPowerup);
                     Destroy(other.gameObject);
@@ -59,7 +59,7 @@ public class PowerupDetecter : MonoBehaviour
             else if (other.gameObject.CompareTag("GunPowerup"))
             {
                 // don't pick up another inputting powerup if the player already has one
-                if (!PlayerController.Instance.usingPowerupInput)
+                if (!PlayerController.Instance.powerupInputting)
                 {
                     PickUpPowerup(_gunPowerup);
                     Destroy(other.gameObject);
@@ -69,7 +69,7 @@ public class PowerupDetecter : MonoBehaviour
             else if (other.gameObject.CompareTag("DynamitePowerup"))
             {
                 // don't pick up another inputting powerup if the player already has one
-                if (!PlayerController.Instance.usingPowerupInput)
+                if (!PlayerController.Instance.powerupInputting)
                 {
                     PickUpPowerup(_dynamitePowerup);
                     Destroy(other.gameObject);

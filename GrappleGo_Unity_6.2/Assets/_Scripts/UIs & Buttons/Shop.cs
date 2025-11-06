@@ -14,8 +14,7 @@ public class Shop : MonoBehaviour
     [Header("Buttons")]
     // references to buttons
     [SerializeField] private UnityEngine.UI.Button _coinButton;
-    [SerializeField] private UnityEngine.UI.Button _playerClimbSpeedButton;
-    [SerializeField] private UnityEngine.UI.Button _grappleClimbSpeedButton;
+    [SerializeField] private UnityEngine.UI.Button _playerMoveSpeedButton;
     [SerializeField] private UnityEngine.UI.Button _boostDurationButton;
     [SerializeField] private UnityEngine.UI.Button _dashDurationButton;
     [SerializeField] private UnityEngine.UI.Button _dynamiteDurationButton;
@@ -25,8 +24,7 @@ public class Shop : MonoBehaviour
     [Header("Text Boxes")]
     // references to texts
     [SerializeField] private TMP_Text _coinText;
-    [SerializeField] private TMP_Text _playerClimbSpeedText;
-    [SerializeField] private TMP_Text _grappleClimbSpeedText;
+    [SerializeField] private TMP_Text _playerMoveSpeedText;
     [SerializeField] private TMP_Text _boostDurationText;
     [SerializeField] private TMP_Text _dashDurationText;
     [SerializeField] private TMP_Text _dynamiteDurationText;
@@ -37,8 +35,7 @@ public class Shop : MonoBehaviour
     [Header("Upgrade Values")]
     /// amount stat increases per upgrade
     [SerializeField] private int _coinValue = 10;
-    [SerializeField] private float _playerClimbSpeedValue = 1f;
-    [SerializeField] private float _grappleClimbSpeedValue = 1f;
+    [SerializeField] private float _playerMoveSpeedValue = 1f;
     [SerializeField] private float _boostDurationValue = 1f;
     [SerializeField] private float _dashDurationValue = 1f;
     [SerializeField] private float _dynamiteDurationValue = 1f;
@@ -46,8 +43,7 @@ public class Shop : MonoBehaviour
     /// prices of upgrades
     [Header("Upgrade Prices")]
     [SerializeField] private int _coinPrice = 1000;
-    [SerializeField] private int _playerClimbSpeedPrice = 1000;
-    [SerializeField] private int _grappleClimbSpeedPrice = 1000;
+    [SerializeField] private int _playerMoveSpeedPrice = 1000;
     [SerializeField] private int _boostDurationPrice = 1000;
     [SerializeField] private int _dashDurationPrice = 1000;
     [SerializeField] private int _dynamiteDurationPrice = 1000;
@@ -81,17 +77,11 @@ public class Shop : MonoBehaviour
         if (GameManager.Instance.currencyAmount < _coinPrice)
             _coinButton.interactable = false;
 
-        // player climb speed upgrade
-        _playerClimbSpeedText.text = "Climbing Speed\n¢" + _playerClimbSpeedPrice + "\n" + GameManager.Instance.playerClimbSpeed + " > "
-            + (GameManager.Instance.playerClimbSpeed + _playerClimbSpeedValue);
-        if (GameManager.Instance.currencyAmount < _playerClimbSpeedPrice)
-            _playerClimbSpeedButton.interactable = false;
-
-        // grapple climb speed upgrade
-        _grappleClimbSpeedText.text = "Grapple Speed\n¢" + _grappleClimbSpeedPrice + "\n" + GameManager.Instance.grappleClimbSpeed + " > "
-            + (GameManager.Instance.grappleClimbSpeed + _grappleClimbSpeedValue);
-        if (GameManager.Instance.currencyAmount < _grappleClimbSpeedPrice)
-            _grappleClimbSpeedButton.interactable = false;
+        // player move speed upgrade
+        _playerMoveSpeedText.text = "Movement Speed\n¢" + _playerMoveSpeedPrice + "\n" + GameManager.Instance.playerMoveSpeed + " > "
+            + (GameManager.Instance.playerMoveSpeed + _playerMoveSpeedValue);
+        if (GameManager.Instance.currencyAmount < _playerMoveSpeedPrice)
+            _playerMoveSpeedButton.interactable = false;
 
         // boost duration upgrade
         _boostDurationText.text = "Boost Duration\n¢" + _boostDurationPrice + "\n" + GameManager.Instance.boostDuration + " > "
@@ -156,14 +146,8 @@ public class Shop : MonoBehaviour
     }
     public void UpgradePlayerClimbSpeed()
     {
-        GameManager.Instance.playerClimbSpeed += _playerClimbSpeedValue;
-        GameManager.Instance.currencyAmount -= _playerClimbSpeedPrice;
-        SetButtons();
-    }
-    public void UpgradeGrappleClimbSpeed()
-    {
-        GameManager.Instance.grappleClimbSpeed += _grappleClimbSpeedValue;
-        GameManager.Instance.currencyAmount -= _grappleClimbSpeedPrice;
+        GameManager.Instance.playerMoveSpeed += _playerMoveSpeedValue;
+        GameManager.Instance.currencyAmount -= _playerMoveSpeedPrice;
         SetButtons();
     }
     public void UpgradeBoostDuration()

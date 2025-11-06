@@ -13,7 +13,7 @@ using UnityEngine.InputSystem;
 /// handles enemy collision and player damage
 /// </summary>
 
-public class PlayerController : SingletonNonPersist<PlayerController>
+public class PlayerController : MonoBehaviour
 {
     // speed player is currently climbing at
     private float _climbSpeed = 12f;
@@ -58,7 +58,6 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
         EventBus.Subscribe(EventType.DashStart, TurnOnPowerupInputting);
         EventBus.Subscribe(EventType.DashEnd, TurnOffPowerupInputting);
-        EventBus.Subscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
 
         // get references
         rbRef = this.GetComponent<Rigidbody>();
@@ -71,13 +70,12 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
         _grappleAction = _playerInputs.Controls.Grapple;
-        _gunAction = _playerInputs.Controls.Gun; //////////////////////////// move this to gun powerup
         _dynamiteAction = _playerInputs.Controls.Dynamite; ///////////// move this to dynamite powerup
         _grappleAction.performed += OnGrapplePerformed;
         _grappleAction.canceled += OnGrappleCanceled;
 
         // get stats
-        _climbSpeed = GameManager.Instance.playerClimbSpeed;
+        _climbSpeed = GameManager.Instance.playerMoveSpeed;
     }
 
     void OnDisable()
@@ -85,7 +83,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
         EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Unsubscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
+       // EventBus.Unsubscribe(EventType.GrappleHitCeiling, OnGrappleHitCeiling);
     }
 
     #endregion
@@ -95,7 +93,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
     // called when run starts
     private void OnRunStart()
     {
-        _climbSpeed = GameManager.Instance.playerClimbSpeed;
+        _climbSpeed = GameManager.Instance.playerMoveSpeed;
     }
 
     // called when run ends
@@ -208,7 +206,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             if (hit.collider.transform.CompareTag("Ceiling") && inputtingGrapple)
                 _onCeiling = true;
         }
-
+        /*
         // if player stops inputting grapple or grapple is not on ceiling stop climbing and reactivate gravity
         if (!inputtingGrapple || !_grappleRef.onCeiling)
         {
@@ -217,7 +215,7 @@ public class PlayerController : SingletonNonPersist<PlayerController>
             // don't turn gravity back on if player is boosting
             if (!boosting)
                 rbRef.useGravity = true;
-        }
+        }*/
     }
 
     #region Damage

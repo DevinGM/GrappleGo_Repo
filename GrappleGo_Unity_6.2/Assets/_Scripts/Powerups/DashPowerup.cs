@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/1/2024
+/// 11/5/2024
 /// handles dash powerup behavior
 /// </summary>
 
@@ -108,16 +108,16 @@ public class DashPowerup : PowerupParent
         // turn on in dash model
         _inDashModelRef.SetActive(true);
         // publish dash
-        EventBus.Publish(EventType.Dash);
-       // PlayerController.Instance.rbRef.AddForce(Vector3.right * _dashForce, ForceMode.Impulse);
+        EventBus.Publish(EventType.DashPerformed);
+        // PlayerController.Instance.rbRef.AddForce(Vector3.right * _dashForce, ForceMode.Impulse);
         // set player invincible
-        PlayerController.Instance.invincible = true;
+        PlayerController_Tap.Instance.invincible = true;
 
         // wait _dashLength seconds
         yield return new WaitForSeconds(_dashLength);
 
         // set player invincibility off
-        PlayerController.Instance.invincible = false;
+        PlayerController_Tap.Instance.invincible = false;
         // turn off dash model
         _inDashModelRef.SetActive(false);
         // turn off cooldown

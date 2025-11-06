@@ -5,9 +5,8 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/3/2024
+/// 11/4/2024
 /// HANDLES GAME MANAGER
-/// holds temp ui
 /// handles world acceleration
 /// holds InRun reference
 /// holds world movement speed
@@ -51,10 +50,8 @@ public class GameManager : Singleton<GameManager>
     public int currencyAmount = 0;
     // value of coin pickups, defaults to 10
     public int coinValue = 10;
-    // speed player climbs at
-    public float playerClimbSpeed = 7f;
-    // speed grapple climbs at
-    public float grappleClimbSpeed = 7f;
+    // speed player moves at
+    public float playerMoveSpeed = 7f;
     // extra boost powerup duration
     public float boostDuration = 0f;
     // extra dash powerup duration
@@ -177,8 +174,7 @@ public class GameManager : Singleton<GameManager>
         data.highScore = highScore;
         data.currency = currencyAmount;
         data.coinValue = coinValue;
-        data.playerClimbSpeed = playerClimbSpeed;
-        data.grappleClimbSpeed = grappleClimbSpeed;
+        data.playerClimbSpeed = playerMoveSpeed;
         data.boostDuration = boostDuration;
         data.dashDuration = dashDuration;
         data.dynamiteDuration = dynamiteDuration;
@@ -193,8 +189,7 @@ public class GameManager : Singleton<GameManager>
         highScore = data.highScore;
         currencyAmount = data.currency;
         coinValue = data.coinValue;
-        playerClimbSpeed = data.playerClimbSpeed;
-        grappleClimbSpeed = data.grappleClimbSpeed;
+        playerMoveSpeed = data.playerClimbSpeed;
         boostDuration = data.boostDuration;
         dashDuration = data.dashDuration;
         dynamiteDuration = data.dynamiteDuration;
@@ -218,8 +213,6 @@ public struct GameManagerSaveData
     public int coinValue;
     // speed player climbs at
     public float playerClimbSpeed;
-    // speed grapple climbs at
-    public float grappleClimbSpeed;
     // extra boost powerup duration
     public float boostDuration;
     // extra dash powerup duration

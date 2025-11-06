@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/19/2025
+/// 11/5/2025
 /// Handles turret enemy behaviour
 /// </summary>
 
@@ -30,7 +30,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy
                 Shoot();
 
             // if player passes the turret, stop firing
-            if (PlayerController.Instance.transform.position.x >= transform.position.x)
+            if (PlayerController_Tap.Instance.transform.position.x >= transform.position.x)
                 _playerPassed = true;
         }
     }
@@ -44,7 +44,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         spawnPos.x--;
         spawnPos.y++;
         // set bullet's target position to 5 units in front of the player
-        Vector3 targetPos = PlayerController.Instance.transform.position;
+        Vector3 targetPos = PlayerController_Tap.Instance.transform.position;
         targetPos.x += 5f;
         // spawn bullet
         GameObject bullet = Instantiate(_bulletPrefab, spawnPos, transform.rotation);

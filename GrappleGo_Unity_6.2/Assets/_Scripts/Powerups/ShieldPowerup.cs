@@ -44,7 +44,7 @@ public class ShieldPowerup : PowerupParent
     protected override void Activate()
     {
         // increase player lives by 1
-        PlayerController.Instance.lives++;
+        PlayerController_Tap.Instance.lives++;
         // turn on shield model
         _shieldModelRef.SetActive(true);
     }
@@ -59,7 +59,7 @@ public class ShieldPowerup : PowerupParent
     private void OnPlayerDamaged()
     {
         // check if player is on last life, in which case deactivate shield
-        if (PlayerController.Instance.lives == 1)
+        if (PlayerController_Tap.Instance.lives == 1)
             this.enabled = false;
     }
 }
