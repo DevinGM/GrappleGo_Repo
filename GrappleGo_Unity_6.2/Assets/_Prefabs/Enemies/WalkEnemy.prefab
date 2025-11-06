@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1164448586395016215}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Obstacle
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 7662585782089397083}
   m_Layer: 0
   m_Name: WalkEnemy
-  m_TagString: Obstacle
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 4962208508421275654}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Obstacle
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -180,11 +180,15 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         _gravityVelocity.y -= _gravityStrength * Time.deltaTime;
         transform.position += _gravityVelocity * Time.deltaTime;
         // if player moves below 1.1 on the y axis, turn off gravity
-        if (transform.position.y <= 1.1f)
+        if (transform.position.y < 1.1f)
         {
             _gravityOn = false;
             // reset position to 1.1
             transform.position = new Vector3(transform.position.x, 1.1f, 0f);
+
+            // play player lands audio
+            if (PlayerAudioHandler.Instance.playerLands != null)
+                PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerLands);
         }
     }
 
@@ -201,6 +205,10 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             {
                 GameManager.Instance.pickupsScore += GameManager.Instance.coinValue;
                 Destroy(other.gameObject);
+
+                // play get coin audio
+                if (PlayerAudioHandler.Instance.getCoin != null)
+                    PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.getCoin);
             }
 
             // if player collides with an obstacle take damage and destroy obstacle
@@ -210,6 +218,19 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
                 if (!invincible)
                     TakeDamage();
                 Destroy(other.gameObject);
+            }
+
+            // if player collides with an enemy take damage and destroy enemy
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                // don't take damage if invincible
+                if (!invincible)
+                    TakeDamage();
+                Destroy(other.gameObject);
+
+                // play enemy death sound
+                if (EnemyAudioHandler.Instance.enemyDeath != null)
+                    EnemyAudioHandler.Instance.PlaySound(EnemyAudioHandler.Instance.enemyDeath);
             }
 
             // if player collides with platform via a trigger, take damage and destroy platform 
@@ -292,10 +313,21 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             {
                 _gravityVelocity = Vector3.zero;
                 _gravityOn = true;
+                /*
+                // make sure to stop playing player grapples audio
+                if (PlayerAudioHandler.Instance.playerGrapples != null)
+                    PlayerAudioHandler.Instance.StopSound(PlayerAudioHandler.Instance.playerGrapples);
+                */
             }
             // if started moving, turn off gravity
             else
+            {
                 _gravityOn = false;
+
+                // play player grapples audio
+                if (PlayerAudioHandler.Instance.playerGrapples != null)
+                    PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerGrapples);
+            }
         }
     }
 

@@ -82,7 +82,13 @@ public class PowerupDetecter : MonoBehaviour
     private void PickUpPowerup(PowerupParent powerup)
     {
         if (powerup != null)
+        {
             powerup.enabled = true;
+
+            // play powerup get audio
+            if (PlayerAudioHandler.Instance.powerupGet_A != null)
+                PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.powerupGet_A);
+        }
         // there is no powerup so throw error
         else
             Debug.LogError("ERROR: no powerup detected!!!");

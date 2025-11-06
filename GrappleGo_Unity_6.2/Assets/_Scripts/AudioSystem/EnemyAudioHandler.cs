@@ -3,17 +3,14 @@ using UnityEngine;
 /// <summary>
 /// Devin G Monaghan
 /// 11/5/2025
-/// Handles player audio
+/// Handles enemy audio
 /// </summary>
 
-public class PlayerAudioHandler : SingletonNonPersist<PlayerAudioHandler>, I_AudioHandler
+public class EnemyAudioHandler : SingletonNonPersist<EnemyAudioHandler>, I_AudioHandler
 {
     // references to audio sources
-    public AudioSource getCoin;
-    public AudioSource powerupGet_A;
-    public AudioSource powerupGet_B;
-    public AudioSource playerLands;
-    public AudioSource playerGrapples;
+    public AudioSource enemyDeath;
+    public AudioSource enemyShoot;
 
     // play the given audio source
     public void PlaySound(AudioSource audioSource)

@@ -31,6 +31,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private TMP_Text _gunDurationText;
     [SerializeField] private TMP_Text _extraLifeText;
     [SerializeField] private TMP_Text _headStartText;
+    [SerializeField] private TMP_Text _currencyText;
 
     [Header("Upgrade Values")]
     /// amount stat increases per upgrade
@@ -67,7 +68,7 @@ public class Shop : MonoBehaviour
         }
     }
 
-    // set the text of all the upgrade buttons
+    // set the text of all the upgrade buttons and currency display
     // if player doesn't have enough currency to purchase an upgrade, turn that button off
     public void SetButtons()
     {
@@ -106,6 +107,10 @@ public class Shop : MonoBehaviour
             + (GameManager.Instance.gunDuration + _gunDurationValue);
         if (GameManager.Instance.currencyAmount < _gunDurationPrice)
             _gunDurationButton.interactable = false;
+
+        // currency display
+        if (_currencyText != null)
+            _currencyText.text = "¢" + GameManager.Instance.currencyAmount;
 
         /// extra life
         if (!GameManager.Instance.purchasedExtraLife)

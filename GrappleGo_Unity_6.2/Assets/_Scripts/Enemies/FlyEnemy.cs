@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 9/30/2025
+/// 11/5/2025
 /// Handles flying enemy behaviour
 /// </summary>
 
@@ -20,7 +20,7 @@ public class FlyEnemy : MonoBehaviour, IEnemy
     private Transform _pointA;
     private Transform _pointB;
 
-    void OnEnable()
+    public void OnEnable()
     {
         // get references to children
         _model = this.transform.Find("Model");
@@ -31,17 +31,17 @@ public class FlyEnemy : MonoBehaviour, IEnemy
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         // only do logic if in run
         if (GameManager.Instance.InRun)
         {
-            Movement();
+            Action();
         }
     }
 
     // movement behaviour
-    public void Movement()
+    public void Action()
     {
         // move towards point B
         if (_movingAtoB)

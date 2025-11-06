@@ -16,6 +16,7 @@ TagManager:
   - SpawnLine
   - Platform
   - Ceiling
+  - Enemy
   layers:
   - Default
   - TransparentFX
