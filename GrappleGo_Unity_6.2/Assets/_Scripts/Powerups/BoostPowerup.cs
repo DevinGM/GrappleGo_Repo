@@ -77,17 +77,20 @@ public class BoostPowerup : PowerupParent
         // reset world speed
         GameManager.Instance.currentMoveSpeed = _startingSpeed;
 
-        // set player invincibility off
-        PlayerController_Tap.Instance.boosting = false;
-        PlayerController_Tap.Instance.invincible = false;
+        if (PlayerController_Tap.Instance.gameObject.activeSelf == true)
+        {
+            // set player invincibility off
+            PlayerController_Tap.Instance.boosting = false;
+            PlayerController_Tap.Instance.invincible = false;
 
-        // set collider back to NOT a trigger
-        PlayerController_Tap.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
+            // set collider back to NOT a trigger
+            PlayerController_Tap.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
 
-        // start damage cooldown so player doesn't immediately take damage after coming out of boost
-        PlayerController_Tap.Instance.StartCoroutine(PlayerController_Tap.Instance.DamageCooldown());
+            // start damage cooldown so player doesn't immediately take damage after coming out of boost
+            PlayerController_Tap.Instance.StartCoroutine(PlayerController_Tap.Instance.DamageCooldown());
 
-        // turn off shield model
-        _boostModelRef.SetActive(false);
+            // turn off shield model
+            _boostModelRef.SetActive(false);
+        }
     }
 }

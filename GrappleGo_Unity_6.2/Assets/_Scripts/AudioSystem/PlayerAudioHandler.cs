@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Devin G Monaghan
@@ -6,7 +8,7 @@ using UnityEngine;
 /// Handles player audio
 /// </summary>
 
-public class PlayerAudioHandler : SingletonNonPersist<PlayerAudioHandler>, I_AudioHandler
+public class PlayerAudioHandler : MonoBehaviour, I_AudioHandler
 {
     // references to audio sources
     public AudioSource getCoin;
@@ -14,6 +16,18 @@ public class PlayerAudioHandler : SingletonNonPersist<PlayerAudioHandler>, I_Aud
     public AudioSource powerupGet_B;
     public AudioSource playerLands;
     public AudioSource playerGrapples;
+
+    // private reference to this object
+    private static PlayerAudioHandler _instance;
+    // public reference to this object
+    public static PlayerAudioHandler Instance { get { return _instance; } }
+
+    // awake is called before start
+    public virtual void Awake()
+    {
+        // set private ref to self
+        _instance = this;
+    }
 
     // play the given audio source
     public void PlaySound(AudioSource audioSource)

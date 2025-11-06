@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1989634534432148262}
   - component: {fileID: 8834406321366275434}
-  - component: {fileID: 4378310783270954633}
+  - component: {fileID: 7416885233859317916}
   m_Layer: 0
   m_Name: SystemAudioHandler
   m_TagString: Untagged
@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SystemAudioHandler
   buttonClick: {fileID: 0}
---- !u!82 &4378310783270954633
+  music: {fileID: 7416885233859317916}
+  playMusic: 1
+--- !u!82 &7416885233859317916
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,9 +61,9 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 5ee0acf23f8b145499693b991c819288, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
