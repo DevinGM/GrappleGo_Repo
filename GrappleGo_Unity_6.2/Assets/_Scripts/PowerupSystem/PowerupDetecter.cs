@@ -11,7 +11,7 @@ using UnityEngine;
 public class PowerupDetecter : MonoBehaviour
 {
     // references to powerup scripts
-    private PowerupParent _shieldPowerup, _boostPowerup, _dashPowerup, _gunPowerUp, _dynamitePowerUp;
+    private PowerupParent _shieldPowerup, _boostPowerup, _dashPowerup, _gunPowerup, _dynamitePowerup;
 
     void OnEnable()
     {
@@ -19,6 +19,7 @@ public class PowerupDetecter : MonoBehaviour
         _shieldPowerup = this.GetComponent<ShieldPowerup>();
         _boostPowerup = this.GetComponent<BoostPowerup>();
         _dashPowerup = this.GetComponent<DashPowerup>();
+        _gunPowerup = this.GetComponent<GunPowerup>();
     }
 
     // handles trigger collisions
@@ -37,7 +38,7 @@ public class PowerupDetecter : MonoBehaviour
             else if (other.gameObject.CompareTag("BoostPowerup"))
             {
                 // don't pick up another boost powerup if the player already has one
-                if (!PlayerController_Tap.Instance.boosting)
+                if (!PlayerController_Tap.Instance.hasBoost)
                 {
                     PickUpPowerup(_boostPowerup);
                     Destroy(other.gameObject);
@@ -53,23 +54,24 @@ public class PowerupDetecter : MonoBehaviour
                     Destroy(other.gameObject);
                 }
             }
-            ///////////////////////////////////// Add these in once made corresponding powerup
-            /*
+            
             // if collide with gun powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("GunPowerup"))
             {
-                // don't pick up another inputting powerup if the player already has one
-                if (!PlayerController.Instance.powerupInputting)
+                // don't pick up gun if player already has one
+                if (!PlayerController_Tap.Instance.hasGun)
                 {
                     PickUpPowerup(_gunPowerup);
                     Destroy(other.gameObject);
                 }
             }
+            ///////////////////////////////////// Add these in once made corresponding powerup
+            /*
             // if collide with dynamite powerup activate it and then destroy the pickup object
             else if (other.gameObject.CompareTag("DynamitePowerup"))
             {
                 // don't pick up another inputting powerup if the player already has one
-                if (!PlayerController.Instance.powerupInputting)
+                if (!PlayerController_Tap.Instance.powerupInputting)
                 {
                     PickUpPowerup(_dynamitePowerup);
                     Destroy(other.gameObject);

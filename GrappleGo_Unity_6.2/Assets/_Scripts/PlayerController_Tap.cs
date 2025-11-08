@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/5/2025
+/// 11/7/2025
 /// HANDLES PLAYER BEHAVIOR
 /// detects touch inputs
 /// moves player to held touch on screen
@@ -48,14 +48,14 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
     // number of player's lives
     // player dies when lives hits 0
     public int lives = 1;
-    // is the player currently boosting
-    public bool boosting = false;
+    // does the player currently have the boost powerup?
+    public bool hasBoost = false;
+    // does the player currently have the gun powerup?
+    public bool hasGun = false;
     // is the player currently invincible?
     public bool invincible = false;
     // is the player currently using a powerup with inputs?
     public bool powerupInputting = false;
-    // reference to rigidbody
-    public Rigidbody rbRef;
 
     #region OnEnable & OnDisable
 
@@ -74,7 +74,6 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             _grappleSpawnPos = _grapple.position;
         else
             Debug.LogError("ERROR: No Grapple reference given to player");
-        rbRef = GetComponent<Rigidbody>();
 
         // add inputs
         _playerInputs = new PlayerInputs();
@@ -313,11 +312,6 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             {
                 _gravityVelocity = Vector3.zero;
                 _gravityOn = true;
-                /*
-                // make sure to stop playing player grapples audio
-                if (PlayerAudioHandler.Instance.playerGrapples != null)
-                    PlayerAudioHandler.Instance.StopSound(PlayerAudioHandler.Instance.playerGrapples);
-                */
             }
             // if started moving, turn off gravity
             else
