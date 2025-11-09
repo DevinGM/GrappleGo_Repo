@@ -11,33 +11,46 @@ using TMPro;
 
 public class HUD_Controller : MonoBehaviour
 {
-    // references to text boxes
-    public TMP_Text highscoreDisplay;
-    public TMP_Text scoreDisplay;
-
+    [Header("Buttons")]
     // references to powerup buttons
-    private GameObject dashButton;
-    private GameObject gunButton;
-    private GameObject dynamiteButton;
+    [SerializeField] private GameObject _dashButton;
+    [SerializeField] private GameObject _dynamiteButton;
+
+    [Header("Text Boxes")]
+    // references to text boxes
+    [SerializeField] private TMP_Text _highscoreDisplay;
+    [SerializeField] private TMP_Text _scoreDisplay;
+
+    [Header("List of Dynamite Charges. Place in matching order")]
+    // references to dynamite charges
+    [SerializeField] private List<UnityEngine.UI.Image> _dynamiteChargesList;
 
     private void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.DashStart, OnDashStart);
-        EventBus.Subscribe(EventType.DashEnd, TurnOffButtons);
+        EventBus.Subscribe(EventType.DashStart, TurnOnDash);
+        EventBus.Subscribe(EventType.DashEnd, TurnOffDash);
+        EventBus.Subscribe(EventType.GetDynamite, OnGetDynamite);
+        EventBus.Subscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Subscribe(EventType.RunEnd, TurnOffButtons);
 
-        // get buttons
-        dashButton = transform.Find("Dash Button").gameObject;
-        gunButton = transform.Find("Gun Button").gameObject;
-        dynamiteButton = transform.Find("Dynamite Button").gameObject;
+        // check for 4th and 5th dynamite charges
+        if (GameManager.Instance.maxDynamiteCharges >= 4)
+            _dynamiteChargesList[3].gameObject.SetActive(true);
+        if (GameManager.Instance.maxDynamiteCharges >= 5)
+            _dynamiteChargesList[4].gameObject.SetActive(true);
+
+        // empty all charges on level begin
+        EmptyCharges(_dynamiteChargesList, _dynamiteButton);
     }
 
     private void OnDisable()
     {
         // unsubscribe to events
-        EventBus.Unsubscribe(EventType.DashStart, OnDashStart);
-        EventBus.Unsubscribe(EventType.DashEnd, TurnOffButtons);
+        EventBus.Unsubscribe(EventType.DashStart, TurnOnDash);
+        EventBus.Unsubscribe(EventType.DashEnd, TurnOffDash);
+        EventBus.Unsubscribe(EventType.GetDynamite, OnGetDynamite);
+        EventBus.Unsubscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Unsubscribe(EventType.RunEnd, TurnOffButtons);
     }
 
@@ -45,22 +58,69 @@ public class HUD_Controller : MonoBehaviour
     private void Update()
     {
         // // set highscore and score text
-        highscoreDisplay.text = "Highscore: " + GameManager.Instance.highScore;
-        scoreDisplay.text = "Score: " + (GameManager.Instance.distanceScore + 
+        _highscoreDisplay.text = "Highscore: " + GameManager.Instance.highScore;
+        _scoreDisplay.text = "Score: " + (GameManager.Instance.distanceScore + 
             GameManager.Instance.pickupsScore);
     }
 
     // turn on dash button
-    private void OnDashStart()
+    private void TurnOnDash()
     {
-        dashButton.SetActive(true);
+        _dashButton.SetActive(true);
+    }
+    // turn off dash button
+    private void TurnOffDash()
+    {
+        _dashButton.SetActive(false);
     }
 
-    // turn off all buttons
+    // turn off buttons
     private void TurnOffButtons()
     {
-        dashButton.SetActive(false);
-        gunButton.SetActive(false);
-        dynamiteButton.SetActive(false);
+        _dashButton.SetActive(false);
+        _dynamiteButton.SetActive(false);
+    }
+
+    // empty all of the given list's charges and turn off given button
+    private void EmptyCharges(List<UnityEngine.UI.Image> chargesList, GameObject button)
+    {
+        // empty all charges
+        for (int i = 0; i < chargesList.Count; i++)
+            chargesList[i].color = new Color(.3f, .3f, .3f, .75f);
+            
+        // turn off button
+        button.SetActive(false);
+    }
+
+    // fill all of the given list's charges until the given current amount of charges
+    // if any charges were filled and the given button is off, turn on the button
+    private void FillCharges(List<UnityEngine.UI.Image> chargesList, int currentCharges, GameObject button)
+    {
+        bool filledACharge = false;
+        // refill charges up to player's current number of charges
+        for (int i = 0; i < currentCharges; i++)
+        {
+            chargesList[i].color = new Color(1f, 1f, 1f, .75f);
+            filledACharge = true;
+
+            print("Filled charge at: " + chargesList[i]);
+        }
+
+        // if any charges were filled and the button is off, turn on button
+        if (filledACharge && !button.activeSelf)
+            button.SetActive(true);
+    }
+
+    // called when player picks up a dynamite
+    private void OnGetDynamite()
+    {
+        FillCharges(_dynamiteChargesList, PlayerController_Tap.Instance.DynamiteCharges, _dynamiteButton);
+    }
+
+    // called when player uses a dynamite
+    private void OnUseDynamite()
+    {
+        EmptyCharges(_dynamiteChargesList, _dynamiteButton);
+        FillCharges(_dynamiteChargesList, PlayerController_Tap.Instance.DynamiteCharges, _dynamiteButton);
     }
 }

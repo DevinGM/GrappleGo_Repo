@@ -15,20 +15,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 {
+    // reference to main camera
+    private Camera _camera;
+
+    #region Movement Variables
+
     [Header("Reference to Grapple object\nUse 'Grapple_Tap' instance inside the scene")]
     // reference to grapple
     [SerializeField] private Transform _grapple;
 
     // speed player is currently moving at
     private float _moveSpeed = 12f;
-    // strength of gravity
-    private float _gravityStrength = 9.81f;
-    // length of cooldown after taking damage
-    private float _damageCooldownTime = .5f;
-    // is the damge cooldown on?
-    private bool _damageCooldown = false;
     // is the player currently moving?
     public bool _moving = false;
+
+    // strength of gravity
+    private float _gravityStrength = 9.81f;
     // is gravity currently on?
     public bool _gravityOn = false;
     // velocity of gravity currently being applied to player
@@ -38,24 +40,44 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
     private Vector3 _grappleSpawnPos;
     // position player grapples towards
     private Vector3 _targetPos;
-    // references to inputs
-    private PlayerInputs _playerInputs;
-    private InputAction _tapGrapplePositionAction;
-    private InputAction _tapGrapplePressAction;
-    // reference to main camera
-    private Camera _camera;
 
-    // number of player's lives
-    // player dies when lives hits 0
+    #endregion
+
+    #region Damage Variables
+
+    // number of player's lives, player dies when lives hits 0
     public int lives = 1;
-    // does the player currently have the boost powerup?
-    public bool hasBoost = false;
-    // does the player currently have the gun powerup?
-    public bool hasGun = false;
     // is the player currently invincible?
     public bool invincible = false;
-    // is the player currently using a powerup with inputs?
-    public bool powerupInputting = false;
+
+    // length of cooldown after taking damage
+    private float _damageCooldownTime = .5f;
+    // is the damge cooldown on?
+    private bool _damageCooldown = false;
+
+    #endregion
+
+    #region Input Variables
+
+    // references to inputs
+    private PlayerInputs _playerInputs;
+    private InputAction _tapGrappleAction;
+
+    #endregion
+
+    #region Powerup Variables
+
+    // number of currently available dynamite charges
+    public int DynamiteCharges /*{ get; private set; }*/ = 0;
+
+    // is the player currently using the boost powerup?
+    public bool usingBoost = false;
+    // is the player currently using the gun powerup?
+    public bool usingGun = false;
+    // does the player currently have the dash
+    public bool hasDash = false; //////////////////////////////////// cut when convert dash to charges
+
+    #endregion
 
     #region OnEnable & OnDisable
 
@@ -64,8 +86,10 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // subscribe to events
         EventBus.Subscribe(EventType.RunStart, OnRunStart);
         EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Subscribe(EventType.DashStart, TurnOnPowerupInputting);
-        EventBus.Subscribe(EventType.DashEnd, TurnOffPowerupInputting);
+        EventBus.Subscribe(EventType.DashStart, FlipHasDash);
+        EventBus.Subscribe(EventType.DashEnd, FlipHasDash);
+        EventBus.Subscribe(EventType.GetDynamite, OnGetDynamite);
+        EventBus.Subscribe(EventType.UseDynamite, OnUseDynamite);
 
         // get references
         _camera = Camera.main;
@@ -78,11 +102,9 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // add inputs
         _playerInputs = new PlayerInputs();
         _playerInputs.Enable();
-        _tapGrapplePositionAction = _playerInputs.Controls.TapGrapplePosition;
-        _tapGrapplePressAction = _playerInputs.Controls.TapGrapplePress;
-        _tapGrapplePositionAction.performed += OnTapGrapplePosition;
-        _tapGrapplePressAction.performed += OnTapGrapplePress;
-        _tapGrapplePressAction.canceled += OnTapGrapplePress;
+        _tapGrappleAction = _playerInputs.Controls.TapGrapple;
+        _tapGrappleAction.performed += OnTapGrapplePerformed;
+        _tapGrappleAction.canceled += OnTapGrappleCancel;
 
         // get stats
         _moveSpeed = GameManager.Instance.playerMoveSpeed;
@@ -93,13 +115,14 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
         EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Unsubscribe(EventType.DashStart, TurnOnPowerupInputting);
-        EventBus.Unsubscribe(EventType.DashEnd, TurnOffPowerupInputting);
+        EventBus.Unsubscribe(EventType.DashStart, FlipHasDash);
+        EventBus.Unsubscribe(EventType.DashEnd, FlipHasDash);
+        EventBus.Unsubscribe(EventType.GetDynamite, OnGetDynamite);
+        EventBus.Unsubscribe(EventType.UseDynamite, OnUseDynamite);
 
         // unsubscribe to inputs
-        _tapGrapplePositionAction.performed -= OnTapGrapplePosition;
-        _tapGrapplePressAction.performed -= OnTapGrapplePress;
-        _tapGrapplePressAction.canceled -= OnTapGrapplePress;
+        _tapGrappleAction.performed -= OnTapGrapplePerformed;
+        _tapGrappleAction.canceled -= OnTapGrappleCancel;
     }
 
     #endregion
@@ -120,38 +143,35 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // reset postion
         transform.position = _spawnPos;
         _grapple.position = _grappleSpawnPos;
+        // reset charges
+        DynamiteCharges = 0;
     }
 
-    // mark player as using powerup inputs
-    private void TurnOnPowerupInputting()
+    // mark player as having or not having the dash powerup
+    private void FlipHasDash()
     {
-        powerupInputting = true;
+        hasDash = !hasDash;
     }
 
-    // mark player as not using powerup inputs
-    private void TurnOffPowerupInputting()
+    // add a dynamite charge
+    private void OnGetDynamite()
     {
-        powerupInputting = false;
+        DynamiteCharges++;
+        // make sure DynamiteCharges never goes above max
+        if (DynamiteCharges > GameManager.Instance.maxDynamiteCharges)
+            DynamiteCharges = GameManager.Instance.maxDynamiteCharges;
+    }
+
+    // use a dynamite charge
+    private void OnUseDynamite()
+    {
+        DynamiteCharges--;
+        // make sure DynamiteCharges never goes below 0
+        if (DynamiteCharges < 0)
+            DynamiteCharges = 0;
     }
 
     #endregion
-
-    // Update is called once per frame
-    void Update()
-    {
-        // logic only happens when in a run
-        if (GameManager.Instance.InRun)
-        {
-            // if player is moving, move
-            if (_moving)
-                Move();
-
-            // if gravity is on, enact gravity
-            if (_gravityOn)
-                Gravity();
-            
-        }
-    }
 
     #region Movement
 
@@ -193,58 +213,6 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
     #endregion
 
-    // handles trigger collisions
-    private void OnTriggerEnter(Collider other)
-    {
-        // only do logic inside run
-        if (GameManager.Instance.InRun)
-        {
-            // if collide with coin destroy it and add to score
-            if (other.gameObject.CompareTag("Coin"))
-            {
-                GameManager.Instance.pickupsScore += GameManager.Instance.coinValue;
-                Destroy(other.gameObject);
-
-                // play get coin audio
-                if (PlayerAudioHandler.Instance.getCoin != null)
-                    PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.getCoin);
-            }
-
-            // if player collides with an obstacle take damage and destroy obstacle
-            if (other.gameObject.CompareTag("Obstacle"))
-            {
-                // don't take damage if invincible
-                if (!invincible)
-                    TakeDamage();
-                Destroy(other.gameObject);
-            }
-
-            // if player collides with an enemy take damage and destroy enemy
-            if (other.gameObject.CompareTag("Enemy"))
-            {
-                // don't take damage if invincible
-                if (!invincible)
-                    TakeDamage();
-                Destroy(other.gameObject);
-
-                // play enemy death sound
-                if (EnemyAudioHandler.Instance.enemyDeath != null)
-                    EnemyAudioHandler.Instance.PlaySound(EnemyAudioHandler.Instance.enemyDeath);
-            }
-
-            // if player collides with platform via a trigger, take damage and destroy platform 
-            if (other.gameObject.CompareTag("Platform"))
-            {
-                // don't take damage if invincible
-                if (!invincible)
-                    TakeDamage();
-                Destroy(other.gameObject);
-
-                print("Player collided with platform");
-            }
-        }
-    }
-
     #region Damage
 
     // called when player takes damage
@@ -275,55 +243,135 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
     #endregion
 
-    #region Input Functions
+    #region Inputs
 
-    // called when player touches the screen
-    // gets location of where the player tapped the screen for the player to move to
-    public void OnTapGrapplePosition(InputAction.CallbackContext context)
+    // called when player starts touching the screen
+    // starts player moving and turns off gravity
+    // if not in run, start run
+    public void OnTapGrapplePerformed(InputAction.CallbackContext context)
     {
-        // only do logic inside
-        if (GameManager.Instance.InRun)
+        // if not in run, start run
+        if (!GameManager.Instance.InRun)
+            EventBus.Publish(EventType.RunStart);
+        // only do logic in run
+        else
         {
-            // convert tap position from screen space to world space
-            Vector3 targetPos = _camera.ScreenToWorldPoint(context.ReadValue<Vector2>());
+            // make sure there is a touch screen
+            if (Touchscreen.current == null)
+            {
+                Debug.LogError("ERROR: No touch screen detected");
+                return;
+            }
+
+            // get position of tap
+            Vector2 tapPos = Touchscreen.current.primaryTouch.position.ReadValue();
+            /*
+            // create a simulated pointer for the current Event System
+            PointerEventData simPointer = new PointerEventData(EventSystem.current);
+            // move simulated pointer to tap position
+            simPointer.position = tapPos;
+            // raycast to ui from position of simulated pointer via Event System
+            var hits = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(simPointer, hits);
+            // if the raycast hits anything, abort this tap, otherwise good to go
+            if (hits.Count > 0)
+            {
+                print("player tapped ui");
+                return;
+            }*/
+
+            // start moving
+            _moving = true;
+            // turn off gravity
+            _gravityOn = false;
+
+            // convert tap position to world position
+            Vector3 targetPos = targetPos = _camera.ScreenToWorldPoint(tapPos);
             targetPos.z = 0f;
             // store world position of tap in _targetPos
             _targetPos = targetPos;
-
             // move grapple to target position
             targetPos.z = -2f;
             _grapple.position = targetPos;
+
+            // play player grapples audio
+            if (PlayerAudioHandler.Instance.playerGrapples != null)
+                PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerGrapples);
+        }
+    }
+
+    // called when player stops touching the screen
+    // stops player moving and turns on gravity
+    // if not in run, start run
+    public void OnTapGrappleCancel(InputAction.CallbackContext context)
+    {
+        // only do logic in run
+        if (GameManager.Instance.InRun)
+        {
+            // stop moving
+            _moving = false;
+            // turn on gravity
+            _gravityVelocity = Vector3.zero;
+            _gravityOn = true;
         }
     }
     
-    // called when player starts and stops touching the screen
-    // starts and stops player moving
-    // turns off gravity while moving and back on when not moving
-    // if not in run, start run
-    public void OnTapGrapplePress(InputAction.CallbackContext context)
-    {
-        if (!GameManager.Instance.InRun)
-            EventBus.Publish(EventType.RunStart);
-        else
-        {
-            _moving = context.ReadValueAsButton();
-            // if stopped moving, turn on gravity
-            if (!_moving)
-            {
-                _gravityVelocity = Vector3.zero;
-                _gravityOn = true;
-            }
-            // if started moving, turn off gravity
-            else
-            {
-                _gravityOn = false;
+    #endregion
 
-                // play player grapples audio
-                if (PlayerAudioHandler.Instance.playerGrapples != null)
-                    PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerGrapples);
-            }
+    // Update is called once per frame
+    private void Update()
+    {
+        // logic only happens when in a run
+        if (GameManager.Instance.InRun)
+        {
+            // if player is moving, move
+            if (_moving)
+                Move();
+
+            // if gravity is on, enact gravity
+            if (_gravityOn)
+                Gravity();
         }
     }
 
-    #endregion
+    // handles trigger collisions
+    private void OnTriggerEnter(Collider other)
+    {
+        // only do logic inside run
+        if (GameManager.Instance.InRun)
+        {
+            // if collide with coin destroy it and add to score
+            if (other.gameObject.CompareTag("Coin"))
+            {
+                GameManager.Instance.pickupsScore += GameManager.Instance.coinValue;
+                Destroy(other.gameObject);
+
+                // play get coin audio
+                if (PlayerAudioHandler.Instance.getCoin != null)
+                    PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.getCoin);
+            }
+
+            // if player collides with an obstacle or platform take damage and destroy obstacle
+            if (other.gameObject.CompareTag("Obstacle") || other.gameObject.CompareTag("Platform"))
+            {
+                // don't take damage if invincible
+                if (!invincible)
+                    TakeDamage();
+                Destroy(other.gameObject);
+            }
+
+            // if player collides with an enemy take damage and destroy enemy
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                // don't take damage if invincible
+                if (!invincible)
+                    TakeDamage();
+                Destroy(other.gameObject);
+
+                // play enemy death sound
+                if (EnemyAudioHandler.Instance.enemyDeath != null)
+                    EnemyAudioHandler.Instance.PlaySound(EnemyAudioHandler.Instance.enemyDeath);
+            }
+        }
+    }
 }

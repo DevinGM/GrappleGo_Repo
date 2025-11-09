@@ -54,7 +54,7 @@ public class GunPowerup : PowerupParent
         base.Duration = _duration + GameManager.Instance.dashDuration;
 
         // tell player they have gun
-        PlayerController_Tap.Instance.hasGun = true;
+        PlayerController_Tap.Instance.usingGun = true;
 
         // activate gun model
         _gunModel.SetActive(true);
@@ -67,7 +67,7 @@ public class GunPowerup : PowerupParent
     protected override void Deactivate()
     {
         // tell player they don't have gun
-        PlayerController_Tap.Instance.hasGun = false;
+        PlayerController_Tap.Instance.usingGun = false;
 
         // deactivate gun model
         _gunModel.SetActive(false);

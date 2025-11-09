@@ -5,7 +5,7 @@ using TMPro;
 
 /// <summary>
 /// Devi G Monaghan
-/// 10/17/2025
+/// 11/7/2025
 /// Handles shop behaviors ¢¢
 /// </summary>
 
@@ -17,9 +17,9 @@ public class Shop : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button _playerMoveSpeedButton;
     [SerializeField] private UnityEngine.UI.Button _boostDurationButton;
     [SerializeField] private UnityEngine.UI.Button _dashDurationButton;
-    [SerializeField] private UnityEngine.UI.Button _dynamiteDurationButton;
     [SerializeField] private UnityEngine.UI.Button _gunDurationButton;
     [SerializeField] private UnityEngine.UI.Button _extraLifeButton;
+    [SerializeField] private UnityEngine.UI.Button _dynamiteChargesButton;
     [SerializeField] private UnityEngine.UI.Button _headStartButton;
     [Header("Text Boxes")]
     // references to texts
@@ -27,8 +27,8 @@ public class Shop : MonoBehaviour
     [SerializeField] private TMP_Text _playerMoveSpeedText;
     [SerializeField] private TMP_Text _boostDurationText;
     [SerializeField] private TMP_Text _dashDurationText;
-    [SerializeField] private TMP_Text _dynamiteDurationText;
     [SerializeField] private TMP_Text _gunDurationText;
+    [SerializeField] private TMP_Text _dynamiteChargesText;
     [SerializeField] private TMP_Text _extraLifeText;
     [SerializeField] private TMP_Text _headStartText;
     [SerializeField] private TMP_Text _currencyText;
@@ -39,7 +39,6 @@ public class Shop : MonoBehaviour
     [SerializeField] private float _playerMoveSpeedValue = 1f;
     [SerializeField] private float _boostDurationValue = 1f;
     [SerializeField] private float _dashDurationValue = 1f;
-    [SerializeField] private float _dynamiteDurationValue = 1f;
     [SerializeField] private float _gunDurationValue = 1f;
     /// prices of upgrades
     [Header("Upgrade Prices")]
@@ -47,76 +46,57 @@ public class Shop : MonoBehaviour
     [SerializeField] private int _playerMoveSpeedPrice = 1000;
     [SerializeField] private int _boostDurationPrice = 1000;
     [SerializeField] private int _dashDurationPrice = 1000;
-    [SerializeField] private int _dynamiteDurationPrice = 1000;
     [SerializeField] private int _gunDurationPrice = 1000;
+    [SerializeField] private int _dynamiteChargesPrice = 1000;
     [SerializeField] private int _extraLifePrice = 1000;
     [SerializeField] private int _headStartPrice = 1000;
 
     void OnEnable()
     {
         SetButtons();
-        // if player has purchased the extra life or head start upgrades, turn those buttons off
-        if (GameManager.Instance.purchasedExtraLife)
-        {
-            _extraLifeButton.interactable = false;
-            _extraLifeText.text = "Extra Life\n[Purchased]";
-        }
-        if (GameManager.Instance.purchasedHeadStart)
-        {
-            _headStartButton.interactable = false;
-            _headStartText.text = "Head Start\n[Purchased]";
-        }
     }
 
     // set the text of all the upgrade buttons and currency display
     // if player doesn't have enough currency to purchase an upgrade, turn that button off
     public void SetButtons()
     {
+        int currencyAmount = GameManager.Instance.currencyAmount;
+
         // coin value upgrade
         _coinText.text = "Coin Value\n¢" + _coinPrice + "\n" + GameManager.Instance.coinValue + " > " 
             + (GameManager.Instance.coinValue + _coinValue);
-        if (GameManager.Instance.currencyAmount < _coinPrice)
+        if (currencyAmount < _coinPrice)
             _coinButton.interactable = false;
 
         // player move speed upgrade
         _playerMoveSpeedText.text = "Movement Speed\n¢" + _playerMoveSpeedPrice + "\n" + GameManager.Instance.playerMoveSpeed + " > "
             + (GameManager.Instance.playerMoveSpeed + _playerMoveSpeedValue);
-        if (GameManager.Instance.currencyAmount < _playerMoveSpeedPrice)
+        if (currencyAmount < _playerMoveSpeedPrice)
             _playerMoveSpeedButton.interactable = false;
 
         // boost duration upgrade
         _boostDurationText.text = "Boost Duration\n¢" + _boostDurationPrice + "\n" + GameManager.Instance.boostDuration + " > "
             + (GameManager.Instance.boostDuration + _boostDurationValue);
-        if (GameManager.Instance.currencyAmount < _boostDurationPrice)
+        if (currencyAmount < _boostDurationPrice)
             _boostDurationButton.interactable = false;
 
         // dash duration upgrade
         _dashDurationText.text = "Dash Duration\n¢" + _dashDurationPrice + "\n" + GameManager.Instance.dashDuration + " > "
             + (GameManager.Instance.dashDuration + _dashDurationValue);
-        if (GameManager.Instance.currencyAmount < _dashDurationPrice)
+        if (currencyAmount < _dashDurationPrice)
             _dashDurationButton.interactable = false;
-
-        // dynamite duration upgrade
-        _dynamiteDurationText.text = "Dynamite Duration\n¢" + _dynamiteDurationPrice + "\n" + GameManager.Instance.dynamiteDuration + " > "
-            + (GameManager.Instance.dynamiteDuration + _dynamiteDurationValue);
-        if (GameManager.Instance.currencyAmount < _dynamiteDurationPrice)
-            _dynamiteDurationButton.interactable = false;
 
         // gun duration upgrade
         _gunDurationText.text = "Gun Duration\n¢" + _gunDurationPrice + "\n" + GameManager.Instance.gunDuration + " > "
             + (GameManager.Instance.gunDuration + _gunDurationValue);
-        if (GameManager.Instance.currencyAmount < _gunDurationPrice)
+        if (currencyAmount < _gunDurationPrice)
             _gunDurationButton.interactable = false;
-
-        // currency display
-        if (_currencyText != null)
-            _currencyText.text = "¢" + GameManager.Instance.currencyAmount;
 
         /// extra life
         if (!GameManager.Instance.purchasedExtraLife)
         {
             _extraLifeText.text = "Extra Life\n¢" + _extraLifePrice;
-            if (GameManager.Instance.currencyAmount < _extraLifePrice)
+            if (currencyAmount < _extraLifePrice)
                 _extraLifeButton.interactable = false;
         }
         // if player has purchased extra life, turn off button and change text to purchased
@@ -130,7 +110,7 @@ public class Shop : MonoBehaviour
         if (!GameManager.Instance.purchasedHeadStart)
         {
             _headStartText.text = "Head Start\n¢" + _headStartPrice;
-            if (GameManager.Instance.currencyAmount < _headStartPrice)
+            if (currencyAmount < _headStartPrice)
                 _headStartButton.interactable = false;
         }
         // if player has purchased head start, turn off button and change text to purchased
@@ -139,6 +119,26 @@ public class Shop : MonoBehaviour
             _headStartButton.interactable = false;
             _headStartText.text = "Head Start\n[Purchased]";
         }
+
+        /// dynamite charges
+        if (GameManager.Instance.maxDynamiteCharges < 5)
+        {
+            int currentCharges = GameManager.Instance.maxDynamiteCharges;
+            int uppedCharges = currentCharges + 1;
+            _dynamiteChargesText.text = "Dynamite Charges\n¢" + _dynamiteChargesPrice + "\n" + currentCharges + " > " + uppedCharges;
+            if (currencyAmount < _dynamiteChargesPrice)
+                _dynamiteChargesButton.interactable = false;
+        }
+        // if player has maxxed dynamite charges, turn button off and change text, defaults to max of 5
+        else
+        {
+            _dynamiteChargesButton.interactable = false;
+            _dynamiteChargesText.text = "Dynamite Charges\n[Maxxed]\n5";
+        }
+
+        // currency display
+        if (_currencyText != null)
+            _currencyText.text = "¢" + currencyAmount;
     }
 
     #region Button Press Functions
@@ -167,12 +167,6 @@ public class Shop : MonoBehaviour
         GameManager.Instance.currencyAmount -= _dashDurationPrice;
         SetButtons();
     }
-    public void UpgradeDynamiteDuration()
-    {
-        GameManager.Instance.dynamiteDuration += _dynamiteDurationValue;
-        GameManager.Instance.currencyAmount -= _dynamiteDurationPrice;
-        SetButtons();
-    }
     public void UpgradeGunDuration()
     {
         GameManager.Instance.gunDuration += _gunDurationValue;
@@ -189,6 +183,12 @@ public class Shop : MonoBehaviour
     {
         GameManager.Instance.purchasedHeadStart = true;
         GameManager.Instance.currencyAmount -= _headStartPrice;
+        SetButtons();
+    }
+    public void UpgradeDynamiteCharges()
+    {
+        GameManager.Instance.maxDynamiteCharges++;
+        GameManager.Instance.currencyAmount -= _dynamiteChargesPrice;
         SetButtons();
     }
     #endregion

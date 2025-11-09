@@ -42,7 +42,12 @@ public class GameManager : Singleton<GameManager>
     // amount of force applied to world upon player dash
     public float dashForce = 20f;
 
-    #region Saved Stats
+    [Header("Stats that get saved")]
+
+    // speed player moves at
+    public float playerMoveSpeed = 7f;
+
+    #region Score/Currency
 
     // highest score ever gained
     public int highScore = 0;
@@ -50,16 +55,19 @@ public class GameManager : Singleton<GameManager>
     public int currencyAmount = 0;
     // value of coin pickups, defaults to 10
     public int coinValue = 10;
-    // speed player moves at
-    public float playerMoveSpeed = 7f;
+
+    #endregion
+
+    #region Powerup Variables
+
     // extra boost powerup duration
     public float boostDuration = 0f;
     // extra dash powerup duration
     public float dashDuration = 0f;
-    // extra dynamite powerup duration
-    public float dynamiteDuration = 0f;
     // extra gun powerup duration
     public float gunDuration = 0f;
+    // number of possible held dynamite charges, defaults to 3
+    public int maxDynamiteCharges = 3;
     // turns on when player purchases extra life upgrade
     public bool purchasedExtraLife = false;
     // turns on when player purchases headstart upgrade
@@ -134,22 +142,6 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
-    // Update is called once per frame
-    void Update()
-    {
-        // manage high score
-        if (highScore < (distanceScore + pickupsScore))
-            highScore = distanceScore + pickupsScore;
-
-        // only do logic during run
-        if (InRun)
-        {
-            // increase speed by 1 every 5 seconds
-            if (!_accelCooldown)
-                StartCoroutine(Accelerate());
-        }
-    }
-
     // wait _accelTime amount of seconds before increasing speed by _accelSpeed
     private IEnumerator Accelerate()
     {
@@ -166,6 +158,22 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(index);
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        // manage high score
+        if (highScore < (distanceScore + pickupsScore))
+            highScore = distanceScore + pickupsScore;
+
+        // only do logic during run
+        if (InRun)
+        {
+            // increase speed by 1 every 5 seconds
+            if (!_accelCooldown)
+                StartCoroutine(Accelerate());
+        }
+    }
+
     #region Save & Load
 
     // save stats to the given struct
@@ -177,8 +185,8 @@ public class GameManager : Singleton<GameManager>
         data.playerClimbSpeed = playerMoveSpeed;
         data.boostDuration = boostDuration;
         data.dashDuration = dashDuration;
-        data.dynamiteDuration = dynamiteDuration;
         data.gunDuration = gunDuration;
+        data.maxDynamiteCharges = maxDynamiteCharges;
         data.purchasedExtraLife = purchasedExtraLife;
         data.purchasedHeadStart = purchasedHeadStart;
     }
@@ -192,14 +200,16 @@ public class GameManager : Singleton<GameManager>
         playerMoveSpeed = data.playerClimbSpeed;
         boostDuration = data.boostDuration;
         dashDuration = data.dashDuration;
-        dynamiteDuration = data.dynamiteDuration;
         gunDuration = data.gunDuration;
+        maxDynamiteCharges = data.maxDynamiteCharges;
         purchasedExtraLife = data.purchasedExtraLife;
         purchasedHeadStart = data.purchasedHeadStart;
     }
 
     #endregion
 }
+
+#region Save Data
 
 // struct for holding GameManager's save data
 [System.Serializable]
@@ -217,12 +227,14 @@ public struct GameManagerSaveData
     public float boostDuration;
     // extra dash powerup duration
     public float dashDuration;
-    // extra dynamite powerup duration
-    public float dynamiteDuration;
     // extra gun powerup duration
     public float gunDuration;
+    // number of possible held dynamite charges, defaults to 3
+    public int maxDynamiteCharges;
     // turns on when player purchases extra life upgrade
     public bool purchasedExtraLife;
     // turns on when player purchases headstart upgrade
     public bool purchasedHeadStart;
 }
+
+#endregion

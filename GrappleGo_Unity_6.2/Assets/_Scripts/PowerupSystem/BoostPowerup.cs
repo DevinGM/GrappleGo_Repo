@@ -58,7 +58,7 @@ public class BoostPowerup : PowerupParent
         GameManager.Instance.currentMoveSpeed += _speedBoost;
 
         // set player invincible
-        PlayerController_Tap.Instance.hasBoost = true;
+        PlayerController_Tap.Instance.usingBoost = true;
         PlayerController_Tap.Instance.invincible = true;
 
         // set player collider to trigger so they don't collide with anything
@@ -80,7 +80,7 @@ public class BoostPowerup : PowerupParent
         if (PlayerController_Tap.Instance.gameObject.activeSelf == true)
         {
             // set player invincibility off
-            PlayerController_Tap.Instance.hasBoost = false;
+            PlayerController_Tap.Instance.usingBoost = false;
             PlayerController_Tap.Instance.invincible = false;
 
             // set collider back to NOT a trigger

@@ -13,8 +13,6 @@ public class DashPowerup : PowerupParent
 {
     // powerup duration
     [SerializeField] private float _duration = 7.5f;
-    // force of dash
-    //[SerializeField] private float _dashForce = 250f;
     // time in seconds of dash invincibilty
     [SerializeField] private float _dashLength = .5f;
 
@@ -51,6 +49,7 @@ public class DashPowerup : PowerupParent
     {
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
+        _dashAction.performed -= OnDashPerformed;
 
         Deactivate();
     }
@@ -109,7 +108,6 @@ public class DashPowerup : PowerupParent
         _inDashModelRef.SetActive(true);
         // publish dash
         EventBus.Publish(EventType.DashPerformed);
-        // PlayerController.Instance.rbRef.AddForce(Vector3.right * _dashForce, ForceMode.Impulse);
         // set player invincible
         PlayerController_Tap.Instance.invincible = true;
 
