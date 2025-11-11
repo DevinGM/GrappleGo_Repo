@@ -17,24 +17,28 @@ public class DynamitePowerup : PowerupChargeParent
     // reference to explosion
     private GameObject _explosionRef;
     // references to inputs
-    private PlayerInputs _playerInputs;
     private InputAction _dynamiteAction;
 
     protected override void OnEnable()
     {
         // add inputs
-        _playerInputs = new PlayerInputs();
-        _playerInputs.Enable();
-        _dynamiteAction = _playerInputs.Controls.Dynamite;
-        _dynamiteAction.performed += Use;
+        StartCoroutine(AddInputs());
 
         // get explosion reference
         _explosionRef = transform.Find("Explosion").gameObject;
     }
 
+    // wait one frame to add inputs to make sure player has correct reference
+    private IEnumerator AddInputs()
+    {
+        yield return null;
+        _dynamiteAction = PlayerController_Tap.Instance.PlayerInputs.Controls.Dynamite;
+        _dynamiteAction.performed += Use;
+    }
+
     protected override void OnDisable()
     {
-        // unsubscribe to inputs
+        // disable inputs
         _dynamiteAction.performed -= Use;
     }
 

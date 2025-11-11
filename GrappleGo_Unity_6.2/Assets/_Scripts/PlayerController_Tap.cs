@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/7/2025
+/// 11/11/2025
 /// HANDLES PLAYER BEHAVIOR
 /// detects touch inputs
 /// moves player to held touch on screen
@@ -61,6 +61,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
     // references to inputs
     private PlayerInputs _playerInputs;
+    public PlayerInputs PlayerInputs { get { return _playerInputs; } }
     private InputAction _tapGrappleAction;
 
     #endregion
@@ -79,7 +80,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
     #endregion
 
-    #region OnEnable & OnDisable
+    #region OnEnable, & OnDisable
 
     void OnEnable()
     {
@@ -120,7 +121,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         EventBus.Unsubscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Unsubscribe(EventType.UseDynamite, OnUseDynamite);
 
-        // unsubscribe to inputs
+        // disable inputs
+        _playerInputs.Disable();
         _tapGrappleAction.performed -= OnTapGrapplePerformed;
         _tapGrappleAction.canceled -= OnTapGrappleCancel;
     }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/5/2024
+/// 11/11/2024
 /// handles dash powerup behavior
 /// </summary>
 
@@ -19,7 +19,6 @@ public class DashPowerup : PowerupParent
     // is the player currently dashing?
     private bool _inDash = false;
     // references to inputs
-    private PlayerInputs _playerInputs;
     private InputAction _dashAction;
     // reference to in dash model
     private GameObject _inDashModelRef;
@@ -29,9 +28,7 @@ public class DashPowerup : PowerupParent
     protected override void OnEnable()
     {
         // add inputs
-        _playerInputs = new PlayerInputs();
-        _dashAction = _playerInputs.Controls.Dash;
-        _dashAction.performed += OnDashPerformed;
+        StartCoroutine(AddInputs());
 
         // subscribe to events
         EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
@@ -45,10 +42,20 @@ public class DashPowerup : PowerupParent
         Activate();
     }
 
+    // wait one frame to add inputs to make sure player has correct reference
+    private IEnumerator AddInputs()
+    {
+        yield return null;
+        _dashAction = PlayerController_Tap.Instance.PlayerInputs.Controls.Dash;
+        _dashAction.performed += OnDashPerformed;
+    }
+
     protected override void OnDisable()
     {
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
+
+        // disable inputs
         _dashAction.performed -= OnDashPerformed;
 
         Deactivate();
@@ -66,9 +73,6 @@ public class DashPowerup : PowerupParent
         // publish DashStart
         EventBus.Publish(EventType.DashStart);
 
-        // enable inputs
-        _playerInputs.Enable();
-
         // set duration
         base.Duration = _duration + GameManager.Instance.dashDuration;
 
@@ -84,9 +88,6 @@ public class DashPowerup : PowerupParent
     {
         // publish DashEnd
         EventBus.Publish(EventType.DashEnd);
-
-        // disable inputs
-        _playerInputs.Disable();
 
         // turn off have dash model
         _haveDashModelRef.SetActive(false);

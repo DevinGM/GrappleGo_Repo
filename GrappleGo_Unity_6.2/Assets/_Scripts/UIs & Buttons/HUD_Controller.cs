@@ -114,13 +114,28 @@ public class HUD_Controller : MonoBehaviour
     // called when player picks up a dynamite
     private void OnGetDynamite()
     {
+        StartCoroutine(GetDynamiteBuffer());
+    }
+
+    // wait for one frame to make sure player has updated charges count and fill dynamite charges
+    private IEnumerator GetDynamiteBuffer()
+    {
+        yield return null;
         FillCharges(_dynamiteChargesList, PlayerController_Tap.Instance.DynamiteCharges, _dynamiteButton);
     }
 
     // called when player uses a dynamite
     private void OnUseDynamite()
     {
+        StartCoroutine(UseDynamiteBuffer());
+    }
+
+    // wait for one frame to make sure player has updated charges count and empty and fill dynamite charges
+    private IEnumerator UseDynamiteBuffer()
+    {
+        yield return null;
         EmptyCharges(_dynamiteChargesList, _dynamiteButton);
         FillCharges(_dynamiteChargesList, PlayerController_Tap.Instance.DynamiteCharges, _dynamiteButton);
     }
+
 }

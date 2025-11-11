@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -85,6 +86,7 @@ public class GameManager : Singleton<GameManager>
 
         // load saved data
         SaveSystem.Load();
+        print("Game manager loaded in onenable");
     }
 
     void OnDisable()
@@ -95,6 +97,7 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
+        print("Game manager saved in ondisable");
     }
 
     // save on application quit
@@ -102,6 +105,7 @@ public class GameManager : Singleton<GameManager>
     {
         // save data
         SaveSystem.Save();
+        print("Game manager saved in on quit");
     }
 
     #endregion
@@ -135,9 +139,10 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
+        print("Game manager saved in on run end");
 
         // move to death scene
-        MoveToScene(2);
+        StartCoroutine(MoveToDeathScene());
     }
 
     #endregion
@@ -156,6 +161,12 @@ public class GameManager : Singleton<GameManager>
     private void MoveToScene(int index)
     {
         SceneManager.LoadScene(index);
+    }
+
+    private IEnumerator MoveToDeathScene()
+    {
+        yield return null;
+        MoveToScene(2);
     }
 
     // Update is called once per frame

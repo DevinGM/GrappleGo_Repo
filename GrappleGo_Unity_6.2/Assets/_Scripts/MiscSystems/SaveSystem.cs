@@ -36,6 +36,8 @@ public class SaveSystem
         HandleSaveData();
         // write save data to text file found at SaveFileName()'s path
         File.WriteAllText(SaveFileName(), JsonUtility.ToJson(_saveData, true));
+
+        Debug.Log("saved save data");
     }
 
     // load data from text file
@@ -49,6 +51,8 @@ public class SaveSystem
             _saveData = JsonUtility.FromJson<SaveData>(saveContent);
             // load save data
             HandleLoadData();
+
+            Debug.Log("loaded save data");
         }
         else
             Debug.LogWarning("WARNING: save data does not exist");

@@ -40,7 +40,7 @@ public class SingletonNonPersist<T> : MonoBehaviour where T : Component
     }
 
     // awake is called before start
-    public virtual void Awake()
+    protected virtual void Awake()
     {
         // check if private ref is empty
         if (_instance == null)
