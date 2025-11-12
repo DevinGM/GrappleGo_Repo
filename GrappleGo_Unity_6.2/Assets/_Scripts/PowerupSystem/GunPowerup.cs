@@ -51,7 +51,7 @@ public class GunPowerup : PowerupParent
     protected override void Activate()
     {
         // set duration
-        base.Duration = _duration + GameManager.Instance.dashDuration;
+        base.Duration = _duration + GameManager.Instance.gunDuration;
 
         // tell player they have gun
         PlayerController_Tap.Instance.usingGun = true;

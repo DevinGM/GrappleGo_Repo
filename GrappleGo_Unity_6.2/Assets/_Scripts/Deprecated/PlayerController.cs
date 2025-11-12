@@ -56,8 +56,8 @@ public class PlayerController : MonoBehaviour
         // subscribe to events
         EventBus.Subscribe(EventType.RunStart, OnRunStart);
         EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Subscribe(EventType.DashStart, TurnOnPowerupInputting);
-        EventBus.Subscribe(EventType.DashEnd, TurnOffPowerupInputting);
+      //  EventBus.Subscribe(EventType.DashStart, TurnOnPowerupInputting);
+    //    EventBus.Subscribe(EventType.DashEnd, TurnOffPowerupInputting);
 
         // get references
         rbRef = this.GetComponent<Rigidbody>();

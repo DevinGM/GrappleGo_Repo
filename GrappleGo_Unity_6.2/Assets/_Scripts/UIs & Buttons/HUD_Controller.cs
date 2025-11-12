@@ -21,6 +21,9 @@ public class HUD_Controller : MonoBehaviour
     [SerializeField] private TMP_Text _highscoreDisplay;
     [SerializeField] private TMP_Text _scoreDisplay;
 
+    [Header("List of Dash Charges. Place in matching order")]
+    // references to dynamite charges
+    [SerializeField] private List<UnityEngine.UI.Image> _dashChargesList;
     [Header("List of Dynamite Charges. Place in matching order")]
     // references to dynamite charges
     [SerializeField] private List<UnityEngine.UI.Image> _dynamiteChargesList;
@@ -28,12 +31,17 @@ public class HUD_Controller : MonoBehaviour
     private void OnEnable()
     {
         // subscribe to events
-        EventBus.Subscribe(EventType.DashStart, TurnOnDash);
-        EventBus.Subscribe(EventType.DashEnd, TurnOffDash);
+        EventBus.Subscribe(EventType.GetDash, OnGetDash);
+        EventBus.Subscribe(EventType.UseDash, OnUseDash);
         EventBus.Subscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Subscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Subscribe(EventType.RunEnd, TurnOffButtons);
 
+        // check for 4th and 5th dash charges
+        if (GameManager.Instance.maxDynamiteCharges >= 4)
+            _dashChargesList[3].gameObject.SetActive(true);
+        if (GameManager.Instance.maxDynamiteCharges >= 5)
+            _dashChargesList[4].gameObject.SetActive(true);
         // check for 4th and 5th dynamite charges
         if (GameManager.Instance.maxDynamiteCharges >= 4)
             _dynamiteChargesList[3].gameObject.SetActive(true);
@@ -42,13 +50,14 @@ public class HUD_Controller : MonoBehaviour
 
         // empty all charges on level begin
         EmptyCharges(_dynamiteChargesList, _dynamiteButton);
+        EmptyCharges(_dashChargesList, _dashButton);
     }
 
     private void OnDisable()
     {
         // unsubscribe to events
-        EventBus.Unsubscribe(EventType.DashStart, TurnOnDash);
-        EventBus.Unsubscribe(EventType.DashEnd, TurnOffDash);
+        EventBus.Unsubscribe(EventType.GetDash, OnGetDash);
+        EventBus.Unsubscribe(EventType.UseDash, OnUseDash);
         EventBus.Unsubscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Unsubscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Unsubscribe(EventType.RunEnd, TurnOffButtons);
@@ -63,23 +72,14 @@ public class HUD_Controller : MonoBehaviour
             GameManager.Instance.pickupsScore);
     }
 
-    // turn on dash button
-    private void TurnOnDash()
-    {
-        _dashButton.SetActive(true);
-    }
-    // turn off dash button
-    private void TurnOffDash()
-    {
-        _dashButton.SetActive(false);
-    }
-
     // turn off buttons
     private void TurnOffButtons()
     {
         _dashButton.SetActive(false);
         _dynamiteButton.SetActive(false);
     }
+
+    #region Empty & Fill Charges
 
     // empty all of the given list's charges and turn off given button
     private void EmptyCharges(List<UnityEngine.UI.Image> chargesList, GameObject button)
@@ -111,6 +111,41 @@ public class HUD_Controller : MonoBehaviour
             button.SetActive(true);
     }
 
+    #endregion
+
+    #region Dash
+
+    // called when player picks up a dash
+    private void OnGetDash()
+    {
+        StartCoroutine(GetDashBuffer());
+    }
+
+    // wait for one frame to make sure player has updated charges count and fill dash charges
+    private IEnumerator GetDashBuffer()
+    {
+        yield return null;
+        FillCharges(_dashChargesList, PlayerController_Tap.Instance.DashCharges, _dashButton);
+    }
+
+    // called when player uses a dash
+    private void OnUseDash()
+    {
+        StartCoroutine(UseDashBuffer());
+    }
+
+    // wait for one frame to make sure player has updated charges count and empty and fill dash charges
+    private IEnumerator UseDashBuffer()
+    {
+        yield return null;
+        EmptyCharges(_dashChargesList, _dashButton);
+        FillCharges(_dashChargesList, PlayerController_Tap.Instance.DashCharges, _dashButton);
+    }
+
+    #endregion
+    
+    #region Dynamite
+
     // called when player picks up a dynamite
     private void OnGetDynamite()
     {
@@ -137,5 +172,7 @@ public class HUD_Controller : MonoBehaviour
         EmptyCharges(_dynamiteChargesList, _dynamiteButton);
         FillCharges(_dynamiteChargesList, PlayerController_Tap.Instance.DynamiteCharges, _dynamiteButton);
     }
+
+    #endregion
 
 }

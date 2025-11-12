@@ -5,7 +5,7 @@ using TMPro;
 
 /// <summary>
 /// Devi G Monaghan
-/// 11/7/2025
+/// 11/11/2025
 /// Handles shop behaviors ¢¢
 /// </summary>
 
@@ -16,7 +16,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button _coinButton;
     [SerializeField] private UnityEngine.UI.Button _playerMoveSpeedButton;
     [SerializeField] private UnityEngine.UI.Button _boostDurationButton;
-    [SerializeField] private UnityEngine.UI.Button _dashDurationButton;
+    [SerializeField] private UnityEngine.UI.Button _dashChargesButton;
     [SerializeField] private UnityEngine.UI.Button _gunDurationButton;
     [SerializeField] private UnityEngine.UI.Button _extraLifeButton;
     [SerializeField] private UnityEngine.UI.Button _dynamiteChargesButton;
@@ -26,7 +26,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private TMP_Text _coinText;
     [SerializeField] private TMP_Text _playerMoveSpeedText;
     [SerializeField] private TMP_Text _boostDurationText;
-    [SerializeField] private TMP_Text _dashDurationText;
+    [SerializeField] private TMP_Text _dashChargesText;
     [SerializeField] private TMP_Text _gunDurationText;
     [SerializeField] private TMP_Text _dynamiteChargesText;
     [SerializeField] private TMP_Text _extraLifeText;
@@ -38,16 +38,15 @@ public class Shop : MonoBehaviour
     [SerializeField] private int _coinValue = 10;
     [SerializeField] private float _playerMoveSpeedValue = 1f;
     [SerializeField] private float _boostDurationValue = 1f;
-    [SerializeField] private float _dashDurationValue = 1f;
     [SerializeField] private float _gunDurationValue = 1f;
     /// prices of upgrades
     [Header("Upgrade Prices")]
     [SerializeField] private int _coinPrice = 1000;
     [SerializeField] private int _playerMoveSpeedPrice = 1000;
     [SerializeField] private int _boostDurationPrice = 1000;
-    [SerializeField] private int _dashDurationPrice = 1000;
     [SerializeField] private int _gunDurationPrice = 1000;
-    [SerializeField] private int _dynamiteChargesPrice = 1000;
+    [SerializeField] private int _dashChargesPrice = 10000;
+    [SerializeField] private int _dynamiteChargesPrice = 10000;
     [SerializeField] private int _extraLifePrice = 1000;
     [SerializeField] private int _headStartPrice = 1000;
 
@@ -79,12 +78,6 @@ public class Shop : MonoBehaviour
             + (GameManager.Instance.boostDuration + _boostDurationValue);
         if (currencyAmount < _boostDurationPrice)
             _boostDurationButton.interactable = false;
-
-        // dash duration upgrade
-        _dashDurationText.text = "Dash Duration\n¢" + _dashDurationPrice + "\n" + GameManager.Instance.dashDuration + " > "
-            + (GameManager.Instance.dashDuration + _dashDurationValue);
-        if (currencyAmount < _dashDurationPrice)
-            _dashDurationButton.interactable = false;
 
         // gun duration upgrade
         _gunDurationText.text = "Gun Duration\n¢" + _gunDurationPrice + "\n" + GameManager.Instance.gunDuration + " > "
@@ -118,6 +111,22 @@ public class Shop : MonoBehaviour
         {
             _headStartButton.interactable = false;
             _headStartText.text = "Head Start\n[Purchased]";
+        }
+
+        /// dash charges
+        if (GameManager.Instance.maxDashCharges < 5)
+        {
+            int currentCharges = GameManager.Instance.maxDashCharges;
+            int uppedCharges = currentCharges + 1;
+            _dashChargesText.text = "Dash Charges\n¢" + _dashChargesPrice + "\n" + currentCharges + " > " + uppedCharges;
+            if (currencyAmount < _dashChargesPrice)
+                _dashChargesButton.interactable = false;
+        }
+        // if player has maxxed dash charges, turn button off and change text, defaults to max of 5
+        else
+        {
+            _dashChargesButton.interactable = false;
+            _dashChargesText.text = "Dash Charges\n[Maxxed]\n5";
         }
 
         /// dynamite charges
@@ -161,12 +170,6 @@ public class Shop : MonoBehaviour
         GameManager.Instance.currencyAmount -= _boostDurationPrice;
         SetButtons();
     }
-    public void UpgradeDashDuration()
-    {
-        GameManager.Instance.dashDuration += _dashDurationValue;
-        GameManager.Instance.currencyAmount -= _dashDurationPrice;
-        SetButtons();
-    }
     public void UpgradeGunDuration()
     {
         GameManager.Instance.gunDuration += _gunDurationValue;
@@ -183,6 +186,12 @@ public class Shop : MonoBehaviour
     {
         GameManager.Instance.purchasedHeadStart = true;
         GameManager.Instance.currencyAmount -= _headStartPrice;
+        SetButtons();
+    }
+    public void UpgradeDashCharges()
+    {
+        GameManager.Instance.maxDashCharges++;
+        GameManager.Instance.currencyAmount -= _dashChargesPrice;
         SetButtons();
     }
     public void UpgradeDynamiteCharges()

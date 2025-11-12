@@ -63,10 +63,10 @@ public class GameManager : Singleton<GameManager>
 
     // extra boost powerup duration
     public float boostDuration = 0f;
-    // extra dash powerup duration
-    public float dashDuration = 0f;
     // extra gun powerup duration
     public float gunDuration = 0f;
+    // number of possible held dash charges, defaults to 3
+    public int maxDashCharges = 3;
     // number of possible held dynamite charges, defaults to 3
     public int maxDynamiteCharges = 3;
     // turns on when player purchases extra life upgrade
@@ -86,7 +86,7 @@ public class GameManager : Singleton<GameManager>
 
         // load saved data
         SaveSystem.Load();
-        print("Game manager loaded in onenable");
+      //  print("Game manager loaded in onenable");
     }
 
     void OnDisable()
@@ -97,7 +97,7 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
-        print("Game manager saved in ondisable");
+       // print("Game manager saved in ondisable");
     }
 
     // save on application quit
@@ -105,7 +105,7 @@ public class GameManager : Singleton<GameManager>
     {
         // save data
         SaveSystem.Save();
-        print("Game manager saved in on quit");
+      //  print("Game manager saved in on quit");
     }
 
     #endregion
@@ -139,7 +139,7 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
-        print("Game manager saved in on run end");
+      //  print("Game manager saved in on run end");
 
         // move to death scene
         StartCoroutine(MoveToDeathScene());
@@ -195,8 +195,8 @@ public class GameManager : Singleton<GameManager>
         data.coinValue = coinValue;
         data.playerClimbSpeed = playerMoveSpeed;
         data.boostDuration = boostDuration;
-        data.dashDuration = dashDuration;
         data.gunDuration = gunDuration;
+        data.maxDashCharges = maxDashCharges;
         data.maxDynamiteCharges = maxDynamiteCharges;
         data.purchasedExtraLife = purchasedExtraLife;
         data.purchasedHeadStart = purchasedHeadStart;
@@ -210,8 +210,8 @@ public class GameManager : Singleton<GameManager>
         coinValue = data.coinValue;
         playerMoveSpeed = data.playerClimbSpeed;
         boostDuration = data.boostDuration;
-        dashDuration = data.dashDuration;
         gunDuration = data.gunDuration;
+        maxDashCharges = data.maxDashCharges;
         maxDynamiteCharges = data.maxDynamiteCharges;
         purchasedExtraLife = data.purchasedExtraLife;
         purchasedHeadStart = data.purchasedHeadStart;
@@ -236,12 +236,12 @@ public struct GameManagerSaveData
     public float playerClimbSpeed;
     // extra boost powerup duration
     public float boostDuration;
-    // extra dash powerup duration
-    public float dashDuration;
     // extra gun powerup duration
     public float gunDuration;
     // number of possible held dynamite charges, defaults to 3
     public int maxDynamiteCharges;
+    // number of possible held dash charges, defaults to 3
+    public int maxDashCharges;
     // turns on when player purchases extra life upgrade
     public bool purchasedExtraLife;
     // turns on when player purchases headstart upgrade

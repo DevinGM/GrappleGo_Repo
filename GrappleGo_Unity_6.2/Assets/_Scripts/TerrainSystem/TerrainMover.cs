@@ -15,7 +15,7 @@ public class TerrainMover : MonoBehaviour
     {
         // subscribe to events
         EventBus.Subscribe(EventType.RunEnd, EndRun);
-        EventBus.Subscribe(EventType.DashPerformed, OnDash);
+    //    EventBus.Subscribe(EventType.DashPerformed, OnDash);
 
         // get rigidbody
         _rbRef = GetComponent<Rigidbody>();
@@ -24,7 +24,7 @@ public class TerrainMover : MonoBehaviour
     {
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.RunEnd, EndRun);
-        EventBus.Unsubscribe(EventType.DashPerformed, OnDash);
+    //    EventBus.Unsubscribe(EventType.DashPerformed, OnDash);
     }
 
     // called when run ends

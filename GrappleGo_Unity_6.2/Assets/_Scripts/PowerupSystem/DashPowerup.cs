@@ -9,37 +9,26 @@ using UnityEngine.InputSystem;
 /// handles dash powerup behavior
 /// </summary>
 
-public class DashPowerup : PowerupParent
+public class DashPowerup : PowerupChargeParent
 {
-    // powerup duration
-    [SerializeField] private float _duration = 7.5f;
     // time in seconds of dash invincibilty
     [SerializeField] private float _dashLength = .5f;
 
-    // is the player currently dashing?
-    private bool _inDash = false;
+    // is the dash currently on cooldown?
+    private float _cooldownLength = .5f;
+    private bool _cooldown = false;
     // references to inputs
     private InputAction _dashAction;
     // reference to in dash model
-    private GameObject _inDashModelRef;
-    // reference to have dash model
-    private GameObject _haveDashModelRef;
+    private GameObject _dashModelRef;
 
     protected override void OnEnable()
     {
         // add inputs
         StartCoroutine(AddInputs());
 
-        // subscribe to events
-        EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
-
         // get reference to in dash model
-        _inDashModelRef = transform.Find("InDashModel").gameObject;
-        // get reference to have dash model
-        _haveDashModelRef = transform.Find("HaveDashModel").gameObject;
-
-        // activate upon enabling
-        Activate();
+        _dashModelRef = transform.Find("InDashModel").gameObject;
     }
 
     // wait one frame to add inputs to make sure player has correct reference
@@ -47,56 +36,26 @@ public class DashPowerup : PowerupParent
     {
         yield return null;
         _dashAction = PlayerController_Tap.Instance.PlayerInputs.Controls.Dash;
-        _dashAction.performed += OnDashPerformed;
+        _dashAction.performed += Use;
     }
 
     protected override void OnDisable()
     {
-        // unsubscribe to events
-        EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
-
         // disable inputs
-        _dashAction.performed -= OnDashPerformed;
-
-        Deactivate();
+        _dashAction.performed -= Use;
     }
 
-    // called when run ends
-    protected override void OnRunEnd()
+    // called upon powerup being picked up
+    public override void Pickup()
     {
-        this.enabled = false;
-    }
-
-    // called upon powerup being activated
-    protected override void Activate()
-    {
-        // publish DashStart
-        EventBus.Publish(EventType.DashStart);
-
-        // set duration
-        base.Duration = _duration + GameManager.Instance.dashDuration;
-
-        // turn on have dash model
-        _haveDashModelRef.SetActive(true);
-
-        // begin disable timer
-        StartCoroutine(AutoDisable());
-    }
-
-    // called upon powerup being deactivated
-    protected override void Deactivate()
-    {
-        // publish DashEnd
-        EventBus.Publish(EventType.DashEnd);
-
-        // turn off have dash model
-        _haveDashModelRef.SetActive(false);
+        // publish GetDash
+        EventBus.Publish(EventType.GetDash);
     }
 
     // trigger dash on button press
-    private void OnDashPerformed(InputAction.CallbackContext context)
+    protected override void Use(InputAction.CallbackContext context)
     {
-        if (!_inDash)
+        if (!_cooldown && PlayerController_Tap.Instance.DashCharges > 0)
             StartCoroutine(Dash());
     }
 
@@ -104,22 +63,30 @@ public class DashPowerup : PowerupParent
     private IEnumerator Dash()
     {
         // turn on cooldown
-        _inDash = true;
-        // turn on in dash model
-        _inDashModelRef.SetActive(true);
-        // publish dash
-        EventBus.Publish(EventType.DashPerformed);
+        _cooldown = true;
+
+        // spawn explosion by turning it on
+        _dashModelRef.SetActive(true);
+
+        // publish UseDash
+        EventBus.Publish(EventType.UseDash);
         // set player invincible
         PlayerController_Tap.Instance.invincible = true;
+        // turn on dash model
+        _dashModelRef.SetActive(true);
 
-        // wait _dashLength seconds
+        // wait _dashLength seconds before deactivating dash
         yield return new WaitForSeconds(_dashLength);
 
         // set player invincibility off
         PlayerController_Tap.Instance.invincible = false;
         // turn off dash model
-        _inDashModelRef.SetActive(false);
+        _dashModelRef.SetActive(false);
+
+        // wait _cooldownLength before turning cooldown off and letting player dash again
+        yield return new WaitForSeconds(_cooldownLength);
+
         // turn off cooldown
-        _inDash = false;
+        _cooldown = false;
     }
 }

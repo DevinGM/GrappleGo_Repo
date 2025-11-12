@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/7/2024
+/// 11/11/2024
 /// handles dynamite powerup behavior
 /// </summary>
 
@@ -42,30 +42,30 @@ public class DynamitePowerup : PowerupChargeParent
         _dynamiteAction.performed -= Use;
     }
 
-    // called upon powerup being activated
+    // called upon powerup being picked up
     public override void Pickup()
     {
         // publish GetDynamite
         EventBus.Publish(EventType.GetDynamite);
     }
 
-    // trigger dash on button press
+    // trigger dynamite on button press
     protected override void Use(InputAction.CallbackContext context)
     {
         if (!_cooldown && PlayerController_Tap.Instance.DynamiteCharges > 0)
-        {
-            _cooldown = true;
             StartCoroutine(Dynamite());
-        }
     }
 
-    // perform dash
+    // perform dynamite
     private IEnumerator Dynamite()
     {
+        // turn on cooldown
+        _cooldown = true;
+
         // spawn explosion by turning it on
         _explosionRef.SetActive(true);
 
-        // publish Dynamite
+        // publish UseDynamite
         EventBus.Publish(EventType.UseDynamite);
 
         // wait _cooldownLength seconds

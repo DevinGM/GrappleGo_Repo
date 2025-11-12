@@ -4,15 +4,15 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/7/2025
+/// 11/11/2025
 /// Detects player's powerup pickups
 /// </summary>
 
 public class PowerupDetecter : MonoBehaviour
 {
     // references to powerups
-    private PowerupParent _shieldPowerup, _boostPowerup, _dashPowerup, _gunPowerup;
-    private PowerupChargeParent _dynamitePowerup;
+    private PowerupParent _shieldPowerup, _boostPowerup, _gunPowerup;
+    private PowerupChargeParent _dashPowerup, _dynamitePowerup;
 
     void OnEnable()
     {
@@ -50,11 +50,13 @@ public class PowerupDetecter : MonoBehaviour
             else if (other.gameObject.CompareTag("DashPowerup"))
             {
                 // don't pick up dash if player already has one
-                if (!PlayerController_Tap.Instance.hasDash)
+                if (PlayerController_Tap.Instance.DashCharges < GameManager.Instance.maxDashCharges)
                 {
                     PickUpPowerup(_dashPowerup);
                     Destroy(other.gameObject);
                 }
+                else
+                    print("player is at max dash charges");
             }
             
             // if collide with gun powerup activate it and then destroy the pickup object

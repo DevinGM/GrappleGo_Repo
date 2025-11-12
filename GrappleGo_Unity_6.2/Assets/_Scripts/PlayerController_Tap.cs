@@ -68,15 +68,15 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
     #region Powerup Variables
 
+    // number of currently available dash charges
+    public int DashCharges = 0;
     // number of currently available dynamite charges
-    public int DynamiteCharges /*{ get; private set; }*/ = 0;
+    public int DynamiteCharges = 0;
 
     // is the player currently using the boost powerup?
     public bool usingBoost = false;
     // is the player currently using the gun powerup?
     public bool usingGun = false;
-    // does the player currently have the dash
-    public bool hasDash = false; //////////////////////////////////// cut when convert dash to charges
 
     #endregion
 
@@ -87,8 +87,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // subscribe to events
         EventBus.Subscribe(EventType.RunStart, OnRunStart);
         EventBus.Subscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Subscribe(EventType.DashStart, FlipHasDash);
-        EventBus.Subscribe(EventType.DashEnd, FlipHasDash);
+        EventBus.Subscribe(EventType.GetDash, OnGetDash);
+        EventBus.Subscribe(EventType.UseDash, OnUseDash);
         EventBus.Subscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Subscribe(EventType.UseDynamite, OnUseDynamite);
 
@@ -116,8 +116,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.RunStart, OnRunStart);
         EventBus.Unsubscribe(EventType.RunEnd, OnRunEnd);
-        EventBus.Unsubscribe(EventType.DashStart, FlipHasDash);
-        EventBus.Unsubscribe(EventType.DashEnd, FlipHasDash);
+        EventBus.Unsubscribe(EventType.GetDash, OnGetDash);
+        EventBus.Unsubscribe(EventType.UseDash, OnUseDash);
         EventBus.Unsubscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Unsubscribe(EventType.UseDynamite, OnUseDynamite);
 
@@ -149,10 +149,22 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         DynamiteCharges = 0;
     }
 
-    // mark player as having or not having the dash powerup
-    private void FlipHasDash()
+    // add a dash charge
+    private void OnGetDash()
     {
-        hasDash = !hasDash;
+        DashCharges++;
+        // make sure DashCharges never goes above max
+        if (DashCharges > GameManager.Instance.maxDashCharges)
+            DashCharges = GameManager.Instance.maxDashCharges;
+    }
+
+    // use a dash charge
+    private void OnUseDash()
+    {
+        DashCharges--;
+        // make sure DashCharges never goes below 0
+        if (DashCharges < 0)
+            DashCharges = 0;
     }
 
     // add a dynamite charge
