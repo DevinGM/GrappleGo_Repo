@@ -40,8 +40,6 @@ public class GameManager : Singleton<GameManager>
     public int lastScore = 0;
     // speed world is currently moving at
     public float currentMoveSpeed;
-    // amount of force applied to world upon player dash
-    public float dashForce = 20f;
 
     [Header("Stats that get saved")]
 

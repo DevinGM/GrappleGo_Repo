@@ -13,6 +13,8 @@ public class DashPowerup : PowerupChargeParent
 {
     // time in seconds of dash invincibilty
     [SerializeField] private float _dashLength = .5f;
+    // strength of dash
+    [SerializeField] private float _dashStrength = 5f;
 
     // is the dash currently on cooldown?
     private float _cooldownLength = .5f;
@@ -72,20 +74,34 @@ public class DashPowerup : PowerupChargeParent
         EventBus.Publish(EventType.UseDash);
         // set player invincible
         PlayerController_Tap.Instance.invincible = true;
+        PlayerController_Tap.Instance.inDash = true;
         // turn on dash model
         _dashModelRef.SetActive(true);
+
+        // reset velocity
+        PlayerController_Tap.Instance.rbRef.linearVelocity = Vector3.zero;
+        // turn off gravity for dash
+        PlayerController_Tap.Instance.rbRef.useGravity = false;
+        // apply force right
+        PlayerController_Tap.Instance.rbRef.AddForce(_dashStrength * transform.right, ForceMode.Impulse);
 
         // wait _dashLength seconds before deactivating dash
         yield return new WaitForSeconds(_dashLength);
 
-        // set player invincibility off
-        PlayerController_Tap.Instance.invincible = false;
+        PlayerController_Tap.Instance.inDash = false;
         // turn off dash model
         _dashModelRef.SetActive(false);
+
+        // if player is not moving, then make sure gravity is on
+        if (!PlayerController_Tap.Instance.moving)
+            PlayerController_Tap.Instance.rbRef.useGravity = true;
+        PlayerController_Tap.Instance.rbRef.linearVelocity = Vector3.zero;
 
         // wait _cooldownLength before turning cooldown off and letting player dash again
         yield return new WaitForSeconds(_cooldownLength);
 
+        // set player invincibility off
+        PlayerController_Tap.Instance.invincible = false;
         // turn off cooldown
         _cooldown = false;
     }

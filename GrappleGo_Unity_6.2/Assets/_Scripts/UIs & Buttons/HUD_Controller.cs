@@ -103,7 +103,7 @@ public class HUD_Controller : MonoBehaviour
             chargesList[i].color = new Color(1f, 1f, 1f, .75f);
             filledACharge = true;
 
-            print("Filled charge at: " + chargesList[i]);
+           // print("Filled charge at: " + chargesList[i]);
         }
 
         // if any charges were filled and the button is off, turn on button

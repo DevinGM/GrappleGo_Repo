@@ -9,8 +9,8 @@ using UnityEngine;
 public class Chain : MonoBehaviour
 {
     // references to player and grapple
-    public Transform playerRef;
-    public Transform grappleRef;
+    [SerializeField] private Transform _playerRef;
+    [SerializeField] private Transform _grappleRef;
 
     // reference to renderer
     private SpriteRenderer _rendererRef;
@@ -32,20 +32,20 @@ public class Chain : MonoBehaviour
     private void Update()
     {
         // return error if don't have player and grapple refs
-        if (!playerRef || !grappleRef)
+        if (!_playerRef || !_grappleRef)
             Debug.LogError("ERROR: Chain not given correct references");
 
         // correct z position of grapple
-        Vector3 grapplPosCorrected = grappleRef.position;
+        Vector3 grapplPosCorrected = _grappleRef.position;
         grapplPosCorrected.z = 0f;
 
         // get direction from player to grapple in a vector 3
-        Vector3 direction = grapplPosCorrected - playerRef.position;
+        Vector3 direction = grapplPosCorrected - _playerRef.position;
         // gets distance between grapple and player
         float distance = direction.magnitude;
 
         // set chain position to exactly in between grapple and player
-        transform.position = (grapplPosCorrected + playerRef.position) / 2;
+        transform.position = (grapplPosCorrected + _playerRef.position) / 2;
         // rotate chain
         transform.right = direction.normalized;
 

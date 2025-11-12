@@ -15,6 +15,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 {
+    // reference to Rigidbody
+    public Rigidbody rbRef;
+
     // reference to main camera
     private Camera _camera;
 
@@ -24,17 +27,11 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
     // reference to grapple
     [SerializeField] private Transform _grapple;
 
+    // is the player currently moving?
+    public bool moving = false;
+
     // speed player is currently moving at
     private float _moveSpeed = 12f;
-    // is the player currently moving?
-    public bool _moving = false;
-
-    // strength of gravity
-    private float _gravityStrength = 9.81f;
-    // is gravity currently on?
-    public bool _gravityOn = false;
-    // velocity of gravity currently being applied to player
-    private Vector3 _gravityVelocity;
     // location player spawns at
     private Vector3 _spawnPos;
     private Vector3 _grappleSpawnPos;
@@ -72,13 +69,16 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
     public int DashCharges = 0;
     // number of currently available dynamite charges
     public int DynamiteCharges = 0;
-
     // is the player currently using the boost powerup?
     public bool usingBoost = false;
     // is the player currently using the gun powerup?
     public bool usingGun = false;
+    // is the player currently in a dash?
+    public bool inDash = false;
 
     #endregion
+
+    /// functions
 
     #region OnEnable, & OnDisable
 
@@ -94,6 +94,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
         // get references
         _camera = Camera.main;
+        rbRef = this.GetComponent<Rigidbody>();
         _spawnPos = transform.position;
         if (_grapple != null)
             _grappleSpawnPos = _grapple.position;
@@ -146,7 +147,10 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         transform.position = _spawnPos;
         _grapple.position = _grappleSpawnPos;
         // reset charges
+        DashCharges = 0;
         DynamiteCharges = 0;
+        // reset velocity
+        rbRef.linearVelocity = Vector3.zero;
     }
 
     // add a dash charge
@@ -204,25 +208,6 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         // if player is above 9.9 on the y, move to 9.9
         if (transform.position.y > 9.9f)
             transform.position = new Vector3(transform.position.x, 9.9f, transform.position.z);
-    }
-
-    // manually enacts gravity on the player
-    // using manual gravity because having a rigidbody breaks Vector3.MoveTowards for some reason
-    public void Gravity()
-    {
-        _gravityVelocity.y -= _gravityStrength * Time.deltaTime;
-        transform.position += _gravityVelocity * Time.deltaTime;
-        // if player moves below 1.1 on the y axis, turn off gravity
-        if (transform.position.y < 1.1f)
-        {
-            _gravityOn = false;
-            // reset position to 1.1
-            transform.position = new Vector3(transform.position.x, 1.1f, 0f);
-
-            // play player lands audio
-            if (PlayerAudioHandler.Instance.playerLands != null)
-                PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerLands);
-        }
     }
 
     #endregion
@@ -295,9 +280,12 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             }*/
 
             // start moving
-            _moving = true;
-            // turn off gravity
-            _gravityOn = false;
+            moving = true;
+            // reset velocity and turn off gravity
+            // if player is dashing, don't reset velocity
+            if (!inDash)
+                rbRef.linearVelocity = Vector3.zero;
+            rbRef.useGravity = false;
 
             // convert tap position to world position
             Vector3 targetPos = targetPos = _camera.ScreenToWorldPoint(tapPos);
@@ -323,10 +311,10 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         if (GameManager.Instance.InRun)
         {
             // stop moving
-            _moving = false;
+            moving = false;
             // turn on gravity
-            _gravityVelocity = Vector3.zero;
-            _gravityOn = true;
+            if (!inDash)
+                rbRef.useGravity = true;
         }
     }
     
@@ -339,12 +327,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         if (GameManager.Instance.InRun)
         {
             // if player is moving, move
-            if (_moving)
+            if (moving)
                 Move();
-
-            // if gravity is on, enact gravity
-            if (_gravityOn)
-                Gravity();
         }
     }
 
