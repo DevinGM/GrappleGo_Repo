@@ -5,12 +5,17 @@ using TMPro;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/3/2025
+/// 11/14/2025
 /// Handles level hud behaviors
 /// </summary>
 
 public class HUD_Controller : MonoBehaviour
 {
+    // reference to level hud group
+    private GameObject _hud_grp;
+    // has the player completley unpaused yet?
+    private bool _unpaused = true;
+
     [Header("Buttons")]
     // references to powerup buttons
     [SerializeField] private GameObject _dashButton;
@@ -20,6 +25,7 @@ public class HUD_Controller : MonoBehaviour
     // references to text boxes
     [SerializeField] private TMP_Text _highscoreDisplay;
     [SerializeField] private TMP_Text _scoreDisplay;
+    [SerializeField] private TMP_Text _countdown;
 
     [Header("List of Dash Charges. Place in matching order")]
     // references to dynamite charges
@@ -36,6 +42,10 @@ public class HUD_Controller : MonoBehaviour
         EventBus.Subscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Subscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Subscribe(EventType.RunEnd, TurnOffButtons);
+        EventBus.Subscribe(EventType.Unpause, OnUnpause);
+
+        // get level hud group
+        _hud_grp = transform.Find("HUD_grp").gameObject;
 
         // check for 4th and 5th dash charges
         if (GameManager.Instance.maxDynamiteCharges >= 4)
@@ -61,18 +71,61 @@ public class HUD_Controller : MonoBehaviour
         EventBus.Unsubscribe(EventType.GetDynamite, OnGetDynamite);
         EventBus.Unsubscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Unsubscribe(EventType.RunEnd, TurnOffButtons);
+        EventBus.Unsubscribe(EventType.Unpause, OnUnpause);
     }
 
     // update is called every frame
     private void Update()
     {
-        // // set highscore and score text
+        // set highscore and score text
         _highscoreDisplay.text = "Highscore: " + GameManager.Instance.highScore;
-        _scoreDisplay.text = "Score: " + (GameManager.Instance.distanceScore + 
-            GameManager.Instance.pickupsScore);
+        _scoreDisplay.text = "Score: " + (GameManager.Instance.distanceScore + GameManager.Instance.pickupsScore);
     }
 
-    // turn off buttons
+    #region Pause
+
+    // pauses game
+    public void Pause()
+    {
+        // only pause if game is completely upaused
+        if (_unpaused)
+        {
+            _unpaused = false;
+            // publish Pause
+            EventBus.Publish(EventType.Pause);
+
+            // turn off level hud
+            _hud_grp.SetActive(false);
+        }
+    }
+
+    // called when player unpauses
+    private void OnUnpause()
+    {
+        // turn hud back on
+        _hud_grp.SetActive(true);
+        // start 321 countdown
+        StartCoroutine(UnpauseCountdown());
+    }
+
+    // turn on countdown, count down from 3, turn off countdown
+    private IEnumerator UnpauseCountdown()
+    {
+        _countdown.gameObject.SetActive(true);
+        _countdown.text = "3";
+        yield return new WaitForSecondsRealtime(1f);
+        _countdown.text = "2";
+        yield return new WaitForSecondsRealtime(1f);
+        _countdown.text = "1";
+        yield return new WaitForSecondsRealtime(1f);
+        _countdown.gameObject.SetActive(false);
+
+        _unpaused = true;
+    }
+
+    #endregion
+
+    // turn off powerup buttons
     private void TurnOffButtons()
     {
         _dashButton.SetActive(false);

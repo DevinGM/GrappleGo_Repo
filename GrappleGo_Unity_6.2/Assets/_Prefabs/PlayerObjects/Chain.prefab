@@ -103,5 +103,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748309c5e05cdad43be0f9f05ee6e740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chain
-  playerRef: {fileID: 0}
-  grappleRef: {fileID: 0}
+  _playerRef: {fileID: 0}
+  _grappleRef: {fileID: 0}

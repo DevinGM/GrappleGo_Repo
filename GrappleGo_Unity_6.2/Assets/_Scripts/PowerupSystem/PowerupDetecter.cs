@@ -54,7 +54,6 @@ public class PowerupDetecter : MonoBehaviour
                 {
                     PickUpPowerup(_dashPowerup);
                     Destroy(other.gameObject);
-                    print("picked up a dash charge");
                 }
                 else
                     print("player is at max dash charges");

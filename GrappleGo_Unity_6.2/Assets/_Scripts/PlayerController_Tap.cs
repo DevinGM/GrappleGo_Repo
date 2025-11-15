@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/11/2025
+/// 11/13/2025
 /// HANDLES PLAYER BEHAVIOR
 /// detects touch inputs
 /// moves player to held touch on screen
@@ -264,7 +265,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
             // get position of tap
             Vector2 tapPos = Touchscreen.current.primaryTouch.position.ReadValue();
-            /*
+            
             // create a simulated pointer for the current Event System
             PointerEventData simPointer = new PointerEventData(EventSystem.current);
             // move simulated pointer to tap position
@@ -274,10 +275,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             EventSystem.current.RaycastAll(simPointer, hits);
             // if the raycast hits anything, abort this tap, otherwise good to go
             if (hits.Count > 0)
-            {
-                print("player tapped ui");
                 return;
-            }*/
 
             // start moving
             moving = true;

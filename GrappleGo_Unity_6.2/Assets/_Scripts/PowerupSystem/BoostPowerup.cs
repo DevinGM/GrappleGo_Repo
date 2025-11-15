@@ -61,9 +61,6 @@ public class BoostPowerup : PowerupParent
         PlayerController_Tap.Instance.usingBoost = true;
         PlayerController_Tap.Instance.invincible = true;
 
-        // set player collider to trigger so they don't collide with anything
-        PlayerController_Tap.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = true;
-
         // turn on shield model
         _boostModelRef.SetActive(true);
 
@@ -82,9 +79,6 @@ public class BoostPowerup : PowerupParent
             // set player invincibility off
             PlayerController_Tap.Instance.usingBoost = false;
             PlayerController_Tap.Instance.invincible = false;
-
-            // set collider back to NOT a trigger
-            PlayerController_Tap.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
 
             // start damage cooldown so player doesn't immediately take damage after coming out of boost
             PlayerController_Tap.Instance.StartCoroutine(PlayerController_Tap.Instance.DamageCooldown());

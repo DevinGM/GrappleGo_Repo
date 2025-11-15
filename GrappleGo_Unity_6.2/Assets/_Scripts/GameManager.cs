@@ -45,6 +45,8 @@ public class GameManager : Singleton<GameManager>
 
     // speed player moves at
     public float playerMoveSpeed = 7f;
+    // game volume on scale from 0.0001 to 1, defaults to .7
+    public float volume = .7f;
 
     #region Score/Currency
 
@@ -74,6 +76,8 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    /// Functions
+
     #region OnEnable, OnDisable, & OnApplicationQuit
 
     void OnEnable()
@@ -84,7 +88,7 @@ public class GameManager : Singleton<GameManager>
 
         // load saved data
         SaveSystem.Load();
-      //  print("Game manager loaded in onenable");
+        //print("GameManager loaded in OnEnable");
     }
 
     void OnDisable()
@@ -95,7 +99,7 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
-       // print("Game manager saved in ondisable");
+        //print("GameManager saved in OnDisable");
     }
 
     // save on application quit
@@ -103,7 +107,7 @@ public class GameManager : Singleton<GameManager>
     {
         // save data
         SaveSystem.Save();
-      //  print("Game manager saved in on quit");
+        //print("GameManager saved in OnApplicationQuit");
     }
 
     #endregion
@@ -114,11 +118,11 @@ public class GameManager : Singleton<GameManager>
     private void OnRunStart()
     {
         InRun = true;
-
         currentMoveSpeed = _startSpeed;
 
         // save data
         SaveSystem.Save();
+        //print("GameManager saved in OnRunStart");
     }
 
     // called when run ends
@@ -137,9 +141,9 @@ public class GameManager : Singleton<GameManager>
 
         // save data
         SaveSystem.Save();
-      //  print("Game manager saved in on run end");
+        //print("GameManager saved in on run end");
 
-        // move to death scene
+        // wait one frame to make sure data is saved beofer moving to death scene
         StartCoroutine(MoveToDeathScene());
     }
 
@@ -159,8 +163,10 @@ public class GameManager : Singleton<GameManager>
     private void MoveToScene(int index)
     {
         SceneManager.LoadScene(index);
+        print("scene changed");
     }
 
+    // wait one frame before moving to death scene
     private IEnumerator MoveToDeathScene()
     {
         yield return null;
@@ -192,6 +198,7 @@ public class GameManager : Singleton<GameManager>
         data.currency = currencyAmount;
         data.coinValue = coinValue;
         data.playerClimbSpeed = playerMoveSpeed;
+        data.volume = volume;
         data.boostDuration = boostDuration;
         data.gunDuration = gunDuration;
         data.maxDashCharges = maxDashCharges;
@@ -207,6 +214,7 @@ public class GameManager : Singleton<GameManager>
         currencyAmount = data.currency;
         coinValue = data.coinValue;
         playerMoveSpeed = data.playerClimbSpeed;
+        volume = data.volume;
         boostDuration = data.boostDuration;
         gunDuration = data.gunDuration;
         maxDashCharges = data.maxDashCharges;
@@ -230,6 +238,8 @@ public struct GameManagerSaveData
     public int currency;
     // value of coin pickups, defaults to 10
     public int coinValue;
+    // game volume on scale from 0.0001 to 1, defaults to .7
+    public float volume;
     // speed player climbs at
     public float playerClimbSpeed;
     // extra boost powerup duration
