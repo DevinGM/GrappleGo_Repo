@@ -120,16 +120,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TapGrapplePosition"",
-                    ""type"": ""Value"",
-                    ""id"": ""4e77611a-7dcc-49fa-854f-522e91b1189a"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""TapGrapplePress"",
+                    ""name"": ""TapGrapple"",
                     ""type"": ""Button"",
                     ""id"": ""6bf4167f-0ee9-49d5-b6a7-c84d5176e53e"",
                     ""expectedControlType"": """",
@@ -163,23 +154,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""d6d4e95c-1f33-42c0-aaa5-c5c30479230f"",
-                    ""path"": ""<Touchscreen>/primaryTouch/startPosition"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""TapGrapplePosition"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""d843a4e3-d8c3-4f1e-813a-ceaa4683be0e"",
                     ""path"": ""<Touchscreen>/touch0/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""TapGrapplePress"",
+                    ""action"": ""TapGrapple"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -204,8 +184,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Controls_Grapple = m_Controls.FindAction("Grapple", throwIfNotFound: true);
         m_Controls_Dash = m_Controls.FindAction("Dash", throwIfNotFound: true);
         m_Controls_Dynamite = m_Controls.FindAction("Dynamite", throwIfNotFound: true);
-        m_Controls_TapGrapplePosition = m_Controls.FindAction("TapGrapplePosition", throwIfNotFound: true);
-        m_Controls_TapGrapplePress = m_Controls.FindAction("TapGrapplePress", throwIfNotFound: true);
+        m_Controls_TapGrapple = m_Controls.FindAction("TapGrapple", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -289,8 +268,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Controls_Grapple;
     private readonly InputAction m_Controls_Dash;
     private readonly InputAction m_Controls_Dynamite;
-    private readonly InputAction m_Controls_TapGrapplePosition;
-    private readonly InputAction m_Controls_TapGrapplePress;
+    private readonly InputAction m_Controls_TapGrapple;
     /// <summary>
     /// Provides access to input actions defined in input action map "Controls".
     /// </summary>
@@ -315,13 +293,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Dynamite => m_Wrapper.m_Controls_Dynamite;
         /// <summary>
-        /// Provides access to the underlying input action "Controls/TapGrapplePosition".
+        /// Provides access to the underlying input action "Controls/TapGrapple".
         /// </summary>
-        public InputAction @TapGrapplePosition => m_Wrapper.m_Controls_TapGrapplePosition;
-        /// <summary>
-        /// Provides access to the underlying input action "Controls/TapGrapplePress".
-        /// </summary>
-        public InputAction @TapGrapplePress => m_Wrapper.m_Controls_TapGrapplePress;
+        public InputAction @TapGrapple => m_Wrapper.m_Controls_TapGrapple;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -357,12 +331,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Dynamite.started += instance.OnDynamite;
             @Dynamite.performed += instance.OnDynamite;
             @Dynamite.canceled += instance.OnDynamite;
-            @TapGrapplePosition.started += instance.OnTapGrapplePosition;
-            @TapGrapplePosition.performed += instance.OnTapGrapplePosition;
-            @TapGrapplePosition.canceled += instance.OnTapGrapplePosition;
-            @TapGrapplePress.started += instance.OnTapGrapplePress;
-            @TapGrapplePress.performed += instance.OnTapGrapplePress;
-            @TapGrapplePress.canceled += instance.OnTapGrapplePress;
+            @TapGrapple.started += instance.OnTapGrapple;
+            @TapGrapple.performed += instance.OnTapGrapple;
+            @TapGrapple.canceled += instance.OnTapGrapple;
         }
 
         /// <summary>
@@ -383,12 +354,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Dynamite.started -= instance.OnDynamite;
             @Dynamite.performed -= instance.OnDynamite;
             @Dynamite.canceled -= instance.OnDynamite;
-            @TapGrapplePosition.started -= instance.OnTapGrapplePosition;
-            @TapGrapplePosition.performed -= instance.OnTapGrapplePosition;
-            @TapGrapplePosition.canceled -= instance.OnTapGrapplePosition;
-            @TapGrapplePress.started -= instance.OnTapGrapplePress;
-            @TapGrapplePress.performed -= instance.OnTapGrapplePress;
-            @TapGrapplePress.canceled -= instance.OnTapGrapplePress;
+            @TapGrapple.started -= instance.OnTapGrapple;
+            @TapGrapple.performed -= instance.OnTapGrapple;
+            @TapGrapple.canceled -= instance.OnTapGrapple;
         }
 
         /// <summary>
@@ -451,18 +419,11 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDynamite(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "TapGrapplePosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "TapGrapple" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTapGrapplePosition(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "TapGrapplePress" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTapGrapplePress(InputAction.CallbackContext context);
+        void OnTapGrapple(InputAction.CallbackContext context);
     }
 }

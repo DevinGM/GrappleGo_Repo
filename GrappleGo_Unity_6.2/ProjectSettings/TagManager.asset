@@ -17,6 +17,8 @@ TagManager:
   - Platform
   - Ceiling
   - Enemy
+  - PlayerBullet
+  - SpawnLineDetecter
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - SpawnLine
+  - Platform
   - 
   - 
   - 

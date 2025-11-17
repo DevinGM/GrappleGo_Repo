@@ -45,7 +45,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         spawnPos.y++;
         // set bullet's target position to 5 units in front of the player
         Vector3 targetPos = PlayerController_Tap.Instance.transform.position;
-        targetPos.x += 5f;
+        //targetPos.x += 5f;
         // spawn bullet
         GameObject bullet = Instantiate(_bulletPrefab, spawnPos, transform.rotation);
         // rotate bullet to look at target position

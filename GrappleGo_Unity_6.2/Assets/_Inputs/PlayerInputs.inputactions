@@ -34,16 +34,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TapGrapplePosition",
-                    "type": "Value",
-                    "id": "4e77611a-7dcc-49fa-854f-522e91b1189a",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "TapGrapplePress",
+                    "name": "TapGrapple",
                     "type": "Button",
                     "id": "6bf4167f-0ee9-49d5-b6a7-c84d5176e53e",
                     "expectedControlType": "",
@@ -77,23 +68,12 @@
                 },
                 {
                     "name": "",
-                    "id": "d6d4e95c-1f33-42c0-aaa5-c5c30479230f",
-                    "path": "<Touchscreen>/primaryTouch/startPosition",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "TapGrapplePosition",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d843a4e3-d8c3-4f1e-813a-ceaa4683be0e",
                     "path": "<Touchscreen>/touch0/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TapGrapplePress",
+                    "action": "TapGrapple",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
