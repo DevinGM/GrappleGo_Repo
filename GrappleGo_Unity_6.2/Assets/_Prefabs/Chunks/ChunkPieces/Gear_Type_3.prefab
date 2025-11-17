@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 50363525261273919}
+  - component: {fileID: 7813434122036991358}
   m_Layer: 0
   m_Name: Gear_Type_3
   m_TagString: Obstacle
@@ -32,6 +33,28 @@ Transform:
   - {fileID: 8440568591323221361}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &7813434122036991358
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4551579478081825158}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 663f793337cfccb4e97e1ac4f7a1f017, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9108878540129146827
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,6 +67,7 @@ GameObject:
   - component: {fileID: 4795550736545792724}
   - component: {fileID: 7307583755084641822}
   - component: {fileID: 4425855567252956357}
+  - component: {fileID: 8719116089503844679}
   m_Layer: 0
   m_Name: Gear_3
   m_TagString: Obstacle
@@ -143,3 +167,25 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 395.51334
   m_Center: {x: 0, y: -3.6379797e-12, z: 0.000015258793}
+--- !u!95 &8719116089503844679
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108878540129146827}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ea4a7ae0977ae5f49969c4948ed7ca68, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
