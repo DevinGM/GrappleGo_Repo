@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 
 public class GrappleController : MonoBehaviour
-{
+{/*
     // speed grapple falls down
     [SerializeField] private float _fallSpeed = 5f;
 
@@ -102,7 +102,7 @@ public class GrappleController : MonoBehaviour
                 if (hit1.collider.gameObject.CompareTag("Ceiling") && !onCeiling)
                 {
                     onCeiling = true;
-                    EventBus.Publish(EventType.GrappleHitCeiling);
+                   // EventBus.Publish(EventType.GrappleHitCeiling);
                 }
             }
             else
@@ -119,5 +119,5 @@ public class GrappleController : MonoBehaviour
             else
                 _onPlayer = false;
         }
-    }
+    }*/
 }

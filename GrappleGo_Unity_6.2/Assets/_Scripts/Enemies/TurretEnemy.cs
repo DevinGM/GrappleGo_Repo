@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/19/2025
+/// 11/5/2025
 /// Handles turret enemy behaviour
 /// </summary>
 
@@ -27,16 +27,16 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         {
             // shoot continuously while not on cooldown and not passed by player
             if (!_onShootCooldown && !_playerPassed)
-                Shoot();
+                Action();
 
             // if player passes the turret, stop firing
-            if (PlayerController.Instance.transform.position.x >= transform.position.x)
+            if (PlayerController_Tap.Instance.transform.position.x >= transform.position.x)
                 _playerPassed = true;
         }
     }
 
     // shoot a bullet towards 5 units in front of the player
-    public void Shoot()
+    public void Action()
     {
         // set bullet's spawn location to one unit to the left and one unit above the turret
         /// /////////////////////////////////////// UPDATE WITH MODEL DIMENSIONS
@@ -44,7 +44,7 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         spawnPos.x--;
         spawnPos.y++;
         // set bullet's target position to 5 units in front of the player
-        Vector3 targetPos = PlayerController.Instance.transform.position;
+        Vector3 targetPos = PlayerController_Tap.Instance.transform.position;
         targetPos.x += 5f;
         // spawn bullet
         GameObject bullet = Instantiate(_bulletPrefab, spawnPos, transform.rotation);
@@ -52,6 +52,10 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         bullet.gameObject.transform.LookAt(targetPos);
         // start shoot cooldown
         StartCoroutine(ShootCooldown());
+
+        // play shoot sound
+        if (EnemyAudioHandler.Instance.enemyShoot != null)
+            EnemyAudioHandler.Instance.PlaySound(EnemyAudioHandler.Instance.enemyShoot);
     }
 
     // turn on cooldown, wait _shootRate seconds, turn cooldown off
@@ -61,7 +65,4 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(_shootRate);
         _onShootCooldown = false;
     }
-
-    // movement behaviour
-    public void Movement() { }
 }

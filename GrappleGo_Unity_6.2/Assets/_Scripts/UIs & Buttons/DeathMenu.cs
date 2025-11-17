@@ -17,7 +17,9 @@ public class DeathMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        _scoreText.text = "Score: " + GameManager.Instance.lastScore;
-        _currencyText.text = "Total Coins: " + GameManager.Instance.currencyAmount;
+        if (_scoreText != null)
+            _scoreText.text = "Score: " + GameManager.Instance.lastScore;
+        if (_currencyText != null)
+            _currencyText.text = "Total Coins: " + GameManager.Instance.currencyAmount;
     }
 }

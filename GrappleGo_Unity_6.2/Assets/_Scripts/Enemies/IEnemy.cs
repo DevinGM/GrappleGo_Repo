@@ -10,6 +10,6 @@ using UnityEngine;
 
 public interface IEnemy
 {
-    // movement behaviour
-    void Movement();
+    // main action behaviour, ie movement or shooting
+    void Action();
 }

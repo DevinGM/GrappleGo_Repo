@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/17/2024
+/// 11/5/2024
 /// handles boost powerup behavior
 /// </summary>
 
@@ -19,7 +19,6 @@ public class BoostPowerup : PowerupParent
     private float _startingSpeed;
     // reference to boost model
     private GameObject _boostModelRef;
-
 
     protected override void OnEnable()
     {
@@ -59,20 +58,11 @@ public class BoostPowerup : PowerupParent
         GameManager.Instance.currentMoveSpeed += _speedBoost;
 
         // set player invincible
-        PlayerController.Instance.boosting = true;
-        PlayerController.Instance.invincible = true;
-
-        // turn gravity off so player doesn't fall through floor
-        PlayerController.Instance.rbRef.useGravity = false;
-
-        // zero velocity in case player was mid fall
-        PlayerController.Instance.rbRef.linearVelocity = Vector3.zero;
+        PlayerController_Tap.Instance.boosting = true;
+        PlayerController_Tap.Instance.invincible = true;
 
         // set player collider to trigger so they don't collide with anything
-        PlayerController.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = true;
-
-        // make sure the player isn't stuck in any grappling state
-        PlayerController.Instance.inputtingGrapple = false;
+        PlayerController_Tap.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = true;
 
         // turn on shield model
         _boostModelRef.SetActive(true);
@@ -87,20 +77,20 @@ public class BoostPowerup : PowerupParent
         // reset world speed
         GameManager.Instance.currentMoveSpeed = _startingSpeed;
 
-        // set player invincibility off
-        PlayerController.Instance.boosting = false;
-        PlayerController.Instance.invincible = false;
+        if (PlayerController_Tap.Instance.gameObject.activeSelf == true)
+        {
+            // set player invincibility off
+            PlayerController_Tap.Instance.boosting = false;
+            PlayerController_Tap.Instance.invincible = false;
 
-        // turn gravity back on
-        PlayerController.Instance.rbRef.useGravity = true;
+            // set collider back to NOT a trigger
+            PlayerController_Tap.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
 
-        // set collider back to NOT a trigger
-        PlayerController.Instance.gameObject.GetComponent<CapsuleCollider>().isTrigger = false;
+            // start damage cooldown so player doesn't immediately take damage after coming out of boost
+            PlayerController_Tap.Instance.StartCoroutine(PlayerController_Tap.Instance.DamageCooldown());
 
-        // start damage cooldown so player doesn't immediately take damage after coming out of boost
-        PlayerController.Instance.StartCoroutine(PlayerController.Instance.DamageCooldown());
-
-        // turn off shield model
-        _boostModelRef.SetActive(false);
+            // turn off shield model
+            _boostModelRef.SetActive(false);
+        }
     }
 }

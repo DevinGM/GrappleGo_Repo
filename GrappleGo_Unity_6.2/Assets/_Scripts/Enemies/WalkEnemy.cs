@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/19/2025
+/// 11/5/2025
 /// Handles walk enemy behaviour
 /// </summary>
 
@@ -14,17 +14,15 @@ public class WalkEnemy : MonoBehaviour, IEnemy
     [SerializeField] private float _moveSpeed = 10f;
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         // only do logic if in run
         if (GameManager.Instance.InRun)
-        {
-            Movement();
-        }
+            Action();
     }
 
     // movement behaviour
-    public void Movement()
+    public void Action()
     {
         transform.Translate(_moveSpeed * Time.deltaTime * -transform.right);
     }
