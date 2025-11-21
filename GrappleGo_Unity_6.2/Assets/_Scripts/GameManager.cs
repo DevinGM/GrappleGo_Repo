@@ -232,6 +232,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     #endregion
+
 }
 
 #region Save Data

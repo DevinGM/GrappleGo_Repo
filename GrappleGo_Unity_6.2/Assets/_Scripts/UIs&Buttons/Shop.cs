@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,18 @@ using TMPro;
 
 /// <summary>
 /// Devi G Monaghan
-/// 11/11/2025
+/// 11/20/2025
 /// Handles shop behaviors ¢¢
+/// Holds shop save data for prices
 /// </summary>
 
 public class Shop : MonoBehaviour
 {
+    // static reference to shop to allow save system to access it's save & load
+    public static Shop Instance;
+
+    #region References
+
     [Header("Buttons")]
     // references to buttons
     [SerializeField] private UnityEngine.UI.Button _coinButton;
@@ -33,12 +40,19 @@ public class Shop : MonoBehaviour
     [SerializeField] private TMP_Text _headStartText;
     [SerializeField] private TMP_Text _currencyText;
 
+    #endregion
+
+    #region Stats
+
     [Header("Upgrade Values")]
     /// amount stat increases per upgrade
     [SerializeField] private int _coinValue = 10;
     [SerializeField] private float _playerMoveSpeedValue = 1f;
     [SerializeField] private float _boostDurationValue = 1f;
     [SerializeField] private float _gunDurationValue = 1f;
+    // maximum player movement speed upgrade value
+    [SerializeField] private float _maxSpeedValue = 40f;
+
     /// prices of upgrades
     [Header("Upgrade Prices")]
     [SerializeField] private int _coinPrice = 1000;
@@ -49,11 +63,32 @@ public class Shop : MonoBehaviour
     [SerializeField] private int _dynamiteChargesPrice = 10000;
     [SerializeField] private int _extraLifePrice = 1000;
     [SerializeField] private int _headStartPrice = 1000;
+    // how much prices increase per purchase
+    [Header("How much prices\nincrease per purchase")]
+    [SerializeField] private int _priceIncrease = 1000;
+
+    #endregion
+
+    #region OnEnable & OnDisable
 
     void OnEnable()
     {
+        // set static reference
+        Instance = this;
+        // load saved data
+        SaveSystem.Load();
         SetButtons();
     }
+
+    private void OnDisable()
+    {
+        // save data
+        SaveSystem.Save();
+        // reset Instance just in case
+        Instance = null;
+    }
+
+#endregion
 
     // set the text of all the upgrade buttons and currency display
     // if player doesn't have enough currency to purchase an upgrade, turn that button off
@@ -68,10 +103,20 @@ public class Shop : MonoBehaviour
             _coinButton.interactable = false;
 
         // player move speed upgrade
-        _playerMoveSpeedText.text = "Movement Speed\n¢" + _playerMoveSpeedPrice + "\n" + GameManager.Instance.playerMoveSpeed + " > "
-            + (GameManager.Instance.playerMoveSpeed + _playerMoveSpeedValue);
-        if (currencyAmount < _playerMoveSpeedPrice)
+        // normal logic, do if player move speed is below cap
+        if (GameManager.Instance.playerMoveSpeed < _maxSpeedValue)
+        {
+            _playerMoveSpeedText.text = "Movement Speed\n¢" + _playerMoveSpeedPrice + "\n" + GameManager.Instance.playerMoveSpeed + " > "
+                + (GameManager.Instance.playerMoveSpeed + _playerMoveSpeedValue);
+            if (currencyAmount < _playerMoveSpeedPrice)
+                _playerMoveSpeedButton.interactable = false;
+        }
+        // if player move speed hits cap, turn off button
+        else
+        {
+            _playerMoveSpeedText.text = "Movement Speed\nMaxxed\n" + _maxSpeedValue;
             _playerMoveSpeedButton.interactable = false;
+        }
 
         // boost duration upgrade
         _boostDurationText.text = "Boost Duration\n¢" + _boostDurationPrice + "\n" + GameManager.Instance.boostDuration + " > "
@@ -156,49 +201,106 @@ public class Shop : MonoBehaviour
     {
         GameManager.Instance.coinValue += _coinValue;
         GameManager.Instance.currencyAmount -= _coinPrice;
+        _coinPrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradePlayerClimbSpeed()
     {
         GameManager.Instance.playerMoveSpeed += _playerMoveSpeedValue;
         GameManager.Instance.currencyAmount -= _playerMoveSpeedPrice;
+        _playerMoveSpeedPrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradeBoostDuration()
     {
         GameManager.Instance.boostDuration += _boostDurationValue;
         GameManager.Instance.currencyAmount -= _boostDurationPrice;
+        _boostDurationPrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradeGunDuration()
     {
         GameManager.Instance.gunDuration += _gunDurationValue;
         GameManager.Instance.currencyAmount -= _gunDurationPrice;
+        _gunDurationPrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradeExtraLife()
     {
         GameManager.Instance.purchasedExtraLife = true;
         GameManager.Instance.currencyAmount -= _extraLifePrice;
+        _extraLifePrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradeHeadStart()
     {
         GameManager.Instance.purchasedHeadStart = true;
         GameManager.Instance.currencyAmount -= _headStartPrice;
+        _headStartPrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradeDashCharges()
     {
         GameManager.Instance.maxDashCharges++;
         GameManager.Instance.currencyAmount -= _dashChargesPrice;
+        _dashChargesPrice += _priceIncrease;
         SetButtons();
     }
     public void UpgradeDynamiteCharges()
     {
         GameManager.Instance.maxDynamiteCharges++;
         GameManager.Instance.currencyAmount -= _dynamiteChargesPrice;
+        _dynamiteChargesPrice += _priceIncrease;
         SetButtons();
     }
     #endregion
+
+    #region Save & Load
+
+    // save stats to the given struct
+    public void Save(ref ShopSaveData data)
+    {
+        data.coinPrice = _coinPrice;
+        data.playerMoveSpeedPrice = _playerMoveSpeedPrice;
+        data.boostDurationPrice = _boostDurationPrice;
+        data.gunDurationPrice = _gunDurationPrice;
+        data.dashChargesPrice = _dashChargesPrice;
+        data.dynamiteChargesPrice = _dynamiteChargesPrice;
+        data.extraLifePrice = _extraLifePrice;
+        data.headStartPrice = _headStartPrice;
+    }
+
+    // load stats from the given struct
+    public void Load(ref ShopSaveData data)
+    {
+        _coinPrice = data.coinPrice;
+        _playerMoveSpeedPrice = data.playerMoveSpeedPrice;
+        _boostDurationPrice = data.boostDurationPrice;
+        _gunDurationPrice = data.gunDurationPrice;
+        _dashChargesPrice = data.dashChargesPrice;
+        _dynamiteChargesPrice = data.dynamiteChargesPrice;
+        _extraLifePrice = data.extraLifePrice;
+        _headStartPrice = data.headStartPrice;
+    }
+
+    #endregion
+
 }
+
+#region Save Data
+
+// struct for holding Shop's save data
+[System.Serializable]
+public struct ShopSaveData
+{
+    public int coinPrice;
+    public int playerMoveSpeedPrice;
+    public int boostDurationPrice;
+    public int gunDurationPrice;
+    public int dashChargesPrice;
+    public int dynamiteChargesPrice;
+    public int extraLifePrice;
+    public int headStartPrice;
+}
+
+#endregion
