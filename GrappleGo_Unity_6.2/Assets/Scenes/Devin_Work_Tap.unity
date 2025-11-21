@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &246508158 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 594761119039732215, guid: 7317ffa5f52f02e4d9e018162b36028a, type: 3}
+  m_PrefabInstance: {fileID: 7281823638947902029}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +256,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4497212279445916007, guid: 7317ffa5f52f02e4d9e018162b36028a, type: 3}
   m_PrefabInstance: {fileID: 7281823638947902029}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &823646647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246508158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa91a3d9ac9efc4c87bacf6ea742c06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grapple
+  _idleLength: 1.5
+  _speed: 7
 --- !u!1001 &1446735856
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -968,7 +987,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 594761119039732215, guid: 7317ffa5f52f02e4d9e018162b36028a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 823646647}
   m_SourcePrefab: {fileID: 100100000, guid: 7317ffa5f52f02e4d9e018162b36028a, type: 3}
 --- !u!1001 &8475530200471078273
 PrefabInstance:
