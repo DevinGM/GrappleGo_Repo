@@ -7,5 +7,5 @@
 public enum EventType
 {
     RunStart, RunEnd, SpawnChunk, PlayerDamaged, UseDash, GetDash, UseDynamite, GetDynamite, Pause, Unpause,
-    OpenSettings, CloseSettings
+    OpenSettings, CloseSettings, PlayDashTutorial, PlayDynamiteTutorial, CloseTutorial
 }

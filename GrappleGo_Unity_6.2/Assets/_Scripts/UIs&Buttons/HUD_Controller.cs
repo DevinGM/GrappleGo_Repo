@@ -5,7 +5,7 @@ using TMPro;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/14/2025
+/// 11/20/2025
 /// Handles level hud behaviors
 /// </summary>
 
@@ -13,6 +13,9 @@ public class HUD_Controller : MonoBehaviour
 {
     // reference to level hud group
     private GameObject _hud_grp;
+    // reference to popup tutorial groups
+    private GameObject _dashTutorial_grp;
+    private GameObject _dynamiteTutorial_grp;
     // has the player completley unpaused yet?
     private bool _unpaused = true;
 
@@ -43,9 +46,13 @@ public class HUD_Controller : MonoBehaviour
         EventBus.Subscribe(EventType.UseDynamite, OnUseDynamite);
         EventBus.Subscribe(EventType.RunEnd, TurnOffButtons);
         EventBus.Subscribe(EventType.Unpause, OnUnpause);
+        EventBus.Subscribe(EventType.PlayDashTutorial, OnPlayDashTutorial);
+        EventBus.Subscribe(EventType.PlayDynamiteTutorial, OnPlayDynamiteTutorial);
 
         // get level hud group
         _hud_grp = transform.Find("HUD_grp").gameObject;
+        _dashTutorial_grp = transform.Find("DashTutorial_grp").gameObject;
+        _dynamiteTutorial_grp = transform.Find("DynamiteTutorial_grp").gameObject;
 
         // check for 4th and 5th dash charges
         if (GameManager.Instance.maxDynamiteCharges >= 4)
@@ -100,6 +107,7 @@ public class HUD_Controller : MonoBehaviour
     }
 
     // called when player unpauses
+    // called by event via pauseMenu
     private void OnUnpause()
     {
         // turn hud back on
@@ -125,7 +133,51 @@ public class HUD_Controller : MonoBehaviour
 
     #endregion
 
+    #region Popup Tutorials
+
+    // pops up dash tutorial
+    // called by event
+    private void OnPlayDashTutorial()
+    {
+        _unpaused = false;
+        // pause game
+        Time.timeScale = 0f;
+
+        // turn off level hud
+        _hud_grp.SetActive(false);
+        // turn on tutorial
+        _dashTutorial_grp.SetActive(true);
+    }
+
+    // pops up dynamite tutorial
+    // called by event
+    private void OnPlayDynamiteTutorial()
+    {
+        _unpaused = false;
+        // pause game
+        Time.timeScale = 0f;
+
+        // turn off level hud
+        _hud_grp.SetActive(false);
+        // turn on tutorial
+        _dynamiteTutorial_grp.SetActive(true);
+    }
+
+    // close popup tutorial and tell pause menu to unpause
+    // called on button press
+    public void CloseTutorial()
+    {
+        // turn tutorials off
+        _dashTutorial_grp.SetActive(false);
+        _dynamiteTutorial_grp.SetActive(false);
+        // publish close tutorial
+        EventBus.Publish(EventType.CloseTutorial);
+    }
+
+#endregion
+
     // turn off powerup buttons
+    // called by event when run ends
     private void TurnOffButtons()
     {
         _dashButton.SetActive(false);

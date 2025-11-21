@@ -24,6 +24,7 @@ public class PauseMenu : MonoBehaviour
     {
         // subscribe to events
         EventBus.Subscribe(EventType.Pause, OnPause);
+        EventBus.Subscribe(EventType.CloseTutorial, Unpause);
 
         // get reference
         _pause_grp = transform.Find("Pause_grp").gameObject;
@@ -33,6 +34,7 @@ public class PauseMenu : MonoBehaviour
     {
         // unsubscribe to events
         EventBus.Unsubscribe(EventType.Pause, OnPause);
+        EventBus.Unsubscribe(EventType.CloseTutorial, Unpause);
 
         // make sure time scale is set to normal
         Time.timeScale = 1.0f;
@@ -55,6 +57,7 @@ public class PauseMenu : MonoBehaviour
 
     // unpauses game
     // called by button press
+    // called by event via close tutorial
     public void Unpause()
     {
         // publish unpause
