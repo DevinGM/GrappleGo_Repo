@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 2013591225800105012}
   m_Layer: 0
   m_Name: TerrainManager
-  m_TagString: Untagged
+  m_TagString: TerrainManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -215,6 +215,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2211140697523215193, guid: 5d7ef349a0b3d714ba7033f58b9f7fdb, type: 3}
       propertyPath: m_Name
+      value: TerrainMover
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211140697523215193, guid: 5d7ef349a0b3d714ba7033f58b9f7fdb, type: 3}
+      propertyPath: m_TagString
       value: TerrainMover
       objectReference: {fileID: 0}
     - target: {fileID: 8364084053974310909, guid: 5d7ef349a0b3d714ba7033f58b9f7fdb, type: 3}
