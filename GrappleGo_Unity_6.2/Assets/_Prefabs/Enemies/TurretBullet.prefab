@@ -53,7 +53,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
+  m_Radius: 0.47
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4046277718327951769
 MonoBehaviour:
@@ -67,7 +67,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253520f19703d9b44b66b3be2cf21016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurretBullet
-  _moveSpeed: 3
+  _moveSpeed: 5
+  targetPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5400578775815210226
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,15 +111,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.34239
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.34239
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.34239
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalPosition.x
@@ -134,7 +135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalRotation.x
@@ -142,7 +143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalRotation.z
@@ -154,7 +155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6322690262532235691, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

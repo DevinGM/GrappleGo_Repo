@@ -55,6 +55,10 @@ public class Grapple : MonoBehaviour
         // only do logic in run
         if (GameManager.Instance.InRun)
         {
+            // make sure not to move grapple when player is moving
+            if (PlayerController_Tap.Instance.moving)
+                _idle = false;
+
             // if player is idle move grapple towards them
             if (_idle)
             {
