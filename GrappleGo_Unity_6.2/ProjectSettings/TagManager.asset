@@ -19,6 +19,7 @@ TagManager:
   - Enemy
   - PlayerBullet
   - SpawnLineDetecter
+  - TerrainMover
   layers:
   - Default
   - TransparentFX
