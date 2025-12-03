@@ -22,11 +22,6 @@ public class TurretBullet : MonoBehaviour
         StartCoroutine(DeathTimer());
         // rotate bullet to look at player
         transform.LookAt(PlayerController_Tap.Instance.transform.position);
-        // set bullet as child of terrain mover so that it moves with the scene
-        transform.parent = GameObject.FindWithTag("TerrainMover").gameObject.transform;
-        // return error if no terrian mover can be found
-        if (transform.parent == null)
-            Debug.LogError("ERROR: No TerrainMover found for bullet!!!!!");
     }
 
     // Update is called once per frame

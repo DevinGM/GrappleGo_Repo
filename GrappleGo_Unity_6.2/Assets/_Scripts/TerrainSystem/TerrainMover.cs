@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class TerrainMover : MonoBehaviour
 {
+    // reference to rigidbody
+    private Rigidbody _rbRef;
+
     void OnEnable()
     {
         // subscribe to events
