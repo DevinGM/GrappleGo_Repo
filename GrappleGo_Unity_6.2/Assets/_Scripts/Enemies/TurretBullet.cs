@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 12/2/2025
+/// 12/3/2025
 /// Handles turret bullet behaviour
 /// </summary>
 
@@ -22,6 +22,9 @@ public class TurretBullet : MonoBehaviour
         StartCoroutine(DeathTimer());
         // rotate bullet to look at player
         transform.LookAt(PlayerController_Tap.Instance.transform.position);
+        // add current environment move speed to bullet move speed so it accelerates in proportion to the level, 
+        // but doesn't appear to drag
+        _moveSpeed += GameManager.Instance.currentMoveSpeed;
     }
 
     // Update is called once per frame
