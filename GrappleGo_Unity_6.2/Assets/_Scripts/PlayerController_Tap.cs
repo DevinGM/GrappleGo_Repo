@@ -279,6 +279,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
             // start moving
             moving = true;
+            // publish player start move
+            EventBus.Publish(EventType.PlayerStartMove);
             // reset velocity and turn off gravity
             // if player is dashing, don't reset velocity
             if (!inDash)
@@ -291,6 +293,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             // store world position of tap in _targetPos
             _targetPos = targetPos;
             // move grapple to target position
+            // only move grapple when moving
             targetPos.z = -2f;
             _grapple.position = targetPos;
 
@@ -313,6 +316,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             // turn on gravity
             if (!inDash)
                 rbRef.useGravity = true;
+            // publish player stop move
+            EventBus.Publish(EventType.PlayerStopMove);
         }
     }
     

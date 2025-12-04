@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/5/2025
+/// 12/2/2025
 /// Handles turret enemy behaviour
 /// </summary>
 
@@ -43,13 +43,8 @@ public class TurretEnemy : MonoBehaviour, IEnemy
         Vector3 spawnPos = transform.position;
         spawnPos.x--;
         spawnPos.y++;
-        // set bullet's target position to 5 units in front of the player
-        Vector3 targetPos = PlayerController_Tap.Instance.transform.position;
-        //targetPos.x += 5f;
         // spawn bullet
         GameObject bullet = Instantiate(_bulletPrefab, spawnPos, transform.rotation);
-        // rotate bullet to look at target position
-        bullet.gameObject.transform.LookAt(targetPos);
         // start shoot cooldown
         StartCoroutine(ShootCooldown());
 

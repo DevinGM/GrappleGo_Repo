@@ -5,7 +5,7 @@ using System.IO;
 
 /// <summary>
 /// Devin G Monaghan
-/// 10/17/2025
+/// 11/20/2025
 /// Handles save system
 /// </summary>
 
@@ -20,6 +20,8 @@ public class SaveSystem
     {
         // GameManager save data
         public GameManagerSaveData gameManagerData;
+        // Shop save data
+        public ShopSaveData shopData;
     }
 
     // creates a save file name and path and puts it in a string using the persistent data path
@@ -36,8 +38,6 @@ public class SaveSystem
         HandleSaveData();
         // write save data to text file found at SaveFileName()'s path
         File.WriteAllText(SaveFileName(), JsonUtility.ToJson(_saveData, true));
-
-      //  Debug.Log("saved save data");
     }
 
     // load data from text file
@@ -51,8 +51,6 @@ public class SaveSystem
             _saveData = JsonUtility.FromJson<SaveData>(saveContent);
             // load save data
             HandleLoadData();
-
-          //  Debug.Log("loaded save data");
         }
         else
             Debug.LogWarning("WARNING: save data does not exist");
@@ -62,11 +60,15 @@ public class SaveSystem
     public static void HandleSaveData()
     {
         GameManager.Instance.Save(ref _saveData.gameManagerData);
+        if (Shop.Instance != null)
+            Shop.Instance.Save(ref _saveData.shopData);
     }
 
     // put save data into GameManager from _saveData
     public static void HandleLoadData()
     {
         GameManager.Instance.Load(ref _saveData.gameManagerData);
+        if (Shop.Instance != null)
+            Shop.Instance.Load(ref _saveData.shopData);
     }
 }
