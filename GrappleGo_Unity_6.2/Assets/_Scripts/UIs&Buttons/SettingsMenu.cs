@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/14/2025
+/// 11/24/2025
 /// Handles settings menu behaviors
 ///     handles volume settings
-///     resets turorials /////////////////////////////// TO BE IMPLEMENTED
+///     resets turorials
 /// </summary>
 
 public class SettingsMenu : MonoBehaviour
@@ -18,6 +18,8 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider _volumeSlider;
     // reference to master mixer group
     [SerializeField] private AudioMixer _mixer;
+    // reference to reset tutorials button
+    [SerializeField] private UnityEngine.UI.Button _resetTutorialsButton;
 
     // settings menu group
     private GameObject _settings_grp;
@@ -54,6 +56,13 @@ public class SettingsMenu : MonoBehaviour
         _settings_grp.SetActive(true);
         // set slider to correct position
         _volumeSlider.value = GameManager.Instance.volume;
+
+        // if player has played one of the popup tutorials, turn on reset tutorials button
+        if (GameManager.Instance.playedDashTutorial || GameManager.Instance.playedDynamiteTutorial)
+            _resetTutorialsButton.interactable = true;
+        // otherwise, turn button off
+        else
+            _resetTutorialsButton.interactable = false;
     }
 
     // close the settings menu
@@ -66,6 +75,8 @@ public class SettingsMenu : MonoBehaviour
     }
 
     #endregion
+
+    #region Volume
 
     public void ChangeVolume(float value)
     {
@@ -82,5 +93,18 @@ public class SettingsMenu : MonoBehaviour
         yield return null;
         // set volume
         _mixer.SetFloat("Volume", Mathf.Log10(GameManager.Instance.volume) * 20);
+    }
+
+    #endregion
+
+    // reset popup tutorial flags
+    // called by button press
+    public void ResetTutorials()
+    {
+        GameManager.Instance.playedDashTutorial = false;
+        GameManager.Instance.playedDynamiteTutorial = false;
+
+        // turn off button
+        _resetTutorialsButton.interactable = false;
     }
 }

@@ -45,6 +45,13 @@ public class DynamitePowerup : PowerupChargeParent
     // called upon powerup being picked up
     public override void Pickup()
     {
+        // if dynamite tutorial has not been played, play it
+        if (!GameManager.Instance.playedDynamiteTutorial)
+        {
+            GameManager.Instance.playedDynamiteTutorial = true;
+            EventBus.Publish(EventType.PlayDynamiteTutorial);
+        }
+
         // publish GetDynamite
         EventBus.Publish(EventType.GetDynamite);
     }

@@ -41,12 +41,16 @@ public class GameManager : Singleton<GameManager>
     // speed world is currently moving at
     public float currentMoveSpeed;
 
+    ////////////////////////////////////////////////////////////////////////////
     [Header("Stats that get saved")]
 
     // speed player moves at
     public float playerMoveSpeed = 7f;
     // game volume on scale from 0.0001 to 1, defaults to .7
     public float volume = .7f;
+    // has the player been given the powerup tutorials?
+    public bool playedDashTutorial = false;
+    public bool playedDynamiteTutorial = false;
 
     #region Score/Currency
 
@@ -205,6 +209,8 @@ public class GameManager : Singleton<GameManager>
         data.maxDynamiteCharges = maxDynamiteCharges;
         data.purchasedExtraLife = purchasedExtraLife;
         data.purchasedHeadStart = purchasedHeadStart;
+        data.playedDashTutorial = playedDashTutorial;
+        data.playedDynamiteTutorial = playedDynamiteTutorial;
     }
 
     // load stats from the given struct
@@ -221,9 +227,12 @@ public class GameManager : Singleton<GameManager>
         maxDynamiteCharges = data.maxDynamiteCharges;
         purchasedExtraLife = data.purchasedExtraLife;
         purchasedHeadStart = data.purchasedHeadStart;
+        playedDashTutorial = data.playedDashTutorial;
+        playedDynamiteTutorial = data.playedDynamiteTutorial;
     }
 
     #endregion
+
 }
 
 #region Save Data
@@ -254,6 +263,9 @@ public struct GameManagerSaveData
     public bool purchasedExtraLife;
     // turns on when player purchases headstart upgrade
     public bool purchasedHeadStart;
+    // has the player been given the powerup tutorials?
+    public bool playedDashTutorial;
+    public bool playedDynamiteTutorial;
 }
 
 #endregion

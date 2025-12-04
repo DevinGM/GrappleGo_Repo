@@ -50,6 +50,13 @@ public class DashPowerup : PowerupChargeParent
     // called upon powerup being picked up
     public override void Pickup()
     {
+        // if dash tutorial has not been played, play it
+        if (!GameManager.Instance.playedDashTutorial)
+        {
+            GameManager.Instance.playedDashTutorial = true;
+            EventBus.Publish(EventType.PlayDashTutorial);
+        }
+
         // publish GetDash
         EventBus.Publish(EventType.GetDash);
     }
