@@ -681,6 +681,10 @@ PrefabInstance:
       propertyPath: _grapple
       value: 
       objectReference: {fileID: 952519729}
+    - target: {fileID: 6132268562124271231, guid: 3ea9036818010dc4db731637866d68fc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
