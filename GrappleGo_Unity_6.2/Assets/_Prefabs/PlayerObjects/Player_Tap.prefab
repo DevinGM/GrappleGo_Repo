@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController_Tap
   rbRef: {fileID: 0}
+  _animatorRef: {fileID: 805093793417931354}
   _grapple: {fileID: 0}
   moving: 0
   lives: 1
@@ -1366,6 +1367,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb6f94951f085a84ba815b6dfcc3d38c, type: 3}
+--- !u!95 &805093793417931354 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2438668008039448840, guid: cb6f94951f085a84ba815b6dfcc3d38c, type: 3}
+  m_PrefabInstance: {fileID: 3097252975760976722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6758891896312033312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8590562917750987634, guid: cb6f94951f085a84ba815b6dfcc3d38c, type: 3}
