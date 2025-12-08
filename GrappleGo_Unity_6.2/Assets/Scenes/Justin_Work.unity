@@ -188,6 +188,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Tap
       objectReference: {fileID: 0}
+    - target: {fileID: 2230789961202655634, guid: 3ea9036818010dc4db731637866d68fc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2326913174525985329, guid: 3ea9036818010dc4db731637866d68fc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
