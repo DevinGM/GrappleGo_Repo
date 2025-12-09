@@ -22,6 +22,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
     // reference to main camera
     private Camera _camera;
 
+    [SerializeField] private Animator _animatorRef;
+
     #region Movement Variables
 
     [Header("Reference to Grapple object\nUse 'Grapple_Tap' instance inside the scene")]
@@ -33,6 +35,8 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
 
     // speed player is currently moving at
     private float _moveSpeed = 12f;
+    // is the player already on the ground?
+    private bool _grounded = true;
     // location player spawns at
     private Vector3 _spawnPos;
     private Vector3 _grappleSpawnPos;
@@ -313,6 +317,10 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         {
             // stop moving
             moving = false;
+
+            // play animation for character falling state when the player let's go of the screen.
+            _animatorRef.SetBool("isFalling", true);
+
             // turn on gravity
             if (!inDash)
                 rbRef.useGravity = true;
@@ -331,7 +339,23 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         {
             // if player is moving, move
             if (moving)
+            {
                 Move();
+                
+                // play the animations for graple when player taps the screen
+                _animatorRef.SetBool("isStartGrapple", true);
+            }
+            // if player is not moving, hasn't already landed, and is below 1.2 on the y, land
+            if (!moving && !_grounded && transform.position.y <= 1.2f)
+            {
+                _grounded = true;
+                // play sound
+                PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerLands);
+                
+                
+                // play landing animation when character touches ground
+                _animatorRef.SetBool("isLanding", true);
+            }
         }
     }
 
