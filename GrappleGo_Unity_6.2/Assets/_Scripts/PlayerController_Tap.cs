@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/13/2025
+/// 12/9/2025
 /// HANDLES PLAYER BEHAVIOR
 /// detects touch inputs
 /// moves player to held touch on screen
@@ -36,7 +36,7 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
     // speed player is currently moving at
     private float _moveSpeed = 12f;
     // is the player already on the ground?
-    private bool _grounded = true;
+    public bool _grounded = true;
     // location player spawns at
     private Vector3 _spawnPos;
     private Vector3 _grappleSpawnPos;
@@ -317,10 +317,10 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
         {
             // stop moving
             moving = false;
-
             // play animation for character falling state when the player let's go of the screen.
+            _animatorRef.SetBool("isStartGrapple", false);
             _animatorRef.SetBool("isFalling", true);
-
+            _animatorRef.SetBool("isLanding", false);
             // turn on gravity
             if (!inDash)
                 rbRef.useGravity = true;
@@ -340,21 +340,29 @@ public class PlayerController_Tap : SingletonNonPersist<PlayerController_Tap>
             // if player is moving, move
             if (moving)
             {
+                _grounded = false;
                 Move();
-                
                 // play the animations for graple when player taps the screen
                 _animatorRef.SetBool("isStartGrapple", true);
+                _animatorRef.SetBool("isFalling", false);
+                _animatorRef.SetBool("isLanding", false);
             }
             // if player is not moving, hasn't already landed, and is below 1.2 on the y, land
-            if (!moving && !_grounded && transform.position.y <= 1.2f)
+            if (!moving)
             {
-                _grounded = true;
-                // play sound
-                PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerLands);
-                
-                
-                // play landing animation when character touches ground
-                _animatorRef.SetBool("isLanding", true);
+                if (!_grounded)
+                {
+                    if (transform.position.y <= 1.3f)
+                    {
+                        _grounded = true;
+                        // play sound
+                        PlayerAudioHandler.Instance.PlaySound(PlayerAudioHandler.Instance.playerLands);
+                        // play landing animation when character touches ground
+                        _animatorRef.SetBool("isStartGrapple", false);
+                        _animatorRef.SetBool("isFalling", false);
+                        _animatorRef.SetBool("isLanding", true);
+                    }
+                }
             }
         }
     }

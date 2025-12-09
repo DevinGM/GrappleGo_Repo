@@ -282,6 +282,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoamingPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3138934fbe592254eb3191b93655fd5e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 1722035203125999126, guid: 3138934fbe592254eb3191b93655fd5e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253520f19703d9b44b66b3be2cf21016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurretBullet
-  _moveSpeed: 5
+  _moveSpeed: 2
   targetPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5400578775815210226
 GameObject:
