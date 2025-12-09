@@ -29,8 +29,8 @@ public class TurretEnemy : MonoBehaviour, IEnemy
             if (!_onShootCooldown && !_playerPassed)
                 Action();
 
-            // if player passes the turret, stop firing
-            if (PlayerController_Tap.Instance.transform.position.x >= transform.position.x)
+            // if player gets up to 2 x units in front the turret, stop firing
+            if ((PlayerController_Tap.Instance.transform.position.x + 4f) >= transform.position.x)
                 _playerPassed = true;
         }
     }
