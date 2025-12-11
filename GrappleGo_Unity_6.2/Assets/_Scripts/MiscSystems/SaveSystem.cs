@@ -5,7 +5,7 @@ using System.IO;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/20/2025
+/// 12/21/2025
 /// Handles save system
 /// </summary>
 
@@ -56,7 +56,20 @@ public class SaveSystem
             Debug.LogWarning("WARNING: save data does not exist");
     }
 
-    // get save data from GameManager and put it into _saveData
+    // delete save data file & reset variables
+    public static void DeleteSaveData()
+    {
+        if (File.Exists(SaveFileName()))
+        {
+            File.Delete(SaveFileName());
+            Debug.Log("File deleted: " + SaveFileName());
+        }
+        else
+            Debug.Log("File not found: " + SaveFileName());
+        ResetData();
+    }
+
+    // get save data from scripts and put it into _saveData
     public static void HandleSaveData()
     {
         GameManager.Instance.Save(ref _saveData.gameManagerData);
@@ -64,11 +77,19 @@ public class SaveSystem
             Shop.Instance.Save(ref _saveData.shopData);
     }
 
-    // put save data into GameManager from _saveData
+    // put save data into scripts from _saveData
     public static void HandleLoadData()
     {
         GameManager.Instance.Load(ref _saveData.gameManagerData);
         if (Shop.Instance != null)
             Shop.Instance.Load(ref _saveData.shopData);
+    }
+
+    // reset save data in scripts
+    public static void ResetData()
+    {
+        GameManager.Instance.ResetData(ref _saveData.gameManagerData);
+        if (Shop.Instance != null)
+            Shop.Instance.ResetData(ref _saveData.shopData);
     }
 }

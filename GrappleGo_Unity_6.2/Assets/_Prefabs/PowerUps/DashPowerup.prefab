@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5766866982643088106}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: DashPowerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8815195950518614251}
   m_Father: {fileID: 8063581130441765688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7390211327747039245
@@ -62,7 +63,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5766866982643088106}
-  - {fileID: 8815195950518614251}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6730060278640658371
@@ -92,7 +92,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8063581130441765688}
+    m_TransformParent: {fileID: 5766866982643088106}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: fa5d801ac9b4ccd4fa851c4fda8d4fe6, type: 3}
       propertyPath: m_LocalScale.x
@@ -145,6 +145,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: fa5d801ac9b4ccd4fa851c4fda8d4fe6, type: 3}
       propertyPath: m_Name
       value: Grapple-GoDash
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fa5d801ac9b4ccd4fa851c4fda8d4fe6, type: 3}
+      propertyPath: m_TagString
+      value: DashPowerup
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

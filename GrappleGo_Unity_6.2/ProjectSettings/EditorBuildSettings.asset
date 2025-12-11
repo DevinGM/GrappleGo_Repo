@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/D_MainMenu.unity
     guid: c9f6cc2a2ed41054b90aeb5e1b7a2f67
   - enabled: 1
-    path: Assets/Scenes/Devin_Work_Tap.unity
+    path: Assets/Scenes/D_Level.unity
     guid: 4a7c537a93ffaeb489b66971b7699530
   - enabled: 1
     path: Assets/Scenes/D_DeathMenu.unity

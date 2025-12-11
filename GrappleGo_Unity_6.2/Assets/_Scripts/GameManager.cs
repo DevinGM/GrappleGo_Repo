@@ -231,6 +231,24 @@ public class GameManager : Singleton<GameManager>
         playedDynamiteTutorial = data.playedDynamiteTutorial;
     }
 
+    // resets variables to default values
+    public void ResetData(ref GameManagerSaveData data)
+    {
+        highScore = 0;
+        currencyAmount = 0;
+        coinValue = 10;
+        playerMoveSpeed = 7f;
+        volume = .7f;
+        boostDuration = 0f;
+        gunDuration = 0f;
+        maxDashCharges = 3;
+        maxDynamiteCharges = 3;
+        purchasedExtraLife = false;
+        purchasedHeadStart = false;
+        playedDashTutorial = false;
+        playedDynamiteTutorial = false;
+    }
+
     #endregion
 
 }

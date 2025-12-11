@@ -6,7 +6,7 @@ using TMPro;
 
 /// <summary>
 /// Devi G Monaghan
-/// 11/20/2025
+/// 12/11/2025
 /// Handles shop behaviors ¢¢
 /// Holds shop save data for prices
 /// </summary>
@@ -281,6 +281,20 @@ public class Shop : MonoBehaviour
         _dynamiteChargesPrice = data.dynamiteChargesPrice;
         _extraLifePrice = data.extraLifePrice;
         _headStartPrice = data.headStartPrice;
+    }
+
+
+    // resets variables to default values
+    public void ResetData(ref ShopSaveData data)
+    {
+        _coinPrice = 1000;
+        _playerMoveSpeedPrice = 1000;
+        _boostDurationPrice = 1000;
+        _gunDurationPrice = 1000;
+        _dashChargesPrice = 1000;
+        _dynamiteChargesPrice = 1000;
+        _extraLifePrice = 1000;
+        _headStartPrice = 1000;
     }
 
     #endregion

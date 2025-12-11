@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Devin G Monaghan
-/// 11/24/2025
+/// 12/11/2025
 /// Handles settings menu behaviors
 ///     handles volume settings
 ///     resets turorials
@@ -110,5 +110,12 @@ public class SettingsMenu : MonoBehaviour
 
         // turn off button
         _resetTutorialsButton.interactable = false;
+    }
+
+    // delete save data
+    // called by button press
+    public void ResetSaveData()
+    {
+        SaveSystem.DeleteSaveData();
     }
 }
