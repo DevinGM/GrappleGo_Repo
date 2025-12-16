@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2518715096584749497}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Model
   m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
@@ -43,7 +43,8 @@ GameObject:
   - component: {fileID: 8246639435193490153}
   - component: {fileID: 6700562888051108465}
   - component: {fileID: 7811851488682062396}
-  m_Layer: 6
+  - component: {fileID: -3794215437469300429}
+  m_Layer: 0
   m_Name: PlayerBullet
   m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
@@ -99,6 +100,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9b4f6803a478494a8c2c2ce3b9b4f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBullet
+--- !u!54 &-3794215437469300429
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8570599082012302400}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &2992095601894367609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,6 +190,14 @@ PrefabInstance:
     - target: {fileID: 6494697720412490495, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
       propertyPath: m_Name
       value: Rocket_Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 6494697720412490495, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6494697720412490495, guid: d3628781f21ec3344bb1254c7fafc547, type: 3}
+      propertyPath: m_TagString
+      value: PlayerBullet
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

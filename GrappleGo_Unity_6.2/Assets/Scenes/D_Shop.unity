@@ -1429,7 +1429,7 @@ GameObject:
   - component: {fileID: 674695855}
   - component: {fileID: 674695854}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2357,6 +2357,7 @@ MonoBehaviour:
   _playerMoveSpeedValue: 1
   _boostDurationValue: 1
   _gunDurationValue: 1
+  _maxSpeedValue: 40
   _coinPrice: 1000
   _playerMoveSpeedPrice: 1000
   _boostDurationPrice: 1000
@@ -2365,6 +2366,7 @@ MonoBehaviour:
   _dynamiteChargesPrice: 1000
   _extraLifePrice: 1000
   _headStartPrice: 1000
+  _priceIncrease: 1000
 --- !u!114 &1159936401
 MonoBehaviour:
   m_ObjectHideFlags: 0

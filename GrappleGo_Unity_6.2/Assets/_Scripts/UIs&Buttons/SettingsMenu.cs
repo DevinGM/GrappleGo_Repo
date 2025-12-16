@@ -85,6 +85,10 @@ public class SettingsMenu : MonoBehaviour
 
         // update GameManager's volume
         GameManager.Instance.volume = value;
+
+        // save volume if not in run
+        if (!GameManager.Instance.InRun)
+            SaveSystem.Save();
     }
 
     // wait a frame and set volume to gamemanager's volume
